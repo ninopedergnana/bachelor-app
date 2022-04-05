@@ -24,7 +24,12 @@ class CertificateList extends StatelessWidget {
           onPressed: () {
             Navigator.pushNamed(context, '/scan-certificate');
           },
-          child: const Text('Scan'))
+          child: const Text('Scan')),
+      ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/create-certificate');
+          },
+          child: const Text('Create'))
     ])));
   }
 }
