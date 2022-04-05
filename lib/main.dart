@@ -1,5 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/screens/CertificateDetail.dart';
+import 'package:flutter_app/screens/CertificateList.dart';
+import 'package:flutter_app/screens/CertificateVerification.dart';
+import 'package:flutter_app/screens/CreateCertificate.dart';
+import 'package:flutter_app/screens/PatientDetail.dart';
+import 'package:flutter_app/screens/PatientList.dart';
+import 'package:flutter_app/screens/ScanCertificate.dart';
+import 'package:flutter_app/screens/SignIn.dart';
+import 'package:flutter_app/screens/SignUp.dart';
+import 'package:flutter_app/screens/Start.dart';
+import 'package:http/http.dart';
 import 'package:openpgp/openpgp.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:web3dart/web3dart.dart';
+
+import 'impfy.g.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,19 +29,32 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.grey,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: '/start',
+      routes: {
+        '/': (context) => const CertificateList(),
+        '/start': (context) => const Start(),
+        '/certificate': (context) => const CertificateDetail(),
+        '/patients': (context) => const PatientList(),
+        '/patient': (context) => const PatientDetail(),
+        '/create-certificate': (context) => const CreateCertificate(),
+        '/sign-up': (context) => const SignUp(),
+        '/sign-in': (context) => const SignIn(),
+        '/scan-certificate': (context) => const ScanCertificate(),
+        '/certificate-verification': (context) =>
+            const CertificateVerification(),
+      },
     );
+  }
+}
+
+class QRCodeRender extends StatelessWidget {
+  const QRCodeRender({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: Center(child: QrImage(data: 'this is a QR code')));
   }
 }
 
@@ -60,6 +88,31 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
+
+  void _eth() async {
+    var privateKey = '';
+    var encryptedCertificate = 'flutter-cert';
+    var certificateHash = 'flutter-hash';
+    var patient =
+        EthereumAddress.fromHex('0x1bAeC083E3002e084129Ca59280624bFe6B0303a');
+    var credentials = EthPrivateKey.fromHex(privateKey);
+    var contractAddress =
+        EthereumAddress.fromHex('0xb58d3d11966CCeB725e39C3d6D0d383Bf3F1cec3');
+    var rpcUrl =
+        'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
+    var client = Web3Client(rpcUrl, Client());
+    var impfy = Impfy(address: contractAddress, client: client);
+    var certificates = await impfy.getCertificates(
+        EthereumAddress.fromHex('0x1bAeC083E3002e084129Ca59280624bFe6B0303a'));
+    // var message = await impfy.addCertificate(encryptedCertificate, certificateHash, patient, credentials: credentials);
+    // print('message: ' + message);
+    for (var value in certificates) {
+      print(value);
+    }
+    // var random = Random.secure();
+    // EthPrivateKey wallet = EthPrivateKey.createRandom(random);
+    // print(wallet.privateKeyInt);
   }
 
   @override
@@ -119,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: _eth,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -129,10 +182,30 @@ class _MyHomePageState extends State<MyHomePage> {
 
 Future<String> getKeys() async {
   var keyOptions = KeyOptions()..rsaBits = 1024;
-  var keyPair = await OpenPGP.generate(
+  var keyPair1 = await OpenPGP.generate(
       options: Options()
-        ..name = 'test'
-        ..email = 'test@test.com'
+        ..name = 'test1'
+        ..email = 'test1@test.com'
+        ..passphrase = 'test'
         ..keyOptions = keyOptions);
-  return 'hello1';
+
+  var keyPair2 = await OpenPGP.generate(
+      options: Options()
+        ..name = 'test2'
+        ..email = 'test2@test.com'
+        ..passphrase = 'test'
+        ..keyOptions = keyOptions);
+
+  var decrypted = 'error';
+
+  var message = await OpenPGP.encrypt(
+      'de nino isch blöd', keyPair1.publicKey + keyPair2.publicKey);
+  decrypted = await OpenPGP.decrypt(message, keyPair1.privateKey, 'test');
+
+  return decrypted;
+}
+
+eth() {
+  var wallet = EthPrivateKey.fromInt(BigInt.from(21323910213));
+  print(wallet.privateKey);
 }
