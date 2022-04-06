@@ -3,33 +3,33 @@
 
 
 class Vaccine {
-  late String firstname;
-  late String lastname;
-  late DateTime vaccinationDate;
-  late DateTime validUntil;
-  late int dose;
-  late String targetedDisease;
-  late String vaccineType;
-  late String product;
-  late String manufacturer;
-  late String countryOfVaccination;
-  late String issuer;
-  late String uvci;
+  String firstname;
+  String lastname;
+  DateTime vaccinationDate;
+  DateTime validUntil;
+  int dose;
+  String targetedDisease;
+  String vaccineType;
+  String product;
+  String manufacturer;
+  String countryOfVaccination;
+  String issuer;
+  String uvci;
 
-  Vaccine(
-      this.firstname,
-      this.lastname,
-      this.vaccinationDate,
-      this.validUntil,
-      this.dose,
-      this.targetedDisease,
-      this.vaccineType,
-      this.product,
-      this.manufacturer,
-      this.countryOfVaccination,
-      this.issuer,
-      this.uvci
-  );
+  Vaccine({
+    required this.firstname,
+    required this.lastname,
+    required this.vaccinationDate,
+    required this.validUntil,
+    required this.dose,
+    required this.targetedDisease,
+    required this.vaccineType,
+    required this.product,
+    required this.manufacturer,
+    required this.countryOfVaccination,
+    required this.issuer,
+    required this.uvci
+  });
 
   Vaccine.fromJson(Map<String, dynamic> json)
       : firstname = json['firstname'],
