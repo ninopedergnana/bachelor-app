@@ -7,14 +7,18 @@ class PatientList extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+        appBar: AppBar(
+          title: const Text('Patient List'),
+        ),
         body: Center(
-            child: Column(children: <Widget>[
-      const Text('Patient List Screen'),
-      ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/patient');
-          },
-          child: const Text('Patient Detail')),
-    ])));
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/');
+                      },
+                      child: const Text('Back to Home')),
+        ])));
   }
 }

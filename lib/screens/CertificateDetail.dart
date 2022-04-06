@@ -7,14 +7,18 @@ class CertificateDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+        appBar: AppBar(
+          title: const Text('Certificate Detail'),
+        ),
         body: Center(
-            child: Column(children: <Widget>[
-      const Text('Go back'),
-      ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Back'))
-    ])));
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Back'))
+        ])));
   }
 }

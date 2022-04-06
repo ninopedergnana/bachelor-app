@@ -7,14 +7,19 @@ class SignUp extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+        appBar: AppBar(
+          title: const Text('Sign Up'),
+        ),
         body: Center(
-            child: Column(children: <Widget>[
-              const Text('SignUp'),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/');
-                  },
-                  child: const Text('Sign Up'))
-            ])));
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text('SignUp'),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/');
+                    },
+                    child: const Text('Sign Up'))
+              ])));
   }
 }

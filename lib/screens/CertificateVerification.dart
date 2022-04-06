@@ -6,6 +6,19 @@ class CertificateVerification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return const Text('CertificateVerification');
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Certificate Verification'),
+        ),
+        body: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/');
+                      },
+                      child: const Text('Back'))
+                ])));
   }
 }

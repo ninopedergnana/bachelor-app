@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/screens/CertificateDetail.dart';
-import 'package:flutter_app/screens/CertificateList.dart';
+import 'package:flutter_app/screens/HomeScreen.dart';
 import 'package:flutter_app/screens/CertificateVerification.dart';
 import 'package:flutter_app/screens/CreateCertificate.dart';
 import 'package:flutter_app/screens/PatientDetail.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.grey,
+        primarySwatch: Colors.blue,
       ),
       initialRoute: '/start',
       routes: {

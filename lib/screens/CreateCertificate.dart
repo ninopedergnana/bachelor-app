@@ -45,7 +45,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
   final _formKey = GlobalKey<FormState>();
 
   // JSON CONVERSION
-  // Vaccine vaccine = Vaccine("", "", DateTime.now(), DateTime.now(), 0, "", "", "", "", "", "", "");
+  Vaccine vaccine = Vaccine("", "", DateTime.now(), DateTime.now(), 0, "", "", "", "", "", "", "");
   // Map<String,dynamic> map = vaccine.toJson();
   // String vaccineJSON = jsonEncode(map);
 
@@ -212,19 +212,31 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Validate returns true if the form is valid, or false otherwise.
-                        if (_formKey.currentState!.validate()) {
-                          // If the form is valid, display a snackbar. In the real world,
-                          // you'd often call a server or save the information in a database.
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Vaccine Entered Successfully')),
-                          );
-                        }
-                      },
-                      child: const Text('Submit'),
-                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/'); // return to home, doesnt work yet for some reason
+                          },
+                          child: const Text('Back'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Validate returns true if the form is valid, or false otherwise.
+                            if (_formKey.currentState!.validate()) {
+                              // If the form is valid, display a snackbar. In the real world,
+                              // you'd often call a server or save the information in a database.
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Vaccine Entered Successfully')),
+                              );
+                            }
+                            Navigator.pushNamed(context, '/'); // return to home, doesnt work yet for some reason
+                          },
+                            child: const Text('Submit'),
+                        ),
+                      ],
+                    )
                   ),
                 ],
               ),

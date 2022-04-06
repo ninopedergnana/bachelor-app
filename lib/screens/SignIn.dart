@@ -7,14 +7,18 @@ class SignIn extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+        appBar: AppBar(
+          title: const Text('Sign In'),
+        ),
         body: Center(
-            child: Column(children: <Widget>[
-      const Text('SignIn'),
-      ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/');
-          },
-          child: const Text('Sign In'))
-    ])));
-  }
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/');
+                      },
+                      child: const Text('Sign In'))
+        ])));
+    }
 }
