@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/screens/CertificateDetail.dart';
+import 'package:flutter_app/screens/CertificateList.dart';
 import 'package:flutter_app/screens/HomeScreen.dart';
 import 'package:flutter_app/screens/CertificateVerification.dart';
 import 'package:flutter_app/screens/CreateCertificate.dart';
@@ -13,6 +14,7 @@ import 'package:http/http.dart';
 import 'package:openpgp/openpgp.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:web3dart/web3dart.dart';
+import 'package:flutter_app/models/Vaccine.dart';
 
 import 'impfy.g.dart';
 
@@ -33,17 +35,23 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/start',
       routes: {
-        '/': (context) => const CertificateList(),
+        '/': (context) => const HomeScreen(),
         '/start': (context) => const Start(),
-        '/certificate': (context) => const CertificateDetail(),
+        '/certificate-list': (context) => CertificateList(vaccineList: [
+          Vaccine(product: "product 1", uvci: "", lastname: "Olgiati 1", firstname: "Carlos", manufacturer: "", issuer: "", targetedDisease: "", countryOfVaccination: "", dose: 0, vaccinationDate: DateTime.now(), vaccineType: "", validUntil: DateTime.now()),
+          Vaccine(product: "product 2", uvci: "", lastname: "Olgiati 2", firstname: "Carlos", manufacturer: "", issuer: "", targetedDisease: "", countryOfVaccination: "", dose: 0, vaccinationDate: DateTime.now(), vaccineType: "", validUntil: DateTime.now()),
+          Vaccine(product: "product 3", uvci: "", lastname: "Olgiati 3", firstname: "Carlos", manufacturer: "", issuer: "", targetedDisease: "", countryOfVaccination: "", dose: 0, vaccinationDate: DateTime.now(), vaccineType: "", validUntil: DateTime.now()),
+          Vaccine(product: "product 4", uvci: "", lastname: "Olgiati 4", firstname: "Carlos", manufacturer: "", issuer: "", targetedDisease: "", countryOfVaccination: "", dose: 0, vaccinationDate: DateTime.now(), vaccineType: "", validUntil: DateTime.now()),
+          Vaccine(product: "product 5", uvci: "", lastname: "Olgiati 5", firstname: "Carlos", manufacturer: "", issuer: "", targetedDisease: "", countryOfVaccination: "", dose: 0, vaccinationDate: DateTime.now(), vaccineType: "", validUntil: DateTime.now())
+        ]),
+        '/certificate': (context) => CertificateDetail(),
         '/patients': (context) => const PatientList(),
         '/patient': (context) => const PatientDetail(),
         '/create-certificate': (context) => const CreateCertificate(),
         '/sign-up': (context) => const SignUp(),
         '/sign-in': (context) => const SignIn(),
         '/scan-certificate': (context) => const ScanCertificate(),
-        '/certificate-verification': (context) =>
-            const CertificateVerification(),
+        '/certificate-verification': (context) => const CertificateVerification(),
       },
     );
   }
