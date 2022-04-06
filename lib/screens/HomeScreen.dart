@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CertificateList extends StatelessWidget {
-  const CertificateList({Key? key}) : super(key: key);
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +16,6 @@ class CertificateList extends StatelessWidget {
                 children: <Widget>[
                 ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/certificate');
-                    },
-                    child: const Text('Detail')),
-                ElevatedButton(
-                    onPressed: () {
                       Navigator.pushNamed(context, '/patients');
                     },
                     child: const Text('Patients')),
@@ -29,6 +24,11 @@ class CertificateList extends StatelessWidget {
                       Navigator.pushNamed(context, '/certificate-verification');
                     },
                     child: const Text('Certificate Verification')),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/certificate-list');
+                    },
+                    child: const Text('Certificate List')),
                 ElevatedButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/start');
