@@ -45,7 +45,19 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
   final _formKey = GlobalKey<FormState>();
 
   // JSON CONVERSION
-  Vaccine vaccine = Vaccine("", "", DateTime.now(), DateTime.now(), 0, "", "", "", "", "", "", "");
+  Vaccine vaccine = Vaccine(
+      product: '',
+      uvci: '',
+      manufacturer: '',
+      targetedDisease: '',
+      vaccineType: '',
+      dose: 0,
+      countryOfVaccination: '',
+      issuer: '',
+      validUntil: DateTime.now(),
+      vaccinationDate: DateTime.now(),
+      lastname: '',
+      firstname: '');
   // Map<String,dynamic> map = vaccine.toJson();
   // String vaccineJSON = jsonEncode(map);
 

@@ -1,11 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/models/Vaccine.dart';
+import 'package:flutter_app/screens/CertificateDetail.dart';
 
-class CertificateVerification extends StatelessWidget {
-  const CertificateVerification({Key? key}) : super(key: key);
+class CertificateList extends StatelessWidget {
+  const CertificateList({Key? key, required this.vaccineList}) : super(key: key);
+
+  final List<Vaccine> vaccineList;
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return const Text('Certificate List');
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('List of Vaccines'),
+      ),
+      body: Center(
+        child: ListView.builder(
+          itemCount: vaccineList.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(vaccineList[index].product),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CertificateDetail(),
+                      settings: RouteSettings(
+                        arguments: vaccineList[index]
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        )
+      ),
+    );
   }
 }
+
