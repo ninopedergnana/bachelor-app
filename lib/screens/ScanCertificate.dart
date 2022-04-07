@@ -1,69 +1,65 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
-class ScanCertificate extends StatelessWidget {
+class ScanCertificate extends StatefulWidget {
   const ScanCertificate({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return const QRCodeScanner();
-  }
+  ScanCertificateState createState() => ScanCertificateState();
 }
 
-class QRCodeScanner extends StatefulWidget {
-  const QRCodeScanner({Key? key}) : super(key: key);
+class ScanCertificateState extends State<ScanCertificate> {
+  String qrCodeString = 'Nothing scanned yet';
 
   @override
-  State<StatefulWidget> createState() => _QRCodeScannerState();
-}
-
-class _QRCodeScannerState extends State<QRCodeScanner> {
-  Barcode? result;
-  QRViewController? controller;
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-
-  @override
-  Widget build(BuildContext context) {
-    var scanArea = (MediaQuery.of(context).size.width < 400 ||
-            MediaQuery.of(context).size.height < 400)
-        ? 150.0
-        : 300.0;
-
-    return Scaffold(
-        body: Center(
-            child: QRView(
-      key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
-      overlay: QrScannerOverlayShape(
-          borderColor: Colors.red,
-          borderRadius: 10,
-          borderLength: 30,
-          borderWidth: 10,
-          cutOutSize: scanArea),
-      onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
-    )));
+  void initState() {
+    super.initState();
   }
 
-  void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
-    if (!p) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('no Permission')),
+  Future<void> scanQR() async {
+    String barcodeScanRes;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666',  // line color
+          'Cancel',   // cancel button text
+          false,      // show flash icon
+          ScanMode.QR // scan mode
       );
+      // handle the string function comes here
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
     }
+    if (!mounted) return;
+
+    setState(() {
+      qrCodeString = barcodeScanRes;
+    });
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
-    });
-    controller.scannedDataStream.listen((scanData) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) => Text(scanData.code!));
-      setState(() {
-        result = scanData;
-      });
-    });
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        home: Scaffold(
+            appBar: AppBar(
+              title: const Text('QR Code Scanner'),
+              centerTitle: true,
+            ),
+            body: Builder(
+                builder: (BuildContext context) {
+                  return Container(
+                      alignment: Alignment.center,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            ElevatedButton(
+                                onPressed: () => scanQR(),
+                                child: const Text('Scan QR')),
+                            Text('Scan result : $qrCodeString\n',
+                                style: const TextStyle(fontSize: 20))
+                          ]));
+                })));
   }
 }
