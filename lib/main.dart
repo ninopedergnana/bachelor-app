@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const HomeScreen(),
         '/start': (context) => const Start(),
         '/certificate-list': (context) => CertificateList(vaccineList: [
-          Vaccine(product: "product 1", uvci: "", lastname: "Olgiati 1", firstname: "Carlos", manufacturer: "", issuer: "", targetedDisease: "", countryOfVaccination: "", dose: 0, vaccinationDate: DateTime.now(), vaccineType: "", validUntil: DateTime.now()),
+          Vaccine(product: "product 1", uvci: "uvci-uvci-uvci-uvci-uvci-uvci-uvci-uvci-uvci-", lastname: "Olgiati 1", firstname: "Carlos", manufacturer: "Moderna", issuer: "Kanton Zürich Impfstation", targetedDisease: "SARS-Covid-19", countryOfVaccination: "CH", dose: 70, vaccinationDate: DateTime.now(), vaccineType: "Dangerous", validUntil: DateTime.now()),
           Vaccine(product: "product 2", uvci: "", lastname: "Olgiati 2", firstname: "Carlos", manufacturer: "", issuer: "", targetedDisease: "", countryOfVaccination: "", dose: 0, vaccinationDate: DateTime.now(), vaccineType: "", validUntil: DateTime.now()),
           Vaccine(product: "product 3", uvci: "", lastname: "Olgiati 3", firstname: "Carlos", manufacturer: "", issuer: "", targetedDisease: "", countryOfVaccination: "", dose: 0, vaccinationDate: DateTime.now(), vaccineType: "", validUntil: DateTime.now()),
           Vaccine(product: "product 4", uvci: "", lastname: "Olgiati 4", firstname: "Carlos", manufacturer: "", issuer: "", targetedDisease: "", countryOfVaccination: "", dose: 0, vaccinationDate: DateTime.now(), vaccineType: "", validUntil: DateTime.now()),
