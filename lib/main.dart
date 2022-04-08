@@ -4,6 +4,7 @@ import 'package:flutter_app/screens/CertificateList.dart';
 import 'package:flutter_app/screens/HomeScreen.dart';
 import 'package:flutter_app/screens/CertificateVerification.dart';
 import 'package:flutter_app/screens/CreateCertificate.dart';
+import 'package:flutter_app/screens/Keys.dart';
 import 'package:flutter_app/screens/PatientDetail.dart';
 import 'package:flutter_app/screens/PatientList.dart';
 import 'package:flutter_app/screens/ScanCertificate.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
         '/sign-up': (context) => const SignUp(),
         '/sign-in': (context) => const SignIn(),
         '/scan-certificate': (context) => const ScanCertificate(),
+        '/keys': (context) => const Keys(),
         '/certificate-verification': (context) => const CertificateVerification(),
       },
     );
