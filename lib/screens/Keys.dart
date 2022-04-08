@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:flutter_app/components/CustomDialog.dart';
 
 class Keys extends StatefulWidget {
   const Keys({Key? key}) : super(key: key);
@@ -10,6 +10,7 @@ class Keys extends StatefulWidget {
 
 class KeysState extends State<Keys> {
 
+  final CustomDialog dialog = CustomDialog();
 
   late TextEditingController pgpPublicKey;
   late TextEditingController pgpPrivateKey;
@@ -25,46 +26,6 @@ class KeysState extends State<Keys> {
     super.initState();
   }
 
-
-  Future<void> _showMyDialog(BuildContext context, String key, String title) async {
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: SingleChildScrollView(
-            child: Container (
-              alignment: Alignment.center,
-              width: 300,
-              height: 300,
-              child: QrImage(
-                data: key,
-                version: QrVersions.auto,
-                gapless: true,
-                errorStateBuilder: (cxt, err) {
-                  return const Center(
-                    child: Text(
-                      "Uh oh! Something went wrong while scanning the code",
-                      textAlign: TextAlign.center,
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Close'),
-              onPressed: () {
-                 Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
 
   @override
@@ -90,7 +51,7 @@ class KeysState extends State<Keys> {
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                   onPressed: () async {
-                    await _showMyDialog(context, pgpPublicKey.text, "PGP Public Key");
+                    await dialog.showQRDialog(context, pgpPublicKey.text, "PGP Public Key");
                   },
                   icon: const Icon(Icons.qr_code),
                 ),
@@ -105,7 +66,7 @@ class KeysState extends State<Keys> {
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                   onPressed: () async {
-                    await _showMyDialog(context, pgpPrivateKey.text, "PGP Private Key");
+                    await dialog.showQRDialog(context, pgpPrivateKey.text, "PGP Private Key");
                   },
                   icon: const Icon(Icons.qr_code),
                 ),
@@ -126,7 +87,7 @@ class KeysState extends State<Keys> {
                 labelText: 'Ether Public Key',
                 suffixIcon: IconButton(
                   onPressed: () async {
-                    await _showMyDialog(context, etherPublicKey.text, "Ether Public Key");
+                    await dialog.showQRDialog(context, etherPublicKey.text, "Ether Public Key");
                   },
                   icon: const Icon(Icons.qr_code),
                 ),
@@ -140,7 +101,7 @@ class KeysState extends State<Keys> {
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                   onPressed: () async {
-                    await _showMyDialog(context, etherPrivateKey.text, "Ether Private Key");
+                    await dialog.showQRDialog(context, etherPrivateKey.text, "Ether Private Key");
                   },
                   icon: const Icon(Icons.qr_code),
                 ),
