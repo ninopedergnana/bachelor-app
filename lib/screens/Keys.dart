@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/CustomDialog.dart';
+import 'package:openpgp/openpgp.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Keys extends StatefulWidget {
   const Keys({Key? key}) : super(key: key);
@@ -10,19 +12,31 @@ class Keys extends StatefulWidget {
 
 class KeysState extends State<Keys> {
 
+  final FlutterSecureStorage _localStorage = const FlutterSecureStorage();
+  String pgpPublicKey = '';
+  String pgpPrivateKey = '';
+
+  Future<bool> fetchKeys() async {
+    pgpPublicKey = (await _localStorage.read(key: 'pgpPublicKey'))!; // null checked with "!"
+    pgpPrivateKey = (await _localStorage.read(key: 'pgpPrivateKey'))!; // null checked with "!"
+    pgpPublicKeyController.text = pgpPublicKey;
+    pgpPrivateKeyController.text = pgpPrivateKey;
+    return true;
+  }
+
   final CustomDialog dialog = CustomDialog();
 
-  late TextEditingController pgpPublicKey;
-  late TextEditingController pgpPrivateKey;
-  late TextEditingController etherPublicKey;
-  late TextEditingController etherPrivateKey;
+  late TextEditingController pgpPublicKeyController;
+  late TextEditingController pgpPrivateKeyController;
+  late TextEditingController etherPublicKeyController;
+  late TextEditingController etherPrivateKeyController;
 
   @override
   void initState() {
-    pgpPublicKey = TextEditingController(text: 'pgpPublicKey');
-    pgpPrivateKey = TextEditingController(text: 'pgpPrivateKey');
-    etherPublicKey = TextEditingController(text: 'etherPublicKey');
-    etherPrivateKey = TextEditingController(text: 'etherPrivateKey');
+    pgpPublicKeyController = TextEditingController(text: pgpPublicKey);
+    pgpPrivateKeyController = TextEditingController(text: pgpPublicKey);
+    etherPublicKeyController = TextEditingController(text: 'etherPublicKey');
+    etherPrivateKeyController = TextEditingController(text: 'etherPrivateKey');
     super.initState();
   }
 
@@ -38,7 +52,7 @@ class KeysState extends State<Keys> {
       body: Container(
         padding: const EdgeInsets.only(left: 5.0, top: 30.0, right: 5.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             const Text(
                 "PGP Keys",
@@ -46,12 +60,12 @@ class KeysState extends State<Keys> {
             ),
             const SizedBox(height: 15),
             TextField(
-              controller: pgpPublicKey,
+              controller: pgpPublicKeyController,
               readOnly: true,
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                   onPressed: () async {
-                    await dialog.showQRDialog(context, pgpPublicKey.text, "PGP Public Key");
+                    await dialog.showQRDialog(context, pgpPublicKeyController.text, "PGP Public Key");
                   },
                   icon: const Icon(Icons.qr_code),
                 ),
@@ -61,12 +75,12 @@ class KeysState extends State<Keys> {
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: pgpPrivateKey,
+              controller: pgpPrivateKeyController,
               readOnly: true,
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                   onPressed: () async {
-                    await dialog.showQRDialog(context, pgpPrivateKey.text, "PGP Private Key");
+                    await dialog.showQRDialog(context, pgpPrivateKeyController.text, "PGP Private Key");
                   },
                   icon: const Icon(Icons.qr_code),
                 ),
@@ -81,13 +95,13 @@ class KeysState extends State<Keys> {
             ),
             const SizedBox(height: 15),
             TextField(
-              controller: etherPublicKey,
+              controller: etherPublicKeyController,
               readOnly: true,
               decoration: InputDecoration(
                 labelText: 'Ether Public Key',
                 suffixIcon: IconButton(
                   onPressed: () async {
-                    await dialog.showQRDialog(context, etherPublicKey.text, "Ether Public Key");
+                    await dialog.showQRDialog(context, etherPublicKeyController.text, "Ether Public Key");
                   },
                   icon: const Icon(Icons.qr_code),
                 ),
@@ -96,12 +110,12 @@ class KeysState extends State<Keys> {
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: etherPrivateKey,
+              controller: etherPrivateKeyController,
               readOnly: true,
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                   onPressed: () async {
-                    await dialog.showQRDialog(context, etherPrivateKey.text, "Ether Private Key");
+                    await dialog.showQRDialog(context, etherPrivateKeyController.text, "Ether Private Key");
                   },
                   icon: const Icon(Icons.qr_code),
                 ),
@@ -109,6 +123,11 @@ class KeysState extends State<Keys> {
                 border: const OutlineInputBorder(),
               ),
             ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+                onPressed: fetchKeys,
+                child: const Text('Fetch Keys'),
+            )
           ],
         ),
       ),

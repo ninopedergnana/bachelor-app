@@ -42,7 +42,7 @@ class SignUpFormState extends State<SignUpForm> {
   // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
 
-  final FlutterSecureStorage _localStorage = FlutterSecureStorage();
+  final FlutterSecureStorage _localStorage = const FlutterSecureStorage();
 
   Person person = Person(
     firstname: '',
@@ -51,16 +51,19 @@ class SignUpFormState extends State<SignUpForm> {
     passphrase: ''
   );
 
+  bool? keysGenerated;
+
   Map keyMap = <String, String>{};
 
   Future<bool> generatePGPKeys() async {
     var keyOptions = KeyOptions()..rsaBits = 1024;
     var keyPair1 = await OpenPGP.generate(
         options: Options()
-          ..name = 'test1'
-          ..email = 'test1@test.com'
-          ..passphrase = 'test'
-          ..keyOptions = keyOptions);
+          ..name = person.firstname + person.lastname
+          ..email = person.email
+          ..passphrase = person.passphrase
+          ..keyOptions = keyOptions
+    );
 
     keyMap['pgpPublicKey'] = keyPair1.publicKey;
     keyMap['pgpPrivateKey'] = keyPair1.privateKey;
@@ -73,12 +76,8 @@ class SignUpFormState extends State<SignUpForm> {
     await _localStorage.write(key: 'pgpPublicKey', value: keyMap['pgpPublicKey']);
     await _localStorage.write(key: 'pgpPrivateKey', value: keyMap['pgpPrivateKey']);
     Map localStorageMap = await _localStorage.readAll();
-
-    return localStorageMap == keyMap;
+    return localStorageMap.isNotEmpty;
   }
-
-
-
 
   @override
 Widget build(BuildContext context) {
@@ -182,14 +181,14 @@ Widget build(BuildContext context) {
                   ),
                   const SizedBox(height: 15.0),
                   ElevatedButton(
-                      onPressed: () {
-                        // Validate returns true if the form is valid, or false otherwise.
-                        generatePGPKeys();
-                        if (_formKey.currentState!.validate()) {
-                          // If the form is valid, display a snackbar. In the real world,
-                          // you'd often call a server or save the information in a database.
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate() && await generatePGPKeys()) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Generating Keys')),
+                            const SnackBar(content: Text("Keys Generated")),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Key Generation Failed")),
                           );
                         }
                       },
