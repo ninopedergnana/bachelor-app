@@ -18,12 +18,20 @@ class Start extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushNamed(context, '/sign-up');
                   },
-                  child: const Text('Sign Up')),
+                  child: const Text('Sign Up')
+              ),
               ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/sign-in');
                   },
-                  child: const Text('Sign In'))
+                  child: const Text('Sign In')
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/keys');
+                  },
+                  child: const Text('Keys')
+              )
       ])),
     );
   }
