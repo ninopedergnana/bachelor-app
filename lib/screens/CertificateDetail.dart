@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/models/Vaccine.dart';
+import 'package:flutter_app/domain/model/Certificate.dart';
 
 class CertificateDetail extends StatelessWidget {
   const CertificateDetail({Key? key}) : super(key: key);
@@ -7,7 +7,7 @@ class CertificateDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final args = ModalRoute.of(context)!.settings.arguments as Vaccine;
+    final args = ModalRoute.of(context)!.settings.arguments as Certificate;
 
     return Scaffold(
       appBar: AppBar(

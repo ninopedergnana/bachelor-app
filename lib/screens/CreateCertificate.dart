@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_app/domain/model/Certificate.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:flutter_app/models/Vaccine.dart';
 
 
 class CreateCertificate extends StatelessWidget {
@@ -45,7 +43,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
   final _formKey = GlobalKey<FormState>();
 
   // JSON CONVERSION
-  Vaccine vaccine = Vaccine(
+  Certificate certificate = Certificate(
       product: '',
       uvci: '',
       manufacturer: '',
@@ -92,7 +90,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        vaccine.firstname = value;
+                        certificate.firstname = value;
                       });
                     },
                   ),
@@ -104,25 +102,25 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        vaccine.lastname = value;
+                        certificate.lastname = value;
                       });
                     },
                   ),
                   _FormDatePicker(
                     title: 'Vaccination Date',
-                    date: vaccine.vaccinationDate,
+                    date: certificate.vaccinationDate,
                     onChanged: (value) {
                       setState(() {
-                        vaccine.vaccinationDate = value;
+                        certificate.vaccinationDate = value;
                       });
                     },
                   ),
                   _FormDatePicker(
                     title: 'Valid Until',
-                    date: vaccine.validUntil,
+                    date: certificate.validUntil,
                     onChanged: (value) {
                       setState(() {
-                        vaccine.validUntil = value;
+                        certificate.validUntil = value;
                       });
                     },
                   ),
@@ -134,7 +132,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        vaccine.dose = value as int;
+                        certificate.dose = value as int;
                       });
                     },
                   ),
@@ -146,7 +144,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        vaccine.targetedDisease = value;
+                        certificate.targetedDisease = value;
                       });
                     },
                   ),
@@ -158,7 +156,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        vaccine.vaccineType = value;
+                        certificate.vaccineType = value;
                       });
                     },
                   ),
@@ -170,7 +168,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        vaccine.product = value;
+                        certificate.product = value;
                       });
                     },
                   ),
@@ -182,7 +180,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        vaccine.manufacturer = value;
+                        certificate.manufacturer = value;
                       });
                     },
                   ),
@@ -194,7 +192,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        vaccine.countryOfVaccination = value;
+                        certificate.countryOfVaccination = value;
                       });
                     },
                   ),
@@ -206,7 +204,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        vaccine.issuer = value;
+                        certificate.issuer = value;
                       });
                     },
                   ),
@@ -218,7 +216,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        vaccine.uvci = value;
+                        certificate.uvci = value;
                       });
                     },
                   ),

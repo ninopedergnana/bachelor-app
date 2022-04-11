@@ -14,7 +14,7 @@ import 'package:http/http.dart';
 import 'package:openpgp/openpgp.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:web3dart/web3dart.dart';
-import 'package:flutter_app/models/Vaccine.dart';
+import 'package:flutter_app/domain/model/Certificate.dart';
 
 import 'impfy.g.dart';
 
@@ -37,21 +37,79 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomeScreen(),
         '/start': (context) => const Start(),
-        '/certificate-list': (context) => CertificateList(vaccineList: [
-          Vaccine(product: "product 1", uvci: "", lastname: "Olgiati 1", firstname: "Carlos", manufacturer: "", issuer: "", targetedDisease: "", countryOfVaccination: "", dose: 0, vaccinationDate: DateTime.now(), vaccineType: "", validUntil: DateTime.now()),
-          Vaccine(product: "product 2", uvci: "", lastname: "Olgiati 2", firstname: "Carlos", manufacturer: "", issuer: "", targetedDisease: "", countryOfVaccination: "", dose: 0, vaccinationDate: DateTime.now(), vaccineType: "", validUntil: DateTime.now()),
-          Vaccine(product: "product 3", uvci: "", lastname: "Olgiati 3", firstname: "Carlos", manufacturer: "", issuer: "", targetedDisease: "", countryOfVaccination: "", dose: 0, vaccinationDate: DateTime.now(), vaccineType: "", validUntil: DateTime.now()),
-          Vaccine(product: "product 4", uvci: "", lastname: "Olgiati 4", firstname: "Carlos", manufacturer: "", issuer: "", targetedDisease: "", countryOfVaccination: "", dose: 0, vaccinationDate: DateTime.now(), vaccineType: "", validUntil: DateTime.now()),
-          Vaccine(product: "product 5", uvci: "", lastname: "Olgiati 5", firstname: "Carlos", manufacturer: "", issuer: "", targetedDisease: "", countryOfVaccination: "", dose: 0, vaccinationDate: DateTime.now(), vaccineType: "", validUntil: DateTime.now())
-        ]),
-        '/certificate': (context) => CertificateDetail(),
+        '/certificate-list': (context) =>
+            CertificateList(vaccineList: [
+              Certificate(product: "product 1",
+                  uvci: "",
+                  lastname: "Olgiati 1",
+                  firstname: "Carlos",
+                  manufacturer: "",
+                  issuer: "",
+                  targetedDisease: "",
+                  countryOfVaccination: "",
+                  dose: 0,
+                  vaccinationDate: DateTime.now(),
+                  vaccineType: "",
+                  validUntil: DateTime.now()),
+              Certificate(product: "product 2",
+                  uvci: "",
+                  lastname: "Olgiati 2",
+                  firstname: "Carlos",
+                  manufacturer: "",
+                  issuer: "",
+                  targetedDisease: "",
+                  countryOfVaccination: "",
+                  dose: 0,
+                  vaccinationDate: DateTime.now(),
+                  vaccineType: "",
+                  validUntil: DateTime.now()),
+              Certificate(
+                  product: "product 3",
+                  uvci: "",
+                  lastname: "Olgiati 3",
+                  firstname: "Carlos",
+                  manufacturer: "",
+                  issuer: "",
+                  targetedDisease: "",
+                  countryOfVaccination: "",
+                  dose: 0,
+                  vaccinationDate: DateTime.now(),
+                  vaccineType: "",
+                  validUntil: DateTime.now()),
+              Certificate(product: "product 4",
+                  uvci: "",
+                  lastname: "Olgiati 4",
+                  firstname: "Carlos",
+                  manufacturer: "",
+                  issuer: "",
+                  targetedDisease: "",
+                  countryOfVaccination: "",
+                  dose: 0,
+                  vaccinationDate: DateTime.now(),
+                  vaccineType: "",
+                  validUntil: DateTime.now()),
+              Certificate(product: "product 5",
+                  uvci: "",
+                  lastname: "Olgiati 5",
+                  firstname: "Carlos",
+                  manufacturer: "",
+                  issuer: "",
+                  targetedDisease: "",
+                  countryOfVaccination: "",
+                  dose: 0,
+                  vaccinationDate: DateTime.now(),
+                  vaccineType: "",
+                  validUntil: DateTime.now())
+            ]),
+        '/certificate': (context) => const CertificateDetail(),
         '/patients': (context) => const PatientList(),
         '/patient': (context) => const PatientDetail(),
         '/create-certificate': (context) => const CreateCertificate(),
         '/sign-up': (context) => const SignUp(),
         '/sign-in': (context) => const SignIn(),
         '/scan-certificate': (context) => const ScanCertificate(),
-        '/certificate-verification': (context) => const CertificateVerification(),
+        '/certificate-verification': (
+            context) => const CertificateVerification(),
       },
     );
   }
@@ -102,17 +160,18 @@ class _MyHomePageState extends State<MyHomePage> {
     var privateKey = '';
     var encryptedCertificate = 'flutter-cert';
     var certificateHash = 'flutter-hash';
-    var patient =
-        EthereumAddress.fromHex('0x1bAeC083E3002e084129Ca59280624bFe6B0303a');
+    var patient = EthereumAddress
+        .fromHex('0x1bAeC083E3002e084129Ca59280624bFe6B0303a');
     var credentials = EthPrivateKey.fromHex(privateKey);
-    var contractAddress =
-        EthereumAddress.fromHex('0xb58d3d11966CCeB725e39C3d6D0d383Bf3F1cec3');
+    var contractAddress = EthereumAddress
+        .fromHex('0xb58d3d11966CCeB725e39C3d6D0d383Bf3F1cec3');
     var rpcUrl =
         'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
     var client = Web3Client(rpcUrl, Client());
     var impfy = Impfy(address: contractAddress, client: client);
     var certificates = await impfy.getCertificates(
-        EthereumAddress.fromHex('0x1bAeC083E3002e084129Ca59280624bFe6B0303a'));
+        EthereumAddress.fromHex('0x1bAeC083E3002e084129Ca59280624bFe6B0303a')
+    );
     // var message = await impfy.addCertificate(encryptedCertificate, certificateHash, patient, credentials: credentials);
     // print('message: ' + message);
     for (var value in certificates) {
@@ -162,7 +221,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline4,
             ),
             FutureBuilder(
                 future: getKeys(),
@@ -189,7 +251,8 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 Future<String> getKeys() async {
-  var keyOptions = KeyOptions()..rsaBits = 1024;
+  var keyOptions = KeyOptions()
+    ..rsaBits = 1024;
   var keyPair1 = await OpenPGP.generate(
       options: Options()
         ..name = 'test1'

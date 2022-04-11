@@ -40,6 +40,7 @@ dependencies:
   qr_flutter: ^4.0.0
   web3dart: ^2.3.5
   intl: ^0.17.0
+  eth_sig_util: ^0.0.7
 
 dev_dependencies:
   flutter_test:

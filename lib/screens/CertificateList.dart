@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/models/Vaccine.dart';
+import 'package:flutter_app/domain/model/Certificate.dart';
 import 'package:flutter_app/screens/CertificateDetail.dart';
 
 class CertificateList extends StatelessWidget {
   const CertificateList({Key? key, required this.vaccineList}) : super(key: key);
 
-  final List<Vaccine> vaccineList;
+  final List<Certificate> vaccineList;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('List of Vaccines'),
+        title: const Text('List of Vaccines'),
       ),
       body: Center(
         child: ListView.builder(
