@@ -7,6 +7,7 @@ import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart';
 import 'package:eth_sig_util/eth_sig_util.dart';
 
+// TODO: Convert to singleton
 class Repository {
   late String _privateKey;
   late Impfy _client;
@@ -34,10 +35,10 @@ class Repository {
 
   Future<void> createCertificate(
       Certificate certificate, EthereumAddress patient, String doctorKey, String patientKey) async {
-    var hash = certificate.hashCode.toString();
+    String hash = certificate.hashCode.toString();
     String signedHash = EthSigUtil.signTypedData(
         privateKey: _privateKey, jsonData: hash, version: TypedDataVersion.V4);
-    var encryptedCertificate = await certificate.encrypt(doctorKey, patientKey);
+    String encryptedCertificate = await certificate.encrypt(doctorKey, patientKey);
     _client.addCertificate(encryptedCertificate, signedHash, patient, credentials: _credentials);
   }
 

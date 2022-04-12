@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/domain/model/Certificate.dart';
 import 'package:intl/intl.dart' as intl;
 
-
 class CreateCertificate extends StatelessWidget {
   const CreateCertificate({Key? key}) : super(key: key);
 
@@ -10,14 +9,11 @@ class CreateCertificate extends StatelessWidget {
   Widget build(BuildContext context) {
     const appTitle = 'Create Certificate';
 
-    return MaterialApp(
-      title: appTitle,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(appTitle),
-        ),
-        body: const CreateCertificateForm(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(appTitle),
       ),
+      body: const CreateCertificateForm(),
     );
   }
 }
@@ -41,6 +37,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
   // Note: This is a GlobalKey<FormState>,
   // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
+  String? result;
 
   // JSON CONVERSION
   Certificate certificate = Certificate(
@@ -56,205 +53,204 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
       vaccinationDate: DateTime.now(),
       lastname: '',
       firstname: '');
+
   // Map<String,dynamic> map = vaccine.toJson();
   // String vaccineJSON = jsonEncode(map);
-
 
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     return Form(
-      key: _formKey,
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: Card(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(10),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 400, minHeight: 100),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a valid name';
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      filled: true,
-                      hintText: 'First Name',
-                      labelText: 'First Name',
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        certificate.firstname = value;
-                      });
-                    },
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      filled: true,
-                      hintText: 'Last Name',
-                      labelText: 'Last Name',
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        certificate.lastname = value;
-                      });
-                    },
-                  ),
-                  _FormDatePicker(
-                    title: 'Vaccination Date',
-                    date: certificate.vaccinationDate,
-                    onChanged: (value) {
-                      setState(() {
-                        certificate.vaccinationDate = value;
-                      });
-                    },
-                  ),
-                  _FormDatePicker(
-                    title: 'Valid Until',
-                    date: certificate.validUntil,
-                    onChanged: (value) {
-                      setState(() {
-                        certificate.validUntil = value;
-                      });
-                    },
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      filled: true,
-                      hintText: 'Dose',
-                      labelText: 'Dose',
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        certificate.dose = value as int;
-                      });
-                    },
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      filled: true,
-                      hintText: 'Targeted Disease',
-                      labelText: 'Targeted Disease',
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        certificate.targetedDisease = value;
-                      });
-                    },
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      filled: true,
-                      hintText: 'VaccineType',
-                      labelText: 'VaccineType',
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        certificate.vaccineType = value;
-                      });
-                    },
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      filled: true,
-                      hintText: 'Product',
-                      labelText: 'Product',
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        certificate.product = value;
-                      });
-                    },
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      filled: true,
-                      hintText: 'Manufacturer',
-                      labelText: 'Manufacturer',
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        certificate.manufacturer = value;
-                      });
-                    },
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      filled: true,
-                      hintText: 'Country Of Vaccination',
-                      labelText: 'Country Of Vaccination',
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        certificate.countryOfVaccination = value;
-                      });
-                    },
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      filled: true,
-                      hintText: 'Issuer',
-                      labelText: 'Issuer',
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        certificate.issuer = value;
-                      });
-                    },
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      filled: true,
-                      hintText: 'UVCI',
-                      labelText: 'UVCI',
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        certificate.uvci = value;
-                      });
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        key: _formKey,
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: Card(
+              child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(10),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 400, minHeight: 100),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/'); // return to home, doesnt work yet for some reason
+                        (result == null)
+                            ? TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/scan-patient')
+                                      .then((value) => setState(() {
+                                            result = value as String;
+                                          }));
+                                },
+                                child: const Text('Scan Patient Key'),
+                                style: TextButton.styleFrom(minimumSize: const Size.fromHeight(50)))
+                            : Text(result!),
+                        const SizedBox(height: 10),
+                        TextInput(
+                            label: 'First Name',
+                            onChanged: (value) {
+                              setState(() {
+                                certificate.firstname = value;
+                              });
+                            }),
+                        const SizedBox(height: 10),
+                        TextInput(
+                            label: 'Last Name',
+                            onChanged: (value) {
+                              setState(() {
+                                certificate.lastname = value;
+                              });
+                            }),
+                        const SizedBox(height: 10),
+                        _FormDatePicker(
+                          title: 'Vaccination Date',
+                          date: certificate.vaccinationDate,
+                          onChanged: (value) {
+                            setState(() {
+                              certificate.vaccinationDate = value;
+                            });
                           },
-                          child: const Text('Back'),
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Validate returns true if the form is valid, or false otherwise.
-                            if (_formKey.currentState!.validate()) {
-                              // If the form is valid, display a snackbar. In the real world,
-                              // you'd often call a server or save the information in a database.
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Vaccine Entered Successfully')),
-                              );
-                            }
-                            Navigator.pushNamed(context, '/'); // return to home, doesnt work yet for some reason
+                        const SizedBox(height: 10),
+                        _FormDatePicker(
+                          title: 'Valid Until',
+                          date: certificate.validUntil,
+                          onChanged: (value) {
+                            setState(() {
+                              certificate.validUntil = value;
+                            });
                           },
-                            child: const Text('Submit'),
                         ),
+                        const SizedBox(height: 10),
+                        TextInput(
+                          label: 'Dose',
+                          onChanged: (value) {
+                            setState(() {
+                              certificate.dose = value as int;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextInput(
+                          label: 'Targeted Disease',
+                          onChanged: (value) {
+                            setState(() {
+                              certificate.targetedDisease = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextInput(
+                          label: 'VaccineType',
+                          onChanged: (value) {
+                            setState(() {
+                              certificate.vaccineType = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextInput(
+                          label: 'Product',
+                          onChanged: (value) {
+                            setState(() {
+                              certificate.product = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextInput(
+                          label: 'Manufacturer',
+                          onChanged: (value) {
+                            setState(() {
+                              certificate.manufacturer = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextInput(
+                          label: 'Country Of Vaccination',
+                          onChanged: (value) {
+                            setState(() {
+                              certificate.countryOfVaccination = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextInput(
+                          label: 'Issuer',
+                          onChanged: (value) {
+                            setState(() {
+                              certificate.issuer = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextInput(
+                          label: 'UVCI',
+                          onChanged: (value) {
+                            setState(() {
+                              certificate.uvci = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context); // return to home, doesnt work yet for some reason
+                                  },
+                                  child: const Text('Back'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    // Validate returns true if the form is valid, or false otherwise.
+                                    if (_formKey.currentState!.validate()) {
+                                      // If the form is valid, display a snackbar. In the real world,
+                                      // you'd often call a server or save the information in a database.
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text('Vaccine Entered Successfully')),
+                                      );
+                                    }
+                                    Navigator.pushNamed(context,
+                                        '/'); // return to home, doesnt work yet for some reason
+                                  },
+                                  child: const Text('Submit'),
+                                ),
+                              ],
+                            )),
                       ],
-                    )
-                  ),
-                ],
-              ),
-            )
-          )
+                    ),
+                  ))),
+        ));
+  }
+}
+
+class TextInput extends StatelessWidget {
+  final String label;
+  final void Function(String) onChanged;
+
+  const TextInput({Key? key, required this.label, required this.onChanged}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'This field cannot be empty.';
+          }
+          return null;
+        },
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          filled: false,
+          hintText: label,
+          labelText: label,
         ),
-      )
-    );
+        onChanged: onChanged);
   }
 }
 
