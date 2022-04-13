@@ -4,6 +4,7 @@ import 'package:flutter_app/screens/CertificateList.dart';
 import 'package:flutter_app/screens/HomeScreen.dart';
 import 'package:flutter_app/screens/CertificateVerification.dart';
 import 'package:flutter_app/screens/CreateCertificate.dart';
+import 'package:flutter_app/screens/Keys.dart';
 import 'package:flutter_app/screens/PatientDetail.dart';
 import 'package:flutter_app/screens/PatientList.dart';
 import 'package:flutter_app/screens/ScanCertificate.dart';
@@ -110,8 +111,8 @@ class MyApp extends StatelessWidget {
         '/sign-up': (context) => const SignUp(),
         '/sign-in': (context) => const SignIn(),
         '/scan-certificate': (context) => const ScanCertificate(),
-        '/certificate-verification': (
-            context) => const CertificateVerification(),
+        '/keys': (context) => const Keys(),
+        '/certificate-verification': (context) => const CertificateVerification(),
       },
     );
   }
@@ -130,8 +131,7 @@ class QRCodeRender extends StatelessWidget {
   Samples:
 
 Future<String> getKeys() async {
-  var keyOptions = KeyOptions()
-    ..rsaBits = 1024;
+  var keyOptions = KeyOptions()..rsaBits = 1024;
   var keyPair1 = await OpenPGP.generate(
       options: Options()
         ..name = 'test1'
