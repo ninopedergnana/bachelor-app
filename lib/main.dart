@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/screens/CertificateDetail.dart';
-import 'package:flutter_app/screens/CertificateList.dart';
-import 'package:flutter_app/screens/HomeScreen.dart';
-import 'package:flutter_app/screens/CertificateVerification.dart';
-import 'package:flutter_app/screens/CreateCertificate.dart';
-import 'package:flutter_app/screens/Keys.dart';
-import 'package:flutter_app/screens/PatientDetail.dart';
-import 'package:flutter_app/screens/PatientList.dart';
-import 'package:flutter_app/screens/ScanCertificate.dart';
-import 'package:flutter_app/screens/ScanPatient.dart';
-import 'package:flutter_app/screens/SignIn.dart';
-import 'package:flutter_app/screens/SignUp.dart';
-import 'package:flutter_app/screens/Start.dart';
-import 'package:http/http.dart';
-import 'package:openpgp/openpgp.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:web3dart/web3dart.dart';
 import 'package:flutter_app/domain/model/Certificate.dart';
-
-import 'impfy.g.dart';
+import 'package:flutter_app/presentation/screens/CertificateDetail.dart';
+import 'package:flutter_app/presentation/screens/CertificateList.dart';
+import 'package:flutter_app/presentation/screens/CertificateVerification.dart';
+import 'package:flutter_app/presentation/screens/CreateCertificate.dart';
+import 'package:flutter_app/presentation/screens/HomeScreen.dart';
+import 'package:flutter_app/presentation/screens/Keys.dart';
+import 'package:flutter_app/presentation/screens/PatientDetail.dart';
+import 'package:flutter_app/presentation/screens/PatientList.dart';
+import 'package:flutter_app/presentation/screens/ScanCertificate.dart';
+import 'package:flutter_app/presentation/screens/ScanPatient.dart';
+import 'package:flutter_app/presentation/screens/SignIn.dart';
+import 'package:flutter_app/presentation/screens/SignUp.dart';
+import 'package:flutter_app/presentation/screens/Start.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,13 +31,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/create-certificate',
+      initialRoute: '/start',
       routes: {
         '/': (context) => const HomeScreen(),
         '/start': (context) => const Start(),
-        '/certificate-list': (context) =>
-            CertificateList(vaccineList: [
-              Certificate(product: "product 1",
+        '/certificate-list': (context) => CertificateList(vaccineList: [
+              Certificate(
+                  product: "product 1",
                   uvci: "",
                   lastname: "Olgiati 1",
                   firstname: "Carlos",
@@ -53,7 +49,8 @@ class MyApp extends StatelessWidget {
                   vaccinationDate: DateTime.now(),
                   vaccineType: "",
                   validUntil: DateTime.now()),
-              Certificate(product: "product 2",
+              Certificate(
+                  product: "product 2",
                   uvci: "",
                   lastname: "Olgiati 2",
                   firstname: "Carlos",
@@ -78,7 +75,8 @@ class MyApp extends StatelessWidget {
                   vaccinationDate: DateTime.now(),
                   vaccineType: "",
                   validUntil: DateTime.now()),
-              Certificate(product: "product 4",
+              Certificate(
+                  product: "product 4",
                   uvci: "",
                   lastname: "Olgiati 4",
                   firstname: "Carlos",
@@ -90,7 +88,8 @@ class MyApp extends StatelessWidget {
                   vaccinationDate: DateTime.now(),
                   vaccineType: "",
                   validUntil: DateTime.now()),
-              Certificate(product: "product 5",
+              Certificate(
+                  product: "product 5",
                   uvci: "",
                   lastname: "Olgiati 5",
                   firstname: "Carlos",

@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter_app/data/dto/PatientKeysDTO.dart';
 import 'package:flutter_app/domain/model/Certificate.dart';
 import 'package:flutter_app/impfy.g.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:openpgp/openpgp.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart';
@@ -9,16 +11,13 @@ import 'package:eth_sig_util/eth_sig_util.dart';
 
 // TODO: Convert to singleton
 class Repository {
-  late String _privateKey;
+  final FlutterSecureStorage _localStorage = const FlutterSecureStorage();
   late Impfy _client;
-  late EthPrivateKey _credentials;
   final EthereumAddress _contractAddress =
       EthereumAddress.fromHex('0xb58d3d11966CCeB725e39C3d6D0d383Bf3F1cec3');
   final String _rpcUrl = 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
 
-  Repository(String privateKey) {
-    _privateKey = privateKey;
-    _credentials = EthPrivateKey.fromHex(_privateKey);
+  Repository() {
     var client = Web3Client(_rpcUrl, Client());
     _client = Impfy(address: _contractAddress, client: client);
   }
@@ -33,13 +32,17 @@ class Repository {
   //   return certificates;
   // }
 
-  Future<void> createCertificate(
-      Certificate certificate, EthereumAddress patient, String doctorKey, String patientKey) async {
+  Future<void> createCertificate(Certificate certificate, PatientKeysDTO patientKeys) async {
+    String doctorKey = (await _localStorage.read(key: 'pgpPublicKey'))!;
+    String privateKey = (await _localStorage.read(key: 'ethPrivateKey'))!;
+    Credentials credentials = EthPrivateKey.fromInt(BigInt.parse(privateKey));
     String hash = certificate.hashCode.toString();
     String signedHash = EthSigUtil.signTypedData(
-        privateKey: _privateKey, jsonData: hash, version: TypedDataVersion.V4);
-    String encryptedCertificate = await certificate.encrypt(doctorKey, patientKey);
-    _client.addCertificate(encryptedCertificate, signedHash, patient, credentials: _credentials);
+        privateKey: privateKey, jsonData: hash, version: TypedDataVersion.V4);
+    String encryptedCertificate = await certificate.encrypt(doctorKey, patientKeys.pgpKey);
+    _client.addCertificate(
+        encryptedCertificate, signedHash, EthereumAddress.fromHex(patientKeys.ethAddress),
+        credentials: credentials);
   }
 
   Future<Certificate> decryptCertificate(dynamic data, String privateKey, String passphrase) async {
