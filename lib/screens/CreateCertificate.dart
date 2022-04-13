@@ -28,16 +28,9 @@ class CreateCertificateForm extends StatefulWidget {
   }
 }
 
-// Create a corresponding State class.
-// This class holds data related to the form.
 class CreateCertificateFormState extends State<CreateCertificateForm> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a GlobalKey<FormState>,
-  // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
-  String? result;
+  String? _patientKey;
 
   // JSON CONVERSION
   Certificate certificate = Certificate(
@@ -57,6 +50,12 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
   // Map<String,dynamic> map = vaccine.toJson();
   // String vaccineJSON = jsonEncode(map);
 
+  void scanPatientKey() {
+    Navigator.pushNamed(context, '/scan-patient').then((value) => setState(() {
+          _patientKey = value as String;
+        }));
+  }
+
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
@@ -73,17 +72,16 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        (result == null)
-                            ? TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/scan-patient')
-                                      .then((value) => setState(() {
-                                            result = value as String;
-                                          }));
-                                },
-                                child: const Text('Scan Patient Key'),
-                                style: TextButton.styleFrom(minimumSize: const Size.fromHeight(50)))
-                            : Text(result!),
+                        TextButton(
+                            onPressed: (_patientKey == null) ? scanPatientKey : null,
+                            child: Text(
+                              (_patientKey == null) ? 'Scan Patient Key' : 'Patient Key Scanned',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            style: TextButton.styleFrom(
+                                minimumSize: const Size.fromHeight(60),
+                                backgroundColor:
+                                    (_patientKey == null) ? Colors.blue : Colors.grey)),
                         const SizedBox(height: 10),
                         TextInput(
                             label: 'First Name',
@@ -192,33 +190,23 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                             });
                           },
                         ),
-                        const SizedBox(height: 10),
                         Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pop(context); // return to home, doesnt work yet for some reason
-                                  },
-                                  child: const Text('Back'),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    // Validate returns true if the form is valid, or false otherwise.
                                     if (_formKey.currentState!.validate()) {
-                                      // If the form is valid, display a snackbar. In the real world,
-                                      // you'd often call a server or save the information in a database.
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(
                                             content: Text('Vaccine Entered Successfully')),
                                       );
+                                      Navigator.pop(context);
                                     }
-                                    Navigator.pushNamed(context,
-                                        '/'); // return to home, doesnt work yet for some reason
                                   },
                                   child: const Text('Submit'),
+                                  style: ElevatedButton.styleFrom(minimumSize: const Size(120, 60)),
                                 ),
                               ],
                             )),
