@@ -23,9 +23,10 @@ class Repository {
   }
 
   // Future<Map<String, Certificate>> getCertificates() async {
-  //   var privateKey = '';
   //   var passphrase = '';
-  //   EthereumAddress address = await _credentials.extractAddress();
+  //   String privateKey = (await _localStorage.read(key: 'ethPrivateKey'))!;
+  //   Credentials credentials = EthPrivateKey.fromHex(privateKey);
+  //   EthereumAddress address = await credentials.extractAddress();
   //   var result = await _client.getCertificates(address);
   //   var x = { for (var e in result) e['certificateHash'] as String : decryptCertificate(e, privateKey, passphrase) };
   //   Map<String, Certificate> certificates = await Future.wait(x);
@@ -35,13 +36,13 @@ class Repository {
   Future<void> createCertificate(Certificate certificate, PatientKeysDTO patientKeys) async {
     String doctorKey = (await _localStorage.read(key: 'pgpPublicKey'))!;
     String privateKey = (await _localStorage.read(key: 'ethPrivateKey'))!;
-    Credentials credentials = EthPrivateKey.fromInt(BigInt.parse(privateKey));
+    Credentials credentials = EthPrivateKey.fromHex(privateKey);
     String hash = certificate.hashCode.toString();
-    String signedHash = EthSigUtil.signTypedData(
-        privateKey: privateKey, jsonData: hash, version: TypedDataVersion.V4);
+    // String signedHash = EthSigUtil.signTypedData(
+    //     privateKey: privateKey, jsonData: json.encode({"hash": hash}), version: TypedDataVersion.V4);
     String encryptedCertificate = await certificate.encrypt(doctorKey, patientKeys.pgpKey);
     _client.addCertificate(
-        encryptedCertificate, signedHash, EthereumAddress.fromHex(patientKeys.ethAddress),
+        encryptedCertificate, hash, EthereumAddress.fromHex(patientKeys.ethAddress),
         credentials: credentials);
   }
 

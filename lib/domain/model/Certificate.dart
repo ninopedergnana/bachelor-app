@@ -66,6 +66,6 @@ class Certificate {
   }
 
   Future<String> encrypt(String doctorKey, String patientKey) async {
-    return await OpenPGP.encrypt(toString(), doctorKey + patientKey);
+    return await OpenPGP.encrypt(toString(), doctorKey);
   }
 }
