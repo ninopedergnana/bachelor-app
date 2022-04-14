@@ -6,6 +6,8 @@ import 'package:flutter_app/presentation/components/CustomDialog.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:web3dart/web3dart.dart';
 
+import '../../data/dto/UserKeysDTO.dart';
+
 class Keys extends StatefulWidget {
   const Keys({Key? key}) : super(key: key);
 
@@ -45,6 +47,18 @@ class KeysState extends State<Keys> {
     String ethAddress = EthPrivateKey.fromHex(ethPrivateKey).address.hex;
     PatientKeysDTO patientKeys = PatientKeysDTO(pgpKey: pgpPublicKey, ethAddress: ethAddress);
     await dialog.showQRDialog(context, patientKeys.toString(), "Public Keys");
+  }
+
+  Future<void> exportAllKeys() async {
+    pgpPublicKey = (await _localStorage.read(key: 'pgpPublicKey'))!;
+    pgpPrivateKey = (await _localStorage.read(key: 'pgpPrivateKey'))!;
+    ethPrivateKey = (await _localStorage.read(key: 'ethPrivateKey'))!;
+    UserKeysDTO userKeys = UserKeysDTO(
+        pgpPrivateKey: pgpPrivateKey,
+        pgpPublicKey: pgpPublicKey,
+        ethPrivateKey: ethPrivateKey
+    );
+    await dialog.showQRDialog(context, userKeys.toString(), "User Keys");
   }
 
   @override
@@ -143,6 +157,10 @@ class KeysState extends State<Keys> {
             ElevatedButton(
               onPressed: sharePublicKeys,
               child: const Text('Share Public Keys'),
+            ),
+            ElevatedButton(
+              onPressed: exportAllKeys,
+              child: const Text('Export Keys'),
             )
           ],
         ),

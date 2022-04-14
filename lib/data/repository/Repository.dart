@@ -22,16 +22,16 @@ class Repository {
     _client = Impfy(address: _contractAddress, client: client);
   }
 
-  // Future<Map<String, Certificate>> getCertificates() async {
-  //   var passphrase = '';
-  //   String privateKey = (await _localStorage.read(key: 'ethPrivateKey'))!;
-  //   Credentials credentials = EthPrivateKey.fromHex(privateKey);
-  //   EthereumAddress address = await credentials.extractAddress();
-  //   var result = await _client.getCertificates(address);
-  //   var x = { for (var e in result) e['certificateHash'] as String : decryptCertificate(e, privateKey, passphrase) };
-  //   Map<String, Certificate> certificates = await Future.wait(x);
-  //   return certificates;
-  // }
+ // Future<Map<String, Certificate>> getCertificates() async {
+ //   var passphrase = '';
+ //   String privateKey = (await _localStorage.read(key: 'ethPrivateKey'))!;
+ //   Credentials credentials = EthPrivateKey.fromHex(privateKey);
+ //   EthereumAddress address = await credentials.extractAddress();
+ //   var result = await _client.getCertificates(address);
+ //   var x = { for (var e in result) e['certificateHash'] as String : decryptCertificate(e, privateKey, passphrase) };
+ //   Map<String, Certificate> certificates = await Future.wait(x);
+ //   return certificates;
+ // }
 
   Future<void> createCertificate(Certificate certificate, PatientKeysDTO patientKeys) async {
     String doctorKey = (await _localStorage.read(key: 'pgpPublicKey'))!;
