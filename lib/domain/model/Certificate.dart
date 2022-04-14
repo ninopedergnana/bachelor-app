@@ -1,4 +1,5 @@
 import 'package:openpgp/openpgp.dart';
+import 'dart:convert';
 
 // https://docs.flutter.dev/development/data-and-backend/json#manual-encoding
 
@@ -34,8 +35,8 @@ class Certificate {
   Certificate.fromJson(Map<String, dynamic> json)
       : firstname = json['fn'],
         lastname = json['ln'],
-        vaccinationDate = json['dt'],
-        validUntil = json['vu'],
+        vaccinationDate = DateTime.parse(json['dt']),
+        validUntil = DateTime.parse(json['vu']),
         dose = json['dn'],
         targetedDisease = json['tg'],
         vaccineType = json['vp'],
@@ -48,8 +49,8 @@ class Certificate {
   Map<String, dynamic> toJson() => {
         'fn': firstname,
         'ln': lastname,
-        'dt': vaccinationDate,
-        'vu': validUntil,
+        'dt': vaccinationDate.toString(),
+        'vu': validUntil.toString(),
         'dn': dose,
         'tg': targetedDisease,
         'vp': vaccineType,
@@ -62,10 +63,11 @@ class Certificate {
 
   @override
   String toString() {
-    return toJson().toString();
+    var x = jsonEncode(toJson());
+    return x;
   }
 
   Future<String> encrypt(String doctorKey, String patientKey) async {
-    return await OpenPGP.encrypt(toString(), doctorKey);
+    return await OpenPGP.encrypt(toString(), doctorKey + patientKey);
   }
 }

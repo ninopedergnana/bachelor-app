@@ -14,8 +14,7 @@ class Repository {
   late Impfy _client;
   final EthereumAddress _contractAddress =
       EthereumAddress.fromHex('0xb58d3d11966CCeB725e39C3d6D0d383Bf3F1cec3');
-  final String _rpcUrl =
-      'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
+  final String _rpcUrl = 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
 
   Repository() {
     var client = Web3Client(_rpcUrl, Client());
@@ -28,39 +27,36 @@ class Repository {
     // ethereum privat key fetched, and public key generated with credentials
     String ethPrivateKey = (await _localStorage.read(key: 'ethPrivateKey'))!;
     Credentials credentials = EthPrivateKey.fromHex(ethPrivateKey);
-    EthereumAddress address = await credentials.extractAddress();
+    // EthereumAddress address = await credentials.extractAddress();
+    EthereumAddress address = EthereumAddress.fromHex('0x94e5999Dea8b2369fd313C34EE4ab2217E6F7B10');
 
     // result structure currently unknown
     var result = (await _client.getCertificates(address));
-    var certs = result.map((element) {
+    var encryptedCertificates = result.map((element) {
       return List.from(element);
     });
 
-    var x = certs.map((e) => e.first).map((e) => decryptCertificate(e, passphrase));
-
-    return Future.wait(List.from(x));
+    // TODO: parse all certificates, add try catch to filter out ones in wrong format.
+    var certificate = await decryptCertificate(encryptedCertificates.last.first as String, passphrase);
+    return [certificate];
   }
 
-  Future<void> createCertificate(
-      Certificate certificate, PatientKeysDTO patientKeys) async {
-    String pgpDoctorPublicKey =
-        (await _localStorage.read(key: 'pgpPublicKey'))!;
+  Future<void> createCertificate(Certificate certificate, PatientKeysDTO patientKeys) async {
+    String pgpDoctorPublicKey = (await _localStorage.read(key: 'pgpPublicKey'))!;
     String ethPrivateKey = (await _localStorage.read(key: 'ethPrivateKey'))!;
     Credentials credentials = EthPrivateKey.fromHex(ethPrivateKey);
     String hash = certificate.hashCode.toString();
     // String signedHash = EthSigUtil.signTypedData(
     //     privateKey: privateKey, jsonData: json.encode({"hash": hash}), version: TypedDataVersion.V4);
-    String encryptedCertificate =
-        await certificate.encrypt(pgpDoctorPublicKey, patientKeys.pgpKey);
-    _client.addCertificate(encryptedCertificate, hash,
-        EthereumAddress.fromHex(patientKeys.ethAddress),
+    String encryptedCertificate = await certificate.encrypt(pgpDoctorPublicKey, patientKeys.pgpKey);
+    _client.addCertificate(
+        encryptedCertificate, hash, EthereumAddress.fromHex(patientKeys.ethAddress),
         credentials: credentials);
   }
 
   Future<Certificate> decryptCertificate(String data, String passphrase) async {
     String privateKey = (await _localStorage.read(key: 'pgpPrivateKey'))!;
-    String certificateJson = await OpenPGP.decrypt(
-        data, privateKey, passphrase);
-    return Certificate.fromJson(jsonDecode(certificateJson));
+    String certificateJson = await OpenPGP.decrypt(data, privateKey, passphrase);
+    return Certificate.fromJson(json.decode(certificateJson));
   }
 }
