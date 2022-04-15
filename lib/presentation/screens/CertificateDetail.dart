@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/domain/model/SignedCertificate.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../components/DetailViewCustomText.dart';
+
 class CertificateDetail extends StatelessWidget {
   const CertificateDetail({Key? key}) : super(key: key);
 
@@ -14,16 +16,17 @@ class CertificateDetail extends StatelessWidget {
       appBar: AppBar(
         title: Text(certificate.product),
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(10),
           child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             QrImage(
               data: signedCertificate.toString(),
               version: QrVersions.auto,
               size: 320,
-              gapless: false,
+              gapless: true,
               errorStateBuilder: (cxt, err) {
                 return const Center(
                   child: Text(
@@ -33,16 +36,16 @@ class CertificateDetail extends StatelessWidget {
                 );
               },
             ),
-            Text(certificate.firstname),
-            Text(certificate.lastname),
-            Text(certificate.vaccinationDate.toString()),
-            Text(certificate.validUntil.toString()),
-            Text(certificate.dose.toString()),
-            Text(certificate.targetedDisease),
-            Text(certificate.vaccineType),
-            Text(certificate.product),
-            Text(certificate.issuer),
-            Text(certificate.uvci),
+            const SizedBox(height: 30),
+            DetailViewCustomText(title: "Name", content: certificate.firstname + " " + certificate.lastname),
+            DetailViewCustomText(title: "Vaccination Date", content: certificate.vaccinationDate.toString()),
+            DetailViewCustomText(title: "Valid Until", content: certificate.validUntil.toString()),
+            DetailViewCustomText(title: "Dose", content: certificate.dose.toString()),
+            DetailViewCustomText(title: "Targeted Disease", content: certificate.targetedDisease),
+            DetailViewCustomText(title: "Vaccine Type", content: certificate.vaccineType),
+            DetailViewCustomText(title: "Product", content: certificate.product),
+            DetailViewCustomText(title: "Issuer", content: certificate.issuer),
+            DetailViewCustomText(title: "UVCI", content: certificate.uvci),
           ],
         )
       ),
