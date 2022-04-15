@@ -1,5 +1,9 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:crypto/crypto.dart';
+import 'package:eth_sig_util/eth_sig_util.dart';
+import 'package:flutter_app/data/repository/Repository.dart';
 import 'package:flutter_app/domain/model/Certificate.dart';
 
 class SignedCertificate {
@@ -17,5 +21,16 @@ class SignedCertificate {
   @override
   String toString() {
     return jsonEncode(toJson());
+  }
+
+  String _getHashCode() {
+    return md5.convert(certificate.toString().codeUnits).toString();
+  }
+
+  Future<bool> verify() async {
+    var unsignedHash = _getHashCode();
+    String address = EthSigUtil.ecRecover(
+        signature: signedHash, message: Uint8List.fromList(unsignedHash.codeUnits));
+    return Repository().isDoctor(address);
   }
 }

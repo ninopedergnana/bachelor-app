@@ -55,7 +55,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
   // String vaccineJSON = jsonEncode(map);
 
   Future<void> scanPatientKey() async {
-    String value = await Navigator.pushNamed(context, '/scan-patient') as String;
+    String value = await Navigator.pushNamed(context, '/create-certificate/scan-patient') as String;
     setState(() {
       if (value != '-1') {
         // Returns -1 when no QR was scanned.

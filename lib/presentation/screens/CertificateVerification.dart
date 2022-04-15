@@ -16,7 +16,7 @@ class CertificateVerification extends StatelessWidget {
                 children: <Widget>[
                   ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/');
+                        Navigator.pop(context);
                       },
                       child: const Text('Back'))
                 ])));

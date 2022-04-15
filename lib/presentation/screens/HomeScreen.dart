@@ -29,14 +29,14 @@ class HomeScreen extends StatelessWidget {
               child: const Text('Certificate List')),
           ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/start');
+                Navigator.pushNamed(context, '/auth');
               },
               child: const Text('Back to Sign In')),
           ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/scan-certificate');
               },
-              child: const Text('Scan')),
+              child: const Text('Verify')),
           ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/create-certificate');

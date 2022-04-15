@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/domain/model/Certificate.dart';
 import 'package:flutter_app/presentation/screens/CertificateDetail.dart';
 import 'package:flutter_app/presentation/screens/CertificateList.dart';
 import 'package:flutter_app/presentation/screens/CertificateVerification.dart';
@@ -20,10 +19,25 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<StatefulWidget> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final FlutterSecureStorage _localStorage = const FlutterSecureStorage();
+  String _initialRoute = '/auth';
+
+  _MyAppState() {
+    _localStorage.containsKey(key: 'ethPrivateKey').then((isAuthenticated) {
+      setState(() {
+        _initialRoute = isAuthenticated ? '/' : '/auth';
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,87 +45,23 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/start',
+      initialRoute: _initialRoute,
       routes: {
         '/': (context) => const HomeScreen(),
-        '/start': (context) => const Start(),
-        '/certificate-list': (context) => CertificateList(vaccineList: [
-              Certificate(
-                  product: "product 1",
-                  uvci: "",
-                  lastname: "Olgiati 1",
-                  firstname: "Carlos",
-                  manufacturer: "",
-                  issuer: "",
-                  targetedDisease: "",
-                  countryOfVaccination: "",
-                  dose: 0,
-                  vaccinationDate: DateTime.now(),
-                  vaccineType: "",
-                  validUntil: DateTime.now()),
-              Certificate(
-                  product: "product 2",
-                  uvci: "",
-                  lastname: "Olgiati 2",
-                  firstname: "Carlos",
-                  manufacturer: "",
-                  issuer: "",
-                  targetedDisease: "",
-                  countryOfVaccination: "",
-                  dose: 0,
-                  vaccinationDate: DateTime.now(),
-                  vaccineType: "",
-                  validUntil: DateTime.now()),
-              Certificate(
-                  product: "product 3",
-                  uvci: "",
-                  lastname: "Olgiati 3",
-                  firstname: "Carlos",
-                  manufacturer: "",
-                  issuer: "",
-                  targetedDisease: "",
-                  countryOfVaccination: "",
-                  dose: 0,
-                  vaccinationDate: DateTime.now(),
-                  vaccineType: "",
-                  validUntil: DateTime.now()),
-              Certificate(
-                  product: "product 4",
-                  uvci: "",
-                  lastname: "Olgiati 4",
-                  firstname: "Carlos",
-                  manufacturer: "",
-                  issuer: "",
-                  targetedDisease: "",
-                  countryOfVaccination: "",
-                  dose: 0,
-                  vaccinationDate: DateTime.now(),
-                  vaccineType: "",
-                  validUntil: DateTime.now()),
-              Certificate(
-                  product: "product 5",
-                  uvci: "",
-                  lastname: "Olgiati 5",
-                  firstname: "Carlos",
-                  manufacturer: "",
-                  issuer: "",
-                  targetedDisease: "",
-                  countryOfVaccination: "",
-                  dose: 0,
-                  vaccinationDate: DateTime.now(),
-                  vaccineType: "",
-                  validUntil: DateTime.now())
-            ]),
-        '/certificate': (context) => const CertificateDetail(),
+        '/certificate-list': (context) => CertificateList(vaccineList: []),
+        '/certificate-list/certificate': (context) => const CertificateDetail(),
         '/patients': (context) => const PatientList(),
-        '/patient': (context) => const PatientDetail(),
+        '/patients/patient': (context) => const PatientDetail(),
         '/create-certificate': (context) => const CreateCertificate(),
-        '/scan-patient': (context) => const ScanPatient(),
-        '/sign-up': (context) => const SignUp(),
-        '/sign-in': (context) => const SignIn(),
+        '/create-certificate/scan-patient': (context) => const ScanPatient(),
         '/scan-certificate': (context) => const ScanCertificate(),
         '/keys': (context) => const Keys(),
         '/certificate-verification': (context) => const CertificateVerification(),
+        '/auth': (context) => const Start(),
+        '/auth/certificate': (context) => const CertificateDetail(),
+        '/auth/sign-up': (context) => const SignUp(),
+        '/auth/sign-in': (context) => const SignIn(),
+        '/auth/scan-certificate': (context) => const ScanCertificate(),
       },
     );
   }

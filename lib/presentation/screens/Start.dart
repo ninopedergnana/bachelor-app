@@ -26,6 +26,7 @@ class Start extends StatelessWidget {
                   },
                   child: const Text('Sign In')
               ),
+              // TODO: Remove and replace with 'Verify' button & functionality.
               ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/keys');

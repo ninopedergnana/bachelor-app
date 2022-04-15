@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/domain/model/SignedCertificate.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class ScanCertificate extends StatefulWidget {
@@ -10,7 +13,8 @@ class ScanCertificate extends StatefulWidget {
 }
 
 class ScanCertificateState extends State<ScanCertificate> {
-  String qrCodeString = 'Nothing scanned yet';
+  SignedCertificate? _signedCertificate;
+  bool? _isValid;
 
   @override
   void initState() {
@@ -18,30 +22,29 @@ class ScanCertificateState extends State<ScanCertificate> {
   }
 
   Future<void> scanQR() async {
-    String barcodeScanRes;
-    // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666',  // line color
-          'Cancel',   // cancel button text
-          false,      // show flash icon
-          ScanMode.QR // scan mode
+      String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666',
+          'Cancel',
+          false,
+          ScanMode.QR
       );
-      // handle the string function comes here
+      setState(() {
+        _signedCertificate = SignedCertificate.fromJson(jsonDecode(barcodeScanRes));
+        _signedCertificate!.verify().then((b) => _isValid = b);
+      });
     } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
+      // barcodeScanRes = 'Failed to get platform version.';
     }
     if (!mounted) return;
-
-    setState(() {
-      qrCodeString = barcodeScanRes;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_signedCertificate == null) scanQR();
     return MaterialApp(
         home: Scaffold(
+          backgroundColor: (_isValid != null && _isValid!) ? Colors.green : Colors.red,
             appBar: AppBar(
               title: const Text('QR Code Scanner'),
               centerTitle: true,
@@ -57,7 +60,9 @@ class ScanCertificateState extends State<ScanCertificate> {
                             ElevatedButton(
                                 onPressed: () => scanQR(),
                                 child: const Text('Scan QR')),
-                            Text('Scan result : $qrCodeString\n',
+                            Text('Scan result : ${_signedCertificate?.signedHash}\n',
+                                style: const TextStyle(fontSize: 20)),
+                            Text('Is valid : $_isValid',
                                 style: const TextStyle(fontSize: 20))
                           ]));
                 })));

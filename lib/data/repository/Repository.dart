@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:crypto/crypto.dart';
 import 'package:flutter_app/data/dto/PatientKeysDTO.dart';
 import 'package:flutter_app/domain/model/Certificate.dart';
 import 'package:flutter_app/domain/model/SignedCertificate.dart';
@@ -47,7 +48,7 @@ class Repository {
     String pgpDoctorPublicKey = (await _localStorage.read(key: 'pgpPublicKey'))!;
     String ethPrivateKey = (await _localStorage.read(key: 'ethPrivateKey'))!;
     Credentials credentials = EthPrivateKey.fromHex(ethPrivateKey);
-    String hash = certificate.hashCode.toString();
+    String hash = md5.convert(certificate.toString().codeUnits).toString();
     String signedHash = EthSigUtil.signMessage(
         privateKey: ethPrivateKey, message: Uint8List.fromList(hash.codeUnits));
     String encryptedCertificate = await certificate.encrypt(pgpDoctorPublicKey, patientKeys.pgpKey);
@@ -67,5 +68,11 @@ class Repository {
     } catch (e) {
       return null;
     }
+  }
+
+  Future<bool> isDoctor(String address) async {
+    // TODO: Check if address belongs to doctor, once function is added to contract.
+    // await _client.isDoctor(EthereumAddress.fromHex(address));
+    return address == '0x08A6475d8F8668DD93fa3bd3AD87D83312a152d6';
   }
 }
