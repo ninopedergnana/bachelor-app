@@ -12,35 +12,29 @@ class CertificateList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var vaccs = repo.getCertificates().then((e) {
-      e.forEach((element) {print(element.toString());});
-    });
+    var certificates = repo.getCertificates();
     return Scaffold(
       appBar: AppBar(
         title: const Text('List of Vaccines'),
       ),
       body: Center(
-        child: ListView.builder(
-          itemCount: vaccineList.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(vaccineList[index].product),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const CertificateDetail(),
-                      settings: RouteSettings(
-                        arguments: vaccineList[index]
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-        )
-      ),
+          child: ListView.builder(
+        itemCount: vaccineList.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(vaccineList[index].product),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CertificateDetail(),
+                  settings: RouteSettings(arguments: vaccineList[index]),
+                ),
+              );
+            },
+          );
+        },
+      )),
     );
   }
 }
-

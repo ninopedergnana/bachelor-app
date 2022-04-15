@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter_app/data/dto/PatientKeysDTO.dart';
 import 'package:flutter_app/domain/model/Certificate.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:openpgp/openpgp.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart';
+import 'package:eth_sig_util/eth_sig_util.dart';
 
 // TODO: Convert to singleton
 class Repository {
@@ -28,17 +30,16 @@ class Repository {
     String ethPrivateKey = (await _localStorage.read(key: 'ethPrivateKey'))!;
     Credentials credentials = EthPrivateKey.fromHex(ethPrivateKey);
     // EthereumAddress address = await credentials.extractAddress();
+    // FIXME: Remove
     EthereumAddress address = EthereumAddress.fromHex('0x94e5999Dea8b2369fd313C34EE4ab2217E6F7B10');
 
     // result structure currently unknown
-    var result = (await _client.getCertificates(address));
-    var encryptedCertificates = result.map((element) {
-      return List.from(element);
-    });
+    var response = (await _client.getCertificates(address));
+    var certificates = response
+        .map((element) => List.from(element))
+        .map((element) => decryptCertificate(element, passphrase));
 
-    // TODO: parse all certificates, add try catch to filter out ones in wrong format.
-    var certificate = await decryptCertificate(encryptedCertificates.last.first as String, passphrase);
-    return [certificate];
+    return (await Future.wait(certificates)).whereType<Certificate>().toList();
   }
 
   Future<void> createCertificate(Certificate certificate, PatientKeysDTO patientKeys) async {
@@ -46,17 +47,25 @@ class Repository {
     String ethPrivateKey = (await _localStorage.read(key: 'ethPrivateKey'))!;
     Credentials credentials = EthPrivateKey.fromHex(ethPrivateKey);
     String hash = certificate.hashCode.toString();
-    // String signedHash = EthSigUtil.signTypedData(
-    //     privateKey: privateKey, jsonData: json.encode({"hash": hash}), version: TypedDataVersion.V4);
+    String signedHash = EthSigUtil.signMessage(
+        privateKey: ethPrivateKey, message: Uint8List.fromList(hash.codeUnits));
     String encryptedCertificate = await certificate.encrypt(pgpDoctorPublicKey, patientKeys.pgpKey);
     _client.addCertificate(
-        encryptedCertificate, hash, EthereumAddress.fromHex(patientKeys.ethAddress),
+        encryptedCertificate, signedHash, EthereumAddress.fromHex(patientKeys.ethAddress),
         credentials: credentials);
   }
 
-  Future<Certificate> decryptCertificate(String data, String passphrase) async {
+  Future<Certificate?> decryptCertificate(List<dynamic> data, String passphrase) async {
+    String encryptedCertificate = data.first as String;
+    String signedHash = data.last as String;
     String privateKey = (await _localStorage.read(key: 'pgpPrivateKey'))!;
-    String certificateJson = await OpenPGP.decrypt(data, privateKey, passphrase);
-    return Certificate.fromJson(json.decode(certificateJson));
+    try {
+      String certificateJson = await OpenPGP.decrypt(encryptedCertificate, privateKey, passphrase);
+      Certificate certificate = Certificate.fromJson(json.decode(certificateJson));
+      certificate.signedHash = signedHash;
+      return certificate;
+    } catch (e) {
+      return null;
+    }
   }
 }
