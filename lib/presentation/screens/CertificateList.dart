@@ -1,40 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/domain/model/Certificate.dart';
+import 'package:flutter_app/domain/model/SignedCertificate.dart';
 import 'package:flutter_app/presentation/screens/CertificateDetail.dart';
-
 import '../../data/repository/Repository.dart';
 
-class CertificateList extends StatelessWidget {
-  CertificateList({Key? key, required this.vaccineList}) : super(key: key);
+class CertificateList extends StatefulWidget {
+  const CertificateList({Key? key}) : super(key: key);
 
-  final List<Certificate> vaccineList;
+  @override
+  _CertificateListState createState() => _CertificateListState();
+}
+  class _CertificateListState extends State<CertificateList> {
   final Repository repo = Repository();
+
+
+  List<SignedCertificate> signedCertList = [];
+
+
+  Future buildSignedCertList() async {
+    signedCertList = await repo.getCertificates();
+    return await repo.getCertificates();
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    var certificates = repo.getCertificates();
     return Scaffold(
       appBar: AppBar(
         title: const Text('List of Vaccines'),
       ),
-      body: Center(
-          child: ListView.builder(
-        itemCount: vaccineList.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(vaccineList[index].product),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CertificateDetail(),
-                  settings: RouteSettings(arguments: vaccineList[index]),
-                ),
-              );
-            },
-          );
-        },
-      )),
+      body: FutureBuilder(
+        future: buildSignedCertList(),
+        builder:(context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+                child: CircularProgressIndicator()
+            );
+          } else {
+            return ListView.builder(
+              itemCount: signedCertList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(signedCertList[index].certificate.product),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CertificateDetail(),
+                        settings: RouteSettings(arguments: signedCertList[index])
+                      )
+                    );
+                  },
+                );
+              } // itemBuilder
+            );
+          } // else case
+        } // builder
+      )
     );
   }
 }

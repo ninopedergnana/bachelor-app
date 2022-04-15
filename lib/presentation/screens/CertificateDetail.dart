@@ -16,35 +16,36 @@ class CertificateDetail extends StatelessWidget {
       ),
       body: Center(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          QrImage(
-            data: certificate.toJson().toString(),
-            version: QrVersions.auto,
-            size: 320,
-            gapless: false,
-            errorStateBuilder: (cxt, err) {
-              return const Center(
-                child: Text(
-                  "Uh oh! Something went wrong while scanning the code",
-                  textAlign: TextAlign.center,
-                ),
-              );
-            },
-          ),
-          Text(certificate.firstname),
-          Text(certificate.lastname),
-          Text(certificate.vaccinationDate.toString()),
-          Text(certificate.validUntil.toString()),
-          Text(certificate.dose.toString()),
-          Text(certificate.targetedDisease),
-          Text(certificate.vaccineType),
-          Text(certificate.product),
-          Text(certificate.issuer),
-          Text(certificate.uvci),
-        ],
-      )),
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            QrImage(
+              data: certificate.toJson().toString(),
+              version: QrVersions.auto,
+              size: 320,
+              gapless: false,
+              errorStateBuilder: (cxt, err) {
+                return const Center(
+                  child: Text(
+                    "Uh oh! Something went wrong while scanning the code",
+                    textAlign: TextAlign.center,
+                  ),
+                );
+              },
+            ),
+            Text(certificate.firstname),
+            Text(certificate.lastname),
+            Text(certificate.vaccinationDate.toString()),
+            Text(certificate.validUntil.toString()),
+            Text(certificate.dose.toString()),
+            Text(certificate.targetedDisease),
+            Text(certificate.vaccineType),
+            Text(certificate.product),
+            Text(certificate.issuer),
+            Text(certificate.uvci),
+          ],
+        )
+      ),
     );
   }
 }
