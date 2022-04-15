@@ -54,6 +54,7 @@ class _MyAppState extends State<MyApp> {
         '/patients/patient': (context) => const PatientDetail(),
         '/create-certificate': (context) => const CreateCertificate(),
         '/create-certificate/scan-patient': (context) => const ScanPatient(),
+        '/scan-patient': (context) => const ScanPatient(),
         '/scan-certificate': (context) => const ScanCertificate(),
         '/keys': (context) => const Keys(),
         '/certificate-verification': (context) => const CertificateVerification(),

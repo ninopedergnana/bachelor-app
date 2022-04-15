@@ -18,11 +18,6 @@ class HomeScreen extends StatelessWidget {
               child: const Text('Patients')),
           ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/certificate-verification');
-              },
-              child: const Text('Certificate Verification')),
-          ElevatedButton(
-              onPressed: () {
                 Navigator.pushNamed(context, '/certificate-list');
               },
               child: const Text('Certificate List')),

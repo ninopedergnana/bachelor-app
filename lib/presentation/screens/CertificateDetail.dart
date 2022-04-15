@@ -20,7 +20,7 @@ class CertificateDetail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             QrImage(
-              data: certificate.toJson().toString(),
+              data: signedCertificate.toString(),
               version: QrVersions.auto,
               size: 320,
               gapless: false,
