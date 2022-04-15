@@ -15,6 +15,7 @@ class SignUp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Sign Up'),
+          centerTitle: true,
         ),
         body: const SignUpForm(),
       ),

@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/presentation/screens/CertificateDetail.dart';
-import 'package:flutter_app/presentation/screens/CertificateList.dart';
-import 'package:flutter_app/presentation/screens/CertificateVerification.dart';
-import 'package:flutter_app/presentation/screens/CreateCertificate.dart';
-import 'package:flutter_app/presentation/screens/HomeScreen.dart';
-import 'package:flutter_app/presentation/screens/Keys.dart';
-import 'package:flutter_app/presentation/screens/PatientDetail.dart';
-import 'package:flutter_app/presentation/screens/PatientList.dart';
-import 'package:flutter_app/presentation/screens/ScanCertificate.dart';
-import 'package:flutter_app/presentation/screens/ScanPatient.dart';
-import 'package:flutter_app/presentation/screens/SignIn.dart';
-import 'package:flutter_app/presentation/screens/SignUp.dart';
-import 'package:flutter_app/presentation/screens/Start.dart';
+import 'package:flutter_app/presentation/screens/other_screens/CertificateDetail.dart';
+import 'package:flutter_app/presentation/screens/navigation_screens/CertificateList.dart';
+import 'package:flutter_app/presentation/screens/other_screens/CertificateVerification.dart';
+import 'package:flutter_app/presentation/screens/other_screens/CreateCertificate.dart';
+import 'package:flutter_app/presentation/screens/navigation_screens/HomeScreen.dart';
+import 'package:flutter_app/presentation/screens/navigation_screens/Keys.dart';
+import 'package:flutter_app/presentation/screens/other_screens/PatientDetail.dart';
+import 'package:flutter_app/presentation/screens/navigation_screens/ScanCertificate.dart';
+import 'package:flutter_app/presentation/screens/other_screens/PatientList.dart';
+import 'package:flutter_app/presentation/screens/other_screens/ScanPatient.dart';
+import 'package:flutter_app/presentation/screens/other_screens/SignIn.dart';
+import 'package:flutter_app/presentation/screens/other_screens/SignUp.dart';
+import 'package:flutter_app/presentation/screens/navigation_screens/Start.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,11 +42,11 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
       ),
       initialRoute: _initialRoute,
+      home: const MyStatefulWidget(),
       routes: {
-        '/': (context) => const HomeScreen(),
         '/certificate-list': (context) => const CertificateList(),
         '/certificate-list/certificate': (context) => const CertificateDetail(),
         '/patients': (context) => const PatientList(),
@@ -67,11 +66,72 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class QRCodeRender extends StatelessWidget {
-  const QRCodeRender({Key? key}) : super(key: key);
+class MyStatefulWidget extends StatefulWidget {
+  const MyStatefulWidget({Key? key}) : super(key: key);
+
+  @override
+  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  int _selectedIndex = 2; //home screen
+
+  //bottom navigation bar widgets
+  static const List<Widget> _widgetOptions = <Widget>[
+    Keys(),
+    CertificateList(),
+    HomeScreen(),
+    ScanCertificate(),
+    Start(),
+  ];
+
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: QrImage(data: 'this is a QR code')));
+    return Scaffold(
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.blueGrey,
+        elevation: 0,
+        iconSize: 25,
+        unselectedLabelStyle: const TextStyle(fontSize: 10),
+        selectedLabelStyle: const TextStyle(fontSize: 12),
+        unselectedItemColor: Colors.grey,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.key_sharp),
+            label: 'Keys',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Certificates',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.qr_code),
+            label: 'Verify',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.login),
+            label: 'Login',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+    );
   }
 }

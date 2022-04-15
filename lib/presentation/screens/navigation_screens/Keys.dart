@@ -6,7 +6,7 @@ import 'package:flutter_app/presentation/components/CustomDialog.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:web3dart/web3dart.dart';
 
-import '../../data/dto/UserKeysDTO.dart';
+import '../../../data/dto/UserKeysDTO.dart';
 
 class Keys extends StatefulWidget {
   const Keys({Key? key}) : super(key: key);

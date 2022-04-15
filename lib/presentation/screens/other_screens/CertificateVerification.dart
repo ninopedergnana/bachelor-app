@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-class PatientList extends StatelessWidget {
-  const PatientList({Key? key}) : super(key: key);
+class CertificateVerification extends StatelessWidget {
+  const CertificateVerification({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Patient List'),
+          title: const Text('Certificate Verification'),
+          centerTitle: true,
         ),
         body: Center(
             child: Column(
@@ -17,7 +18,7 @@ class PatientList extends StatelessWidget {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: const Text('Back to Home')),
-        ])));
+                      child: const Text('Back'))
+                ])));
   }
 }

@@ -46,29 +46,30 @@ class ScanCertificateState extends State<ScanCertificate> {
   @override
   Widget build(BuildContext context) {
     // if (_signedCertificate == null) scanQR();
-    return MaterialApp(
-        home: Scaffold(
-          backgroundColor: (_isValid != null && _isValid!) ? Colors.lightGreen : Colors.red,
-            appBar: AppBar(
-              title: const Text('QR Code Scanner'),
-              centerTitle: true,
-            ),
-            body: Builder(
-                builder: (BuildContext context) {
-                  return Container(
-                      alignment: Alignment.center,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            ElevatedButton(
-                                onPressed: () => scanQR(),
-                                child: const Text('Scan QR')),
-                            Text('Scan result : ${_signedCertificate?.signedHash}\n',
-                                style: const TextStyle(fontSize: 20)),
-                            Text('Is valid : $_isValid',
-                                style: const TextStyle(fontSize: 20))
-                      ]));
-                })));
+    return Scaffold(
+    backgroundColor: (_isValid != null && _isValid!) ? Colors.lightGreen : Colors.red,
+      appBar: AppBar(
+        title: const Text('QR Code Scanner'),
+        centerTitle: true,
+      ),
+      body: Builder(
+        builder: (BuildContext context) {
+          return Container(
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: () => scanQR(),
+                  child: const Text('Scan QR')),
+                Text('Scan result : ${_signedCertificate?.signedHash}\n',
+                  style: const TextStyle(fontSize: 20)),
+                Text('Is valid : $_isValid',
+                  style: const TextStyle(fontSize: 20))
+          ])
+        );
+      })
+    );
   }
 }

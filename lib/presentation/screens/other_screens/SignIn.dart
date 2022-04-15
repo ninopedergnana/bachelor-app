@@ -9,11 +9,10 @@ class SignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const appTitle = 'Sign In';
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text(appTitle),
+        title: const Text('Sign In'),
+        centerTitle: true,
       ),
       body: const SignInForm(),
     );

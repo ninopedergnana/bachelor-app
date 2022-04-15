@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/domain/model/SignedCertificate.dart';
-import 'package:flutter_app/presentation/screens/CertificateDetail.dart';
-import '../../data/repository/Repository.dart';
+import 'package:flutter_app/presentation/screens/other_screens/CertificateDetail.dart';
+import '../../../data/repository/Repository.dart';
 
 class CertificateList extends StatefulWidget {
   const CertificateList({Key? key}) : super(key: key);
@@ -27,6 +27,7 @@ class CertificateList extends StatefulWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('List of Vaccines'),
+        centerTitle: true,
       ),
       body: FutureBuilder(
         future: buildSignedCertList(),

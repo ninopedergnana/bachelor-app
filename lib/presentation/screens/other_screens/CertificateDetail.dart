@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/domain/model/SignedCertificate.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import '../components/DetailViewCustomText.dart';
+import '../../components/DetailViewCustomText.dart';
 
 class CertificateDetail extends StatelessWidget {
   const CertificateDetail({Key? key}) : super(key: key);
@@ -15,6 +15,7 @@ class CertificateDetail extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(certificate.product),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10),

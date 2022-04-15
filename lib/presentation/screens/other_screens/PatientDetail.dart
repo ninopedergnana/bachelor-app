@@ -8,6 +8,7 @@ class PatientDetail extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Patient Details'),
+          centerTitle: true,
         ),
         body: Center(
             child: Column(

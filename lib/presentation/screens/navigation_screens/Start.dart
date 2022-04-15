@@ -7,7 +7,8 @@ class Start extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sign Up'),
+        title: const Text('Start Screen'),
+        centerTitle: true,
       ),
       body: Center(
           child: Column(

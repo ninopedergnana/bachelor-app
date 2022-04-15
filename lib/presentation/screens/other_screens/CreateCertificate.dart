@@ -15,6 +15,7 @@ class CreateCertificate extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle),
+        centerTitle: true,
       ),
       body: const CreateCertificateForm(),
     );
