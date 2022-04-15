@@ -99,6 +99,41 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
+      drawer: Drawer(
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blueGrey,
+              ),
+              child: Text('Welcome to the Impfy!\n\nLeave while you still can'),
+            ),
+            ListTile(
+              title: const Text('Patients'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pushNamed(context, '/patients/patient');
+              },
+            ),
+            ListTile(
+              title: const Text('Settings'),
+              onTap: () {
+                // Navigator.pop(context); should lead to a settings page
+              },
+            ),
+            ListTile(
+              title: const Text('Log Out'),
+              onTap: () {
+                // Navigator.pop(context); should lead to a settings page
+              },
+            ),
+          ],
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.blueGrey,
