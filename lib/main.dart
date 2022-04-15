@@ -96,6 +96,12 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.blueGrey),
+        backgroundColor: Colors.white10,
+        elevation: 0,
+        centerTitle: true, // todo make title dynamic
+      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

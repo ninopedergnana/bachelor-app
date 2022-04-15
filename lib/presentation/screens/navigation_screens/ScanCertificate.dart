@@ -48,10 +48,6 @@ class ScanCertificateState extends State<ScanCertificate> {
     // if (_signedCertificate == null) scanQR();
     return Scaffold(
     backgroundColor: (_isValid != null && _isValid!) ? Colors.lightGreen : Colors.red,
-      appBar: AppBar(
-        title: const Text('QR Code Scanner'),
-        centerTitle: true,
-      ),
       body: Builder(
         builder: (BuildContext context) {
           return Container(

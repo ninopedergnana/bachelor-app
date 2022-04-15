@@ -25,10 +25,6 @@ class CertificateList extends StatefulWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('List of Vaccines'),
-        centerTitle: true,
-      ),
       body: FutureBuilder(
         future: buildSignedCertList(),
         builder:(context, AsyncSnapshot snapshot) {
