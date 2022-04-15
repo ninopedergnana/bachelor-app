@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_app/data/dto/PatientKeysDTO.dart';
 import 'package:flutter_app/domain/model/Certificate.dart';
+import 'package:flutter_app/domain/model/SignedCertificate.dart';
 import 'package:flutter_app/impfy.g.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:openpgp/openpgp.dart';
@@ -23,7 +24,7 @@ class Repository {
     _client = Impfy(address: _contractAddress, client: client);
   }
 
-  Future<List<Certificate>> getCertificates() async {
+  Future<List<SignedCertificate>> getCertificates() async {
     String passphrase = '';
 
     // ethereum privat key fetched, and public key generated with credentials
@@ -37,9 +38,9 @@ class Repository {
     var response = (await _client.getCertificates(address));
     var certificates = response
         .map((element) => List.from(element))
-        .map((element) => decryptCertificate(element, passphrase));
+        .map((element) => _decryptCertificate(element, passphrase));
 
-    return (await Future.wait(certificates)).whereType<Certificate>().toList();
+    return (await Future.wait(certificates)).whereType<SignedCertificate>().toList();
   }
 
   Future<void> createCertificate(Certificate certificate, PatientKeysDTO patientKeys) async {
@@ -55,15 +56,14 @@ class Repository {
         credentials: credentials);
   }
 
-  Future<Certificate?> decryptCertificate(List<dynamic> data, String passphrase) async {
+  Future<SignedCertificate?> _decryptCertificate(List<dynamic> data, String passphrase) async {
     String encryptedCertificate = data.first as String;
     String signedHash = data.last as String;
     String privateKey = (await _localStorage.read(key: 'pgpPrivateKey'))!;
     try {
       String certificateJson = await OpenPGP.decrypt(encryptedCertificate, privateKey, passphrase);
       Certificate certificate = Certificate.fromJson(json.decode(certificateJson));
-      certificate.signedHash = signedHash;
-      return certificate;
+      return SignedCertificate(certificate: certificate, signedHash: signedHash);
     } catch (e) {
       return null;
     }

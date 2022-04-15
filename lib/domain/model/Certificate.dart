@@ -16,7 +16,6 @@ class Certificate {
   String countryOfVaccination;
   String issuer;
   String uvci;
-  String? signedHash;
 
   Certificate(
       {required this.firstname,
@@ -63,8 +62,7 @@ class Certificate {
 
   @override
   String toString() {
-    var x = jsonEncode(toJson());
-    return x;
+    return jsonEncode(toJson());
   }
 
   Future<String> encrypt(String doctorKey, String patientKey) async {
