@@ -45,7 +45,7 @@ class ScanCertificateState extends State<ScanCertificate> {
 
   @override
   Widget build(BuildContext context) {
-    if (_signedCertificate == null) scanQR();
+    // if (_signedCertificate == null) scanQR();
     return MaterialApp(
         home: Scaffold(
           backgroundColor: (_isValid != null && _isValid!) ? Colors.lightGreen : Colors.red,
@@ -68,7 +68,7 @@ class ScanCertificateState extends State<ScanCertificate> {
                                 style: const TextStyle(fontSize: 20)),
                             Text('Is valid : $_isValid',
                                 style: const TextStyle(fontSize: 20))
-                          ]));
+                      ]));
                 })));
   }
 }
