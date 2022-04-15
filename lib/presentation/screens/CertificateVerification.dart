@@ -5,7 +5,6 @@ class CertificateVerification extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         appBar: AppBar(
           title: const Text('Certificate Verification'),

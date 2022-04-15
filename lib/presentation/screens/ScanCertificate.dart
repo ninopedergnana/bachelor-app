@@ -30,8 +30,12 @@ class ScanCertificateState extends State<ScanCertificate> {
           ScanMode.QR
       );
       setState(() {
-        _signedCertificate = SignedCertificate.fromJson(jsonDecode(barcodeScanRes));
-        _signedCertificate!.verify().then((b) => _isValid = b);
+        try {
+          _signedCertificate = SignedCertificate.fromJson(jsonDecode(barcodeScanRes));
+          _signedCertificate!.verify().then((b) => _isValid = b);
+        } catch(e) {
+          _isValid = false;
+        }
       });
     } on PlatformException {
       // barcodeScanRes = 'Failed to get platform version.';
@@ -44,7 +48,7 @@ class ScanCertificateState extends State<ScanCertificate> {
     if (_signedCertificate == null) scanQR();
     return MaterialApp(
         home: Scaffold(
-          backgroundColor: (_isValid != null && _isValid!) ? Colors.green : Colors.red,
+          backgroundColor: (_isValid != null && _isValid!) ? Colors.lightGreen : Colors.red,
             appBar: AppBar(
               title: const Text('QR Code Scanner'),
               centerTitle: true,

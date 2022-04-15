@@ -73,6 +73,6 @@ class Repository {
   Future<bool> isDoctor(String address) async {
     // TODO: Check if address belongs to doctor, once function is added to contract.
     // await _client.isDoctor(EthereumAddress.fromHex(address));
-    return address == '0x08A6475d8F8668DD93fa3bd3AD87D83312a152d6';
+    return address.toLowerCase() == '0x08A6475d8F8668DD93fa3bd3AD87D83312a152d6'.toLowerCase();
   }
 }

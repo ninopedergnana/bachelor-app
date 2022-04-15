@@ -28,7 +28,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final FlutterSecureStorage _localStorage = const FlutterSecureStorage();
-  String _initialRoute = '/auth';
+  String _initialRoute = '/';
 
   _MyAppState() {
     _localStorage.containsKey(key: 'ethPrivateKey').then((isAuthenticated) {
@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
       initialRoute: _initialRoute,
       routes: {
         '/': (context) => const HomeScreen(),
-        '/certificate-list': (context) => CertificateList(vaccineList: []),
+        '/certificate-list': (context) => const CertificateList(),
         '/certificate-list/certificate': (context) => const CertificateDetail(),
         '/patients': (context) => const PatientList(),
         '/patients/patient': (context) => const PatientDetail(),
@@ -58,7 +58,6 @@ class _MyAppState extends State<MyApp> {
         '/keys': (context) => const Keys(),
         '/certificate-verification': (context) => const CertificateVerification(),
         '/auth': (context) => const Start(),
-        '/auth/certificate': (context) => const CertificateDetail(),
         '/auth/sign-up': (context) => const SignUp(),
         '/auth/sign-in': (context) => const SignIn(),
         '/auth/scan-certificate': (context) => const ScanCertificate(),
@@ -75,64 +74,3 @@ class QRCodeRender extends StatelessWidget {
     return Scaffold(body: Center(child: QrImage(data: 'this is a QR code')));
   }
 }
-
-/*
-  Samples:
-
-Future<String> getKeys() async {
-  var keyOptions = KeyOptions()..rsaBits = 1024;
-  var keyPair1 = await OpenPGP.generate(
-      options: Options()
-        ..name = 'test1'
-        ..email = 'test1@test.com'
-        ..passphrase = 'test'
-        ..keyOptions = keyOptions);
-
-  var keyPair2 = await OpenPGP.generate(
-      options: Options()
-        ..name = 'test2'
-        ..email = 'test2@test.com'
-        ..passphrase = 'test'
-        ..keyOptions = keyOptions);
-
-  var decrypted = 'error';
-
-  var message = await OpenPGP.encrypt(
-      'de nino isch blöd', keyPair1.publicKey + keyPair2.publicKey);
-  decrypted = await OpenPGP.decrypt(message, keyPair1.privateKey, 'test');
-
-  return decrypted;
-}
-
-eth() {
-  var wallet = EthPrivateKey.fromInt(BigInt.from(21323910213));
-  print(wallet.privateKey);
-}
-
-void _eth() async {
-  var privateKey = '';
-  var encryptedCertificate = 'flutter-cert';
-  var certificateHash = 'flutter-hash';
-  var patient = EthereumAddress
-      .fromHex('0x1bAeC083E3002e084129Ca59280624bFe6B0303a');
-  var credentials = EthPrivateKey.fromHex(privateKey);
-  var contractAddress = EthereumAddress
-      .fromHex('0xb58d3d11966CCeB725e39C3d6D0d383Bf3F1cec3');
-  var rpcUrl =
-      'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
-  var client = Web3Client(rpcUrl, Client());
-  var impfy = Impfy(address: contractAddress, client: client);
-  var certificates = await impfy.getCertificates(
-      EthereumAddress.fromHex('0x1bAeC083E3002e084129Ca59280624bFe6B0303a')
-  );
-  // var message = await impfy.addCertificate(encryptedCertificate, certificateHash, patient, credentials: credentials);
-  // print('message: ' + message);
-  for (var value in certificates) {
-    print(value);
-  }
-  // var random = Random.secure();
-  // EthPrivateKey wallet = EthPrivateKey.createRandom(random);
-  // print(wallet.privateKeyInt);
-}
-
-*/

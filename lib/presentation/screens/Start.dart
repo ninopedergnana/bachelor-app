@@ -5,7 +5,6 @@ class Start extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sign Up'),
@@ -16,22 +15,21 @@ class Start extends StatelessWidget {
               children: <Widget>[
               ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/sign-up');
+                    Navigator.pushNamed(context, '/auth/sign-up');
                   },
                   child: const Text('Sign Up')
               ),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/sign-in');
+                    Navigator.pushNamed(context, '/auth/sign-in');
                   },
                   child: const Text('Sign In')
               ),
-              // TODO: Remove and replace with 'Verify' button & functionality.
               ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/keys');
+                    Navigator.pushNamed(context, '/auth/scan-certificate');
                   },
-                  child: const Text('Keys')
+                  child: const Text('Verify')
               )
       ])),
     );
