@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/presentation/screens/other_screens/CertificateDetail.dart';
 import 'package:flutter_app/presentation/screens/navigation_screens/CertificateList.dart';
+import 'package:flutter_app/presentation/screens/navigation_screens/Keys.dart';
+import 'package:flutter_app/presentation/screens/navigation_screens/ScanCertificate.dart';
+import 'package:flutter_app/presentation/screens/navigation_screens/Start.dart';
+import 'package:flutter_app/presentation/screens/other_screens/CertificateDetail.dart';
 import 'package:flutter_app/presentation/screens/other_screens/CertificateVerification.dart';
 import 'package:flutter_app/presentation/screens/other_screens/CreateCertificate.dart';
-import 'package:flutter_app/presentation/screens/navigation_screens/HomeScreen.dart';
-import 'package:flutter_app/presentation/screens/navigation_screens/Keys.dart';
 import 'package:flutter_app/presentation/screens/other_screens/PatientDetail.dart';
-import 'package:flutter_app/presentation/screens/navigation_screens/ScanCertificate.dart';
 import 'package:flutter_app/presentation/screens/other_screens/PatientList.dart';
 import 'package:flutter_app/presentation/screens/other_screens/ScanPatient.dart';
 import 'package:flutter_app/presentation/screens/other_screens/SignIn.dart';
 import 'package:flutter_app/presentation/screens/other_screens/SignUp.dart';
-import 'package:flutter_app/presentation/screens/navigation_screens/Start.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
@@ -78,20 +77,17 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   //bottom navigation bar widgets
   static const List<Widget> _widgetOptions = <Widget>[
-    Keys(),
     CertificateList(),
-    HomeScreen(),
+    Keys(),
     ScanCertificate(),
     Start(),
   ];
-
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -150,16 +146,12 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         unselectedItemColor: Colors.grey,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.key_sharp),
-            label: 'Keys',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.list),
             label: 'Certificates',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.key_sharp),
+            label: 'Keys',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.qr_code),
