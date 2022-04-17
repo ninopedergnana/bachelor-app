@@ -36,6 +36,12 @@ class _ScanPatientState extends State<ScanPatient> {
   @override
   Widget build(BuildContext context) {
     scanQR();
-    return const Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white10,
+        iconTheme: const IconThemeData(color: Colors.blueGrey),
+        elevation: 0,
+      )
+    );
   }
 }

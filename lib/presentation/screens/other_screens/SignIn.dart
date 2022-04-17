@@ -46,19 +46,26 @@ class SignInFormState extends State<SignInForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-              onPressed: () {
-                scanUserKeys();
-              },
-              child: const Text('Scan User Keys')
-          ),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white10,
+        iconTheme: const IconThemeData(color: Colors.blueGrey),
+        elevation: 0,
+      ),
+      body: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+                onPressed: () {
+                  scanUserKeys();
+                },
+                child: const Text('Scan User Keys')
+            ),
+          ],
+        ),
       ),
     );
   }
