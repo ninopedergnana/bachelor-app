@@ -73,14 +73,13 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  int _selectedIndex = 2; //home screen
+  int _selectedIndex = 1; //home screen
 
   //bottom navigation bar widgets
   static const List<Widget> _widgetOptions = <Widget>[
     CertificateList(),
     Keys(),
     ScanCertificate(),
-    Start(),
   ];
 
   void _onItemTapped(int index) {
@@ -130,7 +129,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             ListTile(
               title: const Text('Log Out'),
               onTap: () {
-                // Navigator.pop(context); should lead to a settings page
+                Navigator.pushNamed(context, '/auth');
               },
             ),
           ],
@@ -156,10 +155,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           BottomNavigationBarItem(
             icon: Icon(Icons.qr_code),
             label: 'Verify',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.login),
-            label: 'Login',
           ),
         ],
         currentIndex: _selectedIndex,

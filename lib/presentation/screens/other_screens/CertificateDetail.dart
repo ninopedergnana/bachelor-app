@@ -13,7 +13,11 @@ class CertificateDetail extends StatelessWidget {
     final certificate = signedCertificate.certificate;
 
     return Scaffold(
-
+      appBar: AppBar(
+        backgroundColor: Colors.white10,
+        iconTheme: const IconThemeData(color: Colors.blueGrey),
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10),
           child: Column(
