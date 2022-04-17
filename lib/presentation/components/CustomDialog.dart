@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -21,6 +20,8 @@ class CustomDialog {
                 version: QrVersions.auto,
                 gapless: true,
                 errorStateBuilder: (cxt, err) {
+                  print(err);
+                  print(cxt);
                   return const Center(
                     child: Text(
                       "Uh oh! Something went wrong while scanning the code",
