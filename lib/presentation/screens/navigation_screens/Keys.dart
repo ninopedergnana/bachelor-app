@@ -1,9 +1,12 @@
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/data/dto/PatientKeysDTO.dart';
+import 'package:flutter_app/domain/model/Certificate.dart';
 import 'package:flutter_app/presentation/components/CustomDialog.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:openpgp/openpgp.dart';
 import 'package:web3dart/web3dart.dart';
 
 import '../../../data/dto/UserKeysDTO.dart';
@@ -49,15 +52,52 @@ class KeysState extends State<Keys> {
     await dialog.showQRDialog(context, patientKeys.toString(), "Public Keys");
   }
 
+  pgpTest() async {
+    var keyOptions = KeyOptions()..rsaBits = 512;
+    var keyPair1 = await OpenPGP.generate(
+        options: Options()
+          ..name = 'test'
+          ..email = 'test@test.com'
+          ..passphrase = ''
+          ..keyOptions = keyOptions);
+    var keyPair2 = await OpenPGP.generate(
+        options: Options()
+          ..name = 'test1'
+          ..email = 'test1@test.com'
+          ..passphrase = ''
+          ..keyOptions = keyOptions);
+    Certificate certificate = Certificate(
+        firstname: 'Carlos',
+        lastname: 'Olgiati',
+        countryOfVaccination: 'CH',
+        dose: 1,
+        issuer: 'BAG',
+        product: 'Comirnaty',
+        manufacturer: 'Pfizer',
+        vaccinationDate: DateTime.now(),
+        validUntil: DateTime.now(),
+        vaccineType: 'mRNA',
+        targetedDisease: 'COVID',
+        uvci: '123:213:2131231123131');
+
+    var message = certificate.toString();
+    var encrypted = await OpenPGP.encryptBytes(
+        Uint8List.fromList(message.codeUnits), keyPair1.publicKey + keyPair2.publicKey);
+
+    var encryptArmored = Uint8List.fromList(
+        (await OpenPGP.encrypt(message, keyPair1.publicKey + keyPair2.publicKey)).codeUnits);
+    var decrypted = await OpenPGP.decryptBytes(encrypted, keyPair1.privateKey, '');
+
+    print(encrypted.length);
+    print(encryptArmored.length);
+  }
+
   Future<void> exportAllKeys() async {
     pgpPublicKey = (await _localStorage.read(key: 'pgpPublicKey'))!;
     pgpPrivateKey = (await _localStorage.read(key: 'pgpPrivateKey'))!;
     ethPrivateKey = (await _localStorage.read(key: 'ethPrivateKey'))!;
     UserKeysDTO userKeys = UserKeysDTO(
-        pgpPrivateKey: pgpPrivateKey,
-        pgpPublicKey: pgpPublicKey,
-        ethPrivateKey: ethPrivateKey
-    );
+        pgpPrivateKey: pgpPrivateKey, pgpPublicKey: pgpPublicKey, ethPrivateKey: ethPrivateKey);
     await dialog.showQRDialog(context, userKeys.toString(), "User Keys");
   }
 
@@ -78,7 +118,8 @@ class KeysState extends State<Keys> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            const Text("OpenPGP Keys", style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
+            const Text("OpenPGP Keys",
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
             const SizedBox(height: 15),
             TextField(
               controller: pgpPublicKeyController,
@@ -112,7 +153,8 @@ class KeysState extends State<Keys> {
               ),
             ),
             const SizedBox(height: 20),
-            const Text("Ethereum Keys", style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
+            const Text("Ethereum Keys",
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
             const SizedBox(height: 15),
             TextField(
               controller: ethAddressController,
@@ -121,8 +163,7 @@ class KeysState extends State<Keys> {
                 labelText: 'ETH Public Key',
                 suffixIcon: IconButton(
                   onPressed: () async {
-                    await dialog.showQRDialog(
-                        context, ethAddressController.text, "ETH Address");
+                    await dialog.showQRDialog(context, ethAddressController.text, "ETH Address");
                   },
                   icon: const Icon(Icons.qr_code),
                 ),
@@ -147,7 +188,7 @@ class KeysState extends State<Keys> {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              onPressed: fetchKeys,
+              onPressed: pgpTest,
               child: const Text('Fetch Keys'),
             ),
             ElevatedButton(

@@ -10,6 +10,4 @@ class Person {
     required this.email,
     required this.passphrase
   });
-
-
 }

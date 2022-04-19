@@ -5,6 +5,31 @@
     "type": "constructor"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "certificateHash",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "doctor",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "patient",
+        "type": "address"
+      }
+    ],
+    "name": "Vaccine",
+    "type": "event"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -20,26 +45,13 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "doctor",
-        "type": "address"
-      }
-    ],
-    "name": "removeDoctor",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "string",
-        "name": "encryptedCertificate",
+        "name": "certificateHash",
         "type": "string"
       },
       {
         "internalType": "string",
-        "name": "certificateHash",
+        "name": "ipfsHash",
         "type": "string"
       },
       {
@@ -57,28 +69,42 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "patient",
+        "name": "doctor",
         "type": "address"
       }
     ],
-    "name": "getCertificates",
+    "name": "invalidateDoctor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "certificateHash",
+        "type": "string"
+      }
+    ],
+    "name": "invalidateCertificate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "certificateHash",
+        "type": "string"
+      }
+    ],
+    "name": "isValidCertificate",
     "outputs": [
       {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "encryptedCertificate",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "certificateHash",
-            "type": "string"
-          }
-        ],
-        "internalType": "struct Impfy.Vaccine[]",
+        "internalType": "bool",
         "name": "",
-        "type": "tuple[]"
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
