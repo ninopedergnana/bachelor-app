@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/data/dto/PatientKeysDTO.dart';
 import 'package:flutter_app/data/repository/Repository.dart';
 import 'package:flutter_app/domain/model/Certificate.dart';
+import 'package:flutter_app/presentation/components/DropDownButtonWidget.dart';
 import 'dart:convert';
-
 import '../../components/FormDatePicker.dart';
 import '../../components/TextInput.dart';
 
@@ -80,6 +80,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      const DropDownButtonWidget(),
                       TextButton(
                           onPressed: (_patientKeys == null) ? scanPatientKey : null,
                           child: Text(
