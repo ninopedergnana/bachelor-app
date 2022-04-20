@@ -17,7 +17,7 @@ class SignUp extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.blueGrey),
         elevation: 0,
       ),
-      body: SignUpForm(),
+      body: const SignUpForm(),
     );
   }
 }
