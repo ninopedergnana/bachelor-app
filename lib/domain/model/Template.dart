@@ -1,4 +1,6 @@
 
+import 'package:flutter/material.dart';
+
 class Template {
   DateTime? vaccinationDate;
   DateTime? validUntil;
@@ -10,7 +12,17 @@ class Template {
   String? countryOfVaccination;
   String? issuer;
 
-  Template();
+  Template({
+    this.vaccinationDate,
+    this.validUntil,
+    this.dose,
+    this.targetedDisease,
+    this.vaccineType,
+    this.product,
+    this.manufacturer,
+    this.countryOfVaccination,
+    this.issuer
+  });
 
   Template.isNamedConstructor(Template template) {
     vaccinationDate = template.vaccinationDate;
