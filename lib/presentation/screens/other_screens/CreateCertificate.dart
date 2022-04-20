@@ -4,6 +4,7 @@ import 'package:flutter_app/data/repository/Repository.dart';
 import 'package:flutter_app/domain/model/Certificate.dart';
 import 'package:flutter_app/presentation/components/DropDownButtonWidget.dart';
 import 'dart:convert';
+import '../../../domain/model/Template.dart';
 import '../../components/FormDatePicker.dart';
 import '../../components/TextInput.dart';
 
@@ -34,7 +35,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
   final _formKey = GlobalKey<FormState>();
   final Repository _repository = Repository();
   PatientKeysDTO? _patientKeys;
-
+  DropDownButtonWidgetState staty = DropDownButtonWidgetState();
 
   TextEditingController fnController = TextEditingController();
   TextEditingController lnController = TextEditingController();
@@ -80,7 +81,6 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const DropDownButtonWidget(),
                       TextButton(
                           onPressed: (_patientKeys == null) ? scanPatientKey : null,
                           child: Text(
@@ -89,7 +89,22 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                           ),
                           style: TextButton.styleFrom(
                               minimumSize: const Size.fromHeight(60),
-                              backgroundColor: (_patientKeys == null) ? Colors.blue : Colors.grey)),
+                              backgroundColor: (_patientKeys == null) ? Colors.blue : Colors.grey)
+                      ),
+                      const SizedBox(height: 10),
+                      DropDownButtonWidget(
+                        onValueChanged: (value) {
+                          vaccDateController = value.vaccinationDate!;
+                          validUntilController = value.validUntil!;
+                          doseController.text = value.dose.toString();
+                          targetDisController.text = value.targetedDisease!;
+                          vaccTypeController.text = value.vaccineType!;
+                          productController.text = value.product!;
+                          manufactController.text = value.manufacturer!;
+                          countryOfVaccController.text = value.countryOfVaccination!;
+                          issuerController.text = value.issuer!;
+                        },
+                      ),
                       const SizedBox(height: 10),
                       TextInput(
                         textEditingController: fnController,
@@ -167,8 +182,8 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                             children: [
                               ElevatedButton(
                                 onPressed: () {
-                                  if (_formKey.currentState!.validate() && _patientKeys == null) {
-                                    Certificate certificate = Certificate()
+                                if (_formKey.currentState!.validate() && _patientKeys == null) {
+                                  Certificate certificate = Certificate()
                                       ..firstname = fnController.text
                                       ..lastname = lnController.text
                                       ..vaccinationDate = vaccDateController

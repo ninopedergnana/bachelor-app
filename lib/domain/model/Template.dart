@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 class Template {
+  String? templateName; // only used for dropdown
   DateTime? vaccinationDate;
   DateTime? validUntil;
   int? dose;
@@ -13,6 +14,7 @@ class Template {
   String? issuer;
 
   Template({
+    this.templateName,
     this.vaccinationDate,
     this.validUntil,
     this.dose,
