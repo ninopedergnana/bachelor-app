@@ -94,8 +94,8 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                       const SizedBox(height: 10),
                       DropDownButtonWidget(
                         onValueChanged: (value) {
-                          vaccDateController = value.vaccinationDate!;
-                          validUntilController = value.validUntil!;
+                          vaccDateController = value.vaccinationDate ?? DateTime.now();
+                          validUntilController = value.validUntil ?? DateTime.now();
                           doseController.text = value.dose.toString();
                           targetDisController.text = value.targetedDisease!;
                           vaccTypeController.text = value.vaccineType!;
