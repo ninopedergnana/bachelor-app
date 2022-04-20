@@ -50,6 +50,18 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
   TextEditingController issuerController = TextEditingController();
   TextEditingController uvciController = TextEditingController();
 
+  void fillFormValues(value){
+    vaccDateController = value.vaccinationDate ?? DateTime.now();
+    validUntilController = value.validUntil ?? DateTime.now();
+    doseController.text = value.dose.toString();
+    targetDisController.text = value.targetedDisease!;
+    vaccTypeController.text = value.vaccineType!;
+    productController.text = value.product!;
+    manufactController.text = value.manufacturer!;
+    countryOfVaccController.text = value.countryOfVaccination!;
+    issuerController.text = value.issuer!;
+  }
+
   Future<void> scanPatientKey() async {
     String value = await Navigator.pushNamed(context, '/create-certificate/scan-patient') as String;
     setState(() {
@@ -94,15 +106,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                       const SizedBox(height: 10),
                       DropDownButtonWidget(
                         onValueChanged: (value) {
-                          vaccDateController = value.vaccinationDate ?? DateTime.now();
-                          validUntilController = value.validUntil ?? DateTime.now();
-                          doseController.text = value.dose.toString();
-                          targetDisController.text = value.targetedDisease!;
-                          vaccTypeController.text = value.vaccineType!;
-                          productController.text = value.product!;
-                          manufactController.text = value.manufacturer!;
-                          countryOfVaccController.text = value.countryOfVaccination!;
-                          issuerController.text = value.issuer!;
+                          fillFormValues(value);
                         },
                       ),
                       const SizedBox(height: 10),
