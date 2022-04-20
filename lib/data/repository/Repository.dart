@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
-import 'package:flutter_app/data/dto/PatientKeysDTO.dart';
+import 'package:flutter_app/data/dto/PatientDTO.dart';
 import 'package:flutter_app/domain/model/Certificate.dart';
 import 'package:flutter_app/domain/model/SignedCertificate.dart';
 import 'package:flutter_app/impfy.g.dart';
@@ -44,16 +44,17 @@ class Repository {
     return (await Future.wait(certificates)).whereType<SignedCertificate>().toList();
   }
 
-  Future<void> createCertificate(Certificate certificate, PatientKeysDTO patientKeys) async {
+  Future<void> createCertificate(Certificate certificate, PatientDTO patient) async {
     String pgpDoctorPublicKey = (await _localStorage.read(key: 'pgpPublicKey'))!;
     String ethPrivateKey = (await _localStorage.read(key: 'ethPrivateKey'))!;
     Credentials credentials = EthPrivateKey.fromHex(ethPrivateKey);
     String hash = md5.convert(certificate.toString().codeUnits).toString();
     String signedHash = EthSigUtil.signMessage(
         privateKey: ethPrivateKey, message: Uint8List.fromList(hash.codeUnits));
-    String encryptedCertificate = await certificate.encrypt(pgpDoctorPublicKey, patientKeys.pgpKey);
+    String encryptedCertificate =
+        await certificate.encrypt(pgpDoctorPublicKey, patient.pgpPublicKey);
     _client.addCertificate(
-        encryptedCertificate, signedHash, EthereumAddress.fromHex(patientKeys.ethAddress),
+        encryptedCertificate, signedHash, EthereumAddress.fromHex(patient.ethAddress),
         credentials: credentials);
   }
 

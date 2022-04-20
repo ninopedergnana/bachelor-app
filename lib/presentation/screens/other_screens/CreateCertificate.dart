@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/dto/PatientKeysDTO.dart';
+import 'package:flutter_app/data/dto/PatientDTO.dart';
 import 'package:flutter_app/data/repository/Repository.dart';
 import 'package:flutter_app/domain/model/Certificate.dart';
 import 'package:intl/intl.dart' as intl;
@@ -31,7 +31,7 @@ class CreateCertificateForm extends StatefulWidget {
 class CreateCertificateFormState extends State<CreateCertificateForm> {
   final _formKey = GlobalKey<FormState>();
   final Repository _repository = Repository();
-  PatientKeysDTO? _patientKeys;
+  PatientDTO? _patientKeys;
 
   // JSON CONVERSION
   Certificate certificate = Certificate(
@@ -56,7 +56,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
     setState(() {
       if (value != '-1') {
         // Returns -1 when no QR was scanned.
-        _patientKeys = PatientKeysDTO.fromJson(json.decode(value));
+        _patientKeys = PatientDTO.fromJson(json.decode(value));
       }
     });
   }

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/dto/UserKeysDTO.dart';
+import 'package:flutter_app/data/dto/UserAccountDTO.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SignIn extends StatelessWidget {
@@ -27,20 +27,22 @@ class SignInForm extends StatefulWidget {
 class SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
   final FlutterSecureStorage _localStorage = const FlutterSecureStorage();
-  UserKeysDTO? _userKeys;
+  UserAccountDTO? _user;
 
   Future<void> scanUserKeys() async {
     String value = await Navigator.pushNamed(context, '/scan-patient') as String;
     setState(() {
       if (value != '-1') {
         // Returns -1 when no QR was scanned.
-        _userKeys = UserKeysDTO.fromJson(json.decode(value));
+        _user = UserAccountDTO.fromJson(json.decode(value));
       }
     });
     await Future.wait([
-    _localStorage.write(key: 'pgpPrivateKey', value: _userKeys!.pgpPrivateKey),
-    _localStorage.write(key: 'pgpPublicKey', value: _userKeys!.pgpPublicKey),
-    _localStorage.write(key: 'ethPrivateKey', value: _userKeys!.ethPrivateKey),
+      _localStorage.write(key: 'pgpPrivateKey', value: _user!.pgpPrivateKey),
+      _localStorage.write(key: 'pgpPublicKey', value: _user!.pgpPublicKey),
+      _localStorage.write(key: 'ethPrivateKey', value: _user!.ethPrivateKey),
+      _localStorage.write(key: 'firstName', value: _user!.firstName),
+      _localStorage.write(key: 'lastName', value: _user!.lastName),
     ]);
   }
 
@@ -62,20 +64,10 @@ class SignInFormState extends State<SignInForm> {
                 onPressed: () {
                   scanUserKeys();
                 },
-                child: const Text('Scan User Keys')
-            ),
+                child: const Text('Scan User Keys')),
           ],
         ),
       ),
     );
   }
-
-
-
 }
-
-
-
-
-
-
