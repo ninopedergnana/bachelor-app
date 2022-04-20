@@ -20,8 +20,6 @@ class CustomDialog {
                 version: QrVersions.auto,
                 gapless: true,
                 errorStateBuilder: (cxt, err) {
-                  print(err);
-                  print(cxt);
                   return const Center(
                     child: Text(
                       "Uh oh! Something went wrong while scanning the code",

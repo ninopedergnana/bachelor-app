@@ -39,7 +39,7 @@ class CertificateDetail extends StatelessWidget {
               },
             ),
             const SizedBox(height: 30),
-            DetailViewCustomText(title: "Name", content: certificate.firstname + " " + certificate.lastname),
+            DetailViewCustomText(title: "Name", content: certificate.firstname! + " " + certificate.lastname!),
             DetailViewCustomText(title: "Vaccination Date", content: certificate.vaccinationDate.toString()),
             DetailViewCustomText(title: "Valid Until", content: certificate.validUntil.toString()),
             DetailViewCustomText(title: "Dose", content: certificate.dose.toString()),
