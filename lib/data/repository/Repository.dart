@@ -43,14 +43,12 @@ class Repository {
   }
 
   Future<void> createCertificate(Certificate certificate, PatientDTO patient) async {
-    String pgpDoctorPublicKey = (await _secureStore.read(key: 'pgpPublicKey'))!;
     String ethPrivateKey = (await _secureStore.read(key: 'ethPrivateKey'))!;
     Credentials credentials = EthPrivateKey.fromHex(ethPrivateKey);
     String hash = md5.convert(certificate.toString().codeUnits).toString();
     String signedHash = EthSigUtil.signMessage(
         privateKey: ethPrivateKey, message: Uint8List.fromList(hash.codeUnits));
-    String encryptedCertificate =
-        await certificate.encrypt(pgpDoctorPublicKey, patient.pgpPublicKey);
+    String encryptedCertificate = await certificate.encrypt(patient.pgpPublicKey);
     String ipfsHash = await _ipfs.postCertificate(encryptedCertificate);
     _impfy.addCertificate(signedHash, ipfsHash, EthereumAddress.fromHex(patient.ethAddress),
         credentials: credentials);
