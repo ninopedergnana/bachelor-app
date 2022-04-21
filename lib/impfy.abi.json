@@ -66,6 +66,36 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getCertificates",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "certificateHash",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "ipfsHash",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "blockNumber",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Impfy.CertificateDTO[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -108,7 +138,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   }
 ]

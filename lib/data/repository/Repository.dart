@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:quiver/iterables.dart';
 import 'package:crypto/crypto.dart';
-import 'package:flutter_app/data/api/ipfsApi.dart';
-import 'package:flutter_app/data/dto/PatientKeysDTO.dart';
+import 'package:flutter_app/data/api/ipfs.dart';
+import 'package:flutter_app/data/dto/PatientDTO.dart';
 import 'package:flutter_app/domain/model/Certificate.dart';
 import 'package:flutter_app/domain/model/SignedCertificate.dart';
 import 'package:flutter_app/impfy.g.dart';
@@ -14,56 +13,53 @@ import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart';
 import 'package:eth_sig_util/eth_sig_util.dart';
 
-// TODO: Convert to singleton
 class Repository {
+  static final Repository _instance = Repository._internal();
+  final IPFS _ipfs = IPFS();
   final FlutterSecureStorage _secureStore = const FlutterSecureStorage();
-  late Impfy _client;
-  final EthereumAddress _contractAddress =
-      EthereumAddress.fromHex('0xb58d3d11966CCeB725e39C3d6D0d383Bf3F1cec3');
-  final String _rpcUrl = 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
+  late final Impfy _impfy;
 
-  Repository() {
-    var client = Web3Client(_rpcUrl, Client());
-    _client = Impfy(address: _contractAddress, client: client);
+  factory Repository() {
+    return _instance;
+  }
+
+  Repository._internal() {
+    String hexAddress = '0x926684114C466a2D6Ad87292fEC30E98aC8e0196';
+    EthereumAddress contractAddress = EthereumAddress.fromHex(hexAddress);
+    String rpcUrl = 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
+    var client = Web3Client(rpcUrl, Client());
+    _impfy = Impfy(address: contractAddress, client: client);
   }
 
   Future<List<SignedCertificate>> getCertificates() async {
     String passphrase = '';
-    String privateKey = (await _secureStore.read(key: 'pgpPrivateKey'))!;
 
-    // result structure currently unknown
-    // var signedHashes = await _client.getCertificates();
-    // var ipfsHashes = await _client.getIpfsHashes(signedHashes);
-    var signedHashes = [];
-    var ipfsHashes = [];
-    var encryptedCertificates = await Future.wait(ipfsHashes.map((e) => getFromIPFS(e)));
+    var response = (await _impfy.getCertificates());
+    var certificates = response
+        .map((element) => List.from(element))
+        .map((element) => _decryptCertificate(element, passphrase));
 
-    var certificates = zip([signedHashes, encryptedCertificates]).map((e) {
-      return _decryptCertificate(e[1], e[0], privateKey, passphrase);
-    });
     return (await Future.wait(certificates)).whereType<SignedCertificate>().toList();
   }
 
-  Future<void> createCertificate(Certificate certificate, PatientKeysDTO patientKeys) async {
+  Future<void> createCertificate(Certificate certificate, PatientDTO patient) async {
+    String pgpDoctorPublicKey = (await _secureStore.read(key: 'pgpPublicKey'))!;
     String ethPrivateKey = (await _secureStore.read(key: 'ethPrivateKey'))!;
     Credentials credentials = EthPrivateKey.fromHex(ethPrivateKey);
-    EthereumAddress patientAddress = EthereumAddress.fromHex(patientKeys.ethAddress);
-
-    String signedHash = _getSignedHash(ethPrivateKey, certificate);
-    String encryptedCertificate = await certificate.encrypt(patientKeys.pgpKey);
-
-    String ipfsHash = await storeOnIPFS(encryptedCertificate);
-    await _client.addCertificate(signedHash, ipfsHash, patientAddress, credentials: credentials);
-  }
-
-  String _getSignedHash(String privateKey, Certificate certificate) {
     String hash = md5.convert(certificate.toString().codeUnits).toString();
-    Uint8List message = Uint8List.fromList(hash.codeUnits);
-    return EthSigUtil.signMessage(privateKey: privateKey, message: message);
+    String signedHash = EthSigUtil.signMessage(
+        privateKey: ethPrivateKey, message: Uint8List.fromList(hash.codeUnits));
+    String encryptedCertificate =
+        await certificate.encrypt(pgpDoctorPublicKey, patient.pgpPublicKey);
+    String ipfsHash = await _ipfs.postCertificate(encryptedCertificate);
+    _impfy.addCertificate(signedHash, ipfsHash, EthereumAddress.fromHex(patient.ethAddress),
+        credentials: credentials);
   }
 
-  Future<SignedCertificate?> _decryptCertificate(
-      encryptedCertificate, signedHash, String privateKey, String passphrase) async {
+  Future<SignedCertificate?> _decryptCertificate(List<dynamic> data, String passphrase) async {
+    String encryptedCertificate = data.first as String;
+    String signedHash = data.last as String;
+    String privateKey = (await _secureStore.read(key: 'pgpPrivateKey'))!;
     try {
       String certificateJson = await OpenPGP.decrypt(encryptedCertificate, privateKey, passphrase);
       Certificate certificate = Certificate.fromJson(json.decode(certificateJson));
@@ -73,13 +69,9 @@ class Repository {
     }
   }
 
-  Future<BigInt> getDoctorValidityBlockNumber(String address) async {
-    EthereumAddress doctorAddress = EthereumAddress.fromHex(address);
-    // return await _client.getDoctorValidityBlockNumber(doctorAddress);
-    return BigInt.one;
-  }
-
-  Future<bool> certificateExistsAtBlock(String signedHash, BigInt blockNumber) async {
-    return false;
+  Future<bool> isDoctor(String address) async {
+    // TODO: Check if address belongs to doctor, once function is added to contract.
+    // await _client.isDoctor(EthereumAddress.fromHex(address));
+    return address.toLowerCase() == '0x08A6475d8F8668DD93fa3bd3AD87D83312a152d6'.toLowerCase();
   }
 }
