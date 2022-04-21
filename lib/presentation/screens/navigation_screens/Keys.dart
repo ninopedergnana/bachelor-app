@@ -48,13 +48,14 @@ class KeysState extends State<Keys> {
   }
 
   Future<void> exportAllKeys() async {
-    UserAccountDTO userKeys = UserAccountDTO(
+    UserAccountDTO user = UserAccountDTO(
         pgpPrivateKey: pgpPrivateKey.text,
         pgpPublicKey: pgpPublicKey.text,
         ethPrivateKey: ethPrivateKey.text,
         firstName: firstName.text,
         lastName: lastName.text);
-    await dialog.showQRDialog(context, userKeys.toString(), "User Keys");
+
+    await dialog.showQRDialog(context, user.toString(), "User Keys");
   }
 
   @override

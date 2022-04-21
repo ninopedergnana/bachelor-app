@@ -25,8 +25,8 @@ class UserAccountDTO {
         'pPr': pgpPrivateKey,
         'pPu': pgpPublicKey,
         'ePr': ethPrivateKey,
-        'fn': ethPrivateKey,
-        'ln': ethPrivateKey,
+        'fn': firstName,
+        'ln': lastName,
       };
 
   @override

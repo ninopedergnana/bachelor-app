@@ -69,6 +69,8 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
         // Returns -1 when no QR was scanned.
         _patientKeys = PatientDTO.fromJson(json.decode(value));
       }
+      fnController.text = _patientKeys!.firstName;
+      lnController.text = _patientKeys!.lastName;
     });
   }
 
@@ -186,7 +188,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                             children: [
                               ElevatedButton(
                                 onPressed: () {
-                                if (_formKey.currentState!.validate() && _patientKeys == null) {
+                                if (_formKey.currentState!.validate() && _patientKeys != null) {
                                   Certificate certificate = Certificate()
                                       ..firstname = fnController.text
                                       ..lastname = lnController.text
@@ -201,7 +203,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                                       ..issuer = issuerController.text
                                       ..uvci = uvciController.text;
 
-                                    print(certificate);
+                                    _repository.createCertificate(certificate, _patientKeys!);
 
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(content: Text('Vaccine Entered Successfully')),

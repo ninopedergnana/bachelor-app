@@ -28,14 +28,10 @@ class SignedCertificate {
   }
 
   Future<bool> verify() async {
-    // Repository repository = Repository();
-    // var unsignedHash = _getHashCode();
-    // String address = EthSigUtil.ecRecover(
-    //     signature: signedHash, message: Uint8List.fromList(unsignedHash.codeUnits));
-    // BigInt blockNumber = await Repository().getDoctorValidityBlockNumber(address);
-    // if (blockNumber == BigInt.zero) return false;
-    // if (blockNumber == BigInt.one) return true;
-    // return repository.certificateExistsAtBlock(signedHash, blockNumber - BigInt.one);
-    return true;
+    Repository repository = Repository();
+    var unsignedHash = _getHashCode();
+    String address = EthSigUtil.ecRecover(
+        signature: signedHash, message: Uint8List.fromList(unsignedHash.codeUnits));
+    return repository.isDoctor(address);
   }
 }
