@@ -18,6 +18,7 @@ class Repository {
   static final Repository _instance = Repository._internal();
   final IPFS _ipfs = IPFS();
   final FlutterSecureStorage _secureStore = const FlutterSecureStorage();
+  final String _passphrase = '';
   late final Impfy _impfy;
 
   factory Repository() {
@@ -25,7 +26,7 @@ class Repository {
   }
 
   Repository._internal() {
-    String hexAddress = '0x259e2D8c295C3576604C3a0ace28756D483a342D';
+    String hexAddress = '0xd74F65f2146351355BBFDD6c3aE6CD452630B9aB';
     EthereumAddress contractAddress = EthereumAddress.fromHex(hexAddress);
     String rpcUrl = 'https://eth-rinkeby.alchemyapi.io/v2/yCa_KizxtugRrLnI4Hl7wTwYZZHKJkrc';
     var client = Web3Client(rpcUrl, Client());
@@ -39,21 +40,19 @@ class Repository {
 
   Future<List<SignedCertificate>> getCertificates() async {
     EthPrivateKey credentials = await _getCredentials();
-    String passphrase = '';
 
     var response = (await _impfy.getCertificates(credentials.address));
     var certificates = response
-        .map((element) => List.from(element))
-        .map((element) => CertificateDTO(
-            certificateHash: element[0], ipfsHash: element[1], blockNumber: element[2]))
+        .map((element) => String.fromCharCodes(element))
         .map((element) => _getCertificateFromIPFS(element));
 
     return (await Future.wait(certificates)).whereType<SignedCertificate>().toList();
   }
 
-  Future<SignedCertificate?> _getCertificateFromIPFS(CertificateDTO dto) async {
-    String encryptedCertificate = await _ipfs.getCertificate(dto.ipfsHash);
-    return _decryptCertificate(encryptedCertificate, dto.certificateHash, '');
+  Future<SignedCertificate?> _getCertificateFromIPFS(String ipfsHash) async {
+    String ipfsResult = await _ipfs.getCertificate(ipfsHash);
+    CertificateDTO certificateDTO = CertificateDTO.fromJson(jsonDecode(ipfsResult));
+    return _decryptCertificate(certificateDTO, _passphrase);
   }
 
   Future<void> createCertificate(Certificate certificate, PatientDTO patient) async {
@@ -63,18 +62,22 @@ class Repository {
     String signedHash = EthSigUtil.signMessage(
         privateKey: ethPrivateKey, message: Uint8List.fromList(hash.codeUnits));
     String encryptedCertificate = await certificate.encrypt(patient.pgpPublicKey);
-    String ipfsHash = await _ipfs.postCertificate(encryptedCertificate);
-    _impfy.addCertificate(signedHash, ipfsHash, EthereumAddress.fromHex(patient.ethAddress),
+    CertificateDTO certificateDTO =
+        CertificateDTO(encryptedCertificate: encryptedCertificate, signedHash: signedHash);
+    String ipfsHash = await _ipfs.postCertificate(certificateDTO.toString());
+    _impfy.addCertificate(
+        Uint8List.fromList(ipfsHash.codeUnits), EthereumAddress.fromHex(patient.ethAddress),
         credentials: credentials);
   }
 
   Future<SignedCertificate?> _decryptCertificate(
-      String encryptedCertificate, String certificateHash, String passphrase) async {
+      CertificateDTO certificateDTO, String passphrase) async {
     String privateKey = (await _secureStore.read(key: 'pgpPrivateKey'))!;
     try {
-      String certificateJson = await OpenPGP.decrypt(encryptedCertificate, privateKey, passphrase);
+      String certificateJson =
+          await OpenPGP.decrypt(certificateDTO.encryptedCertificate, privateKey, passphrase);
       Certificate certificate = Certificate.fromJson(json.decode(certificateJson));
-      return SignedCertificate(certificate: certificate, signedHash: certificateHash);
+      return SignedCertificate(certificate: certificate, signedHash: certificateDTO.signedHash);
     } catch (e) {
       return null;
     }

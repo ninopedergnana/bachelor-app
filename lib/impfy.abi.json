@@ -5,31 +5,6 @@
     "type": "constructor"
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "certificateHash",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "doctor",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "patient",
-        "type": "address"
-      }
-    ],
-    "name": "Vaccine",
-    "type": "event"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -45,14 +20,9 @@
   {
     "inputs": [
       {
-        "internalType": "string",
-        "name": "certificateHash",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
+        "internalType": "bytes",
         "name": "ipfsHash",
-        "type": "string"
+        "type": "bytes"
       },
       {
         "internalType": "address",
@@ -76,30 +46,14 @@
     "name": "getCertificates",
     "outputs": [
       {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "certificateHash",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "ipfsHash",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "blockNumber",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct Impfy.CertificateDTO[]",
+        "internalType": "bytes[]",
         "name": "",
-        "type": "tuple[]"
+        "type": "bytes[]"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -112,38 +66,6 @@
     "name": "invalidateDoctor",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "certificateHash",
-        "type": "string"
-      }
-    ],
-    "name": "invalidateCertificate",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "certificateHash",
-        "type": "string"
-      }
-    ],
-    "name": "isValidCertificate",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   }
 ]
