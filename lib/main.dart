@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/domain/AuthProvider.dart';
 import 'package:flutter_app/presentation/screens/navigation_screens/CertificateList.dart';
 import 'package:flutter_app/presentation/screens/navigation_screens/Keys.dart';
 import 'package:flutter_app/presentation/screens/navigation_screens/ScanCertificate.dart';
@@ -12,9 +13,12 @@ import 'package:flutter_app/presentation/screens/other_screens/ScanPatient.dart'
 import 'package:flutter_app/presentation/screens/other_screens/SignIn.dart';
 import 'package:flutter_app/presentation/screens/other_screens/SignUp.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => AuthProvider())],
+      child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -26,18 +30,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final FlutterSecureStorage _localStorage = const FlutterSecureStorage();
-  String _initialRoute = '/';
-
-  _MyAppState() {
-    _localStorage.containsKey(key: 'ethPrivateKey').then((isAuthenticated) {
-      setState(() {
-        _initialRoute = isAuthenticated ? '/' : '/auth';
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+    String _initialRoute =
+        context.watch<AuthProvider>().isSignedIn ? '/' : '/auth';
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -55,7 +52,8 @@ class _MyAppState extends State<MyApp> {
         '/scan-patient': (context) => const ScanPatient(),
         '/scan-certificate': (context) => const ScanCertificate(),
         '/keys': (context) => const Keys(),
-        '/certificate-verification': (context) => const CertificateVerification(),
+        '/certificate-verification': (context) =>
+            const CertificateVerification(),
         '/auth': (context) => const Start(),
         '/auth/sign-up': (context) => const SignUp(),
         '/auth/sign-in': (context) => const SignIn(),
@@ -73,7 +71,7 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  int _selectedIndex = 1; //home screen
+  int _selectedIndex = 0; //home screen
 
   //bottom navigation bar widgets
   static const List<Widget> _widgetOptions = <Widget>[
@@ -102,7 +100,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
       drawer: Drawer(
         child: ListView(
-          // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(
@@ -114,9 +111,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             ListTile(
               title: const Text('Patients'),
               onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
                 Navigator.pushNamed(context, '/patients/patient');
               },
             ),
@@ -127,7 +121,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               },
             ),
             ListTile(
-              title: const Text('Log Out'),
+              title: const Text('Sign Out'),
               onTap: () {
                 Navigator.pushNamed(context, '/auth');
               },
@@ -135,30 +129,30 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.blueGrey,
-        elevation: 0,
-        iconSize: 25,
-        unselectedLabelStyle: const TextStyle(fontSize: 10),
-        selectedLabelStyle: const TextStyle(fontSize: 12),
-        unselectedItemColor: Colors.grey,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+      bottomNavigationBar: NavigationBar(
+        destinations: const <NavigationDestination>[
+          NavigationDestination(
+            selectedIcon: Icon(Icons.list_outlined),
             icon: Icon(Icons.list),
             label: 'Certificates',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.key_sharp),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.key_outlined),
+            icon: Icon(Icons.key),
             label: 'Keys',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
+            selectedIcon: Icon(Icons.qr_code_outlined),
             icon: Icon(Icons.qr_code),
             label: 'Verify',
           ),
         ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (int newIndex) {
+          setState(() {
+            _selectedIndex = newIndex;
+          });
+        },
       ),
     );
   }

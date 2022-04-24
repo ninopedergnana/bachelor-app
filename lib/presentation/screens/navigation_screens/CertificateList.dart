@@ -27,6 +27,10 @@ class _CertificateListState extends State<CertificateList> {
           onPressed: () {
             Navigator.pushNamed(context, '/create-certificate');
           },
+          elevation: 4,
+          focusElevation: 8,
+          hoverElevation: 8,
+          highlightElevation: 8,
           backgroundColor: Colors.blueGrey,
           child: const Icon(
             Icons.add,

@@ -42,6 +42,7 @@ dependencies:
   web3dart: ^2.3.5
   flutter_secure_storage: ^5.0.2
   intl: ^0.17.0
+  provider: ^6.0.2
   eth_sig_util: ^0.0.7
 
 
