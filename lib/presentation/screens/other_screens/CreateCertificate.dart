@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/dto/PatientKeysDTO.dart';
+import 'package:flutter_app/data/dto/PatientDTO.dart';
 import 'package:flutter_app/data/repository/Repository.dart';
 import 'package:flutter_app/domain/model/Certificate.dart';
-import 'package:intl/intl.dart' as intl;
+import 'package:flutter_app/presentation/components/DropDownButtonWidget.dart';
 import 'dart:convert';
+import '../../../domain/model/Template.dart';
+import '../../components/FormDatePicker.dart';
+import '../../components/TextInput.dart';
 
 class CreateCertificate extends StatelessWidget {
   const CreateCertificate({Key? key}) : super(key: key);
@@ -31,33 +34,43 @@ class CreateCertificateForm extends StatefulWidget {
 class CreateCertificateFormState extends State<CreateCertificateForm> {
   final _formKey = GlobalKey<FormState>();
   final Repository _repository = Repository();
-  PatientKeysDTO? _patientKeys;
+  PatientDTO? _patientKeys;
+  DropDownButtonWidgetState staty = DropDownButtonWidgetState();
 
-  // JSON CONVERSION
-  Certificate certificate = Certificate(
-      product: '',
-      uvci: '',
-      manufacturer: '',
-      targetedDisease: '',
-      vaccineType: '',
-      dose: 0,
-      countryOfVaccination: '',
-      issuer: '',
-      validUntil: DateTime.now(),
-      vaccinationDate: DateTime.now(),
-      lastname: '',
-      firstname: '');
+  TextEditingController fnController = TextEditingController();
+  TextEditingController lnController = TextEditingController();
+  DateTime vaccDateController = DateTime.now();
+  DateTime validUntilController = DateTime.now();
+  TextEditingController doseController = TextEditingController();
+  TextEditingController targetDisController = TextEditingController();
+  TextEditingController vaccTypeController = TextEditingController();
+  TextEditingController productController = TextEditingController();
+  TextEditingController manufactController = TextEditingController();
+  TextEditingController countryOfVaccController = TextEditingController();
+  TextEditingController issuerController = TextEditingController();
+  TextEditingController uvciController = TextEditingController();
 
-  // Map<String,dynamic> map = vaccine.toJson();
-  // String vaccineJSON = jsonEncode(map);
+  void fillFormValues(value){
+    vaccDateController = value.vaccinationDate ?? DateTime.now();
+    validUntilController = value.validUntil ?? DateTime.now();
+    doseController.text = value.dose.toString();
+    targetDisController.text = value.targetedDisease!;
+    vaccTypeController.text = value.vaccineType!;
+    productController.text = value.product!;
+    manufactController.text = value.manufacturer!;
+    countryOfVaccController.text = value.countryOfVaccination!;
+    issuerController.text = value.issuer!;
+  }
 
   Future<void> scanPatientKey() async {
     String value = await Navigator.pushNamed(context, '/create-certificate/scan-patient') as String;
     setState(() {
       if (value != '-1') {
         // Returns -1 when no QR was scanned.
-        _patientKeys = PatientKeysDTO.fromJson(json.decode(value));
+        _patientKeys = PatientDTO.fromJson(json.decode(value));
       }
+      fnController.text = _patientKeys!.firstName;
+      lnController.text = _patientKeys!.lastName;
     });
   }
 
@@ -90,114 +103,83 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                           ),
                           style: TextButton.styleFrom(
                               minimumSize: const Size.fromHeight(60),
-                              backgroundColor: (_patientKeys == null) ? Colors.blue : Colors.grey)),
+                              backgroundColor: (_patientKeys == null) ? Colors.blue : Colors.grey)
+                      ),
+                      const SizedBox(height: 10),
+                      DropDownButtonWidget(
+                        onValueChanged: (value) {
+                          fillFormValues(value);
+                        },
+                      ),
                       const SizedBox(height: 10),
                       TextInput(
-                          label: 'First Name',
-                          onChanged: (value) {
-                            setState(() {
-                              certificate.firstname = value;
-                            });
-                          }),
+                        textEditingController: fnController,
+                        label: 'First Name',
+                      ),
                       const SizedBox(height: 10),
                       TextInput(
-                          label: 'Last Name',
-                          onChanged: (value) {
-                            setState(() {
-                              certificate.lastname = value;
-                            });
-                          }),
+                        textEditingController: lnController,
+                        label: 'Last Name',
+                      ),
                       const SizedBox(height: 10),
-                      _FormDatePicker(
+                      FormDatePicker(
                         title: 'Vaccination Date',
-                        date: certificate.vaccinationDate,
+                        date: vaccDateController,
                         onChanged: (value) {
                           setState(() {
-                            certificate.vaccinationDate = value;
+                            vaccDateController = value;
                           });
                         },
                       ),
                       const SizedBox(height: 10),
-                      _FormDatePicker(
+                      FormDatePicker(
                         title: 'Valid Until',
-                        date: certificate.validUntil,
+                        date: validUntilController,
                         onChanged: (value) {
                           setState(() {
-                            certificate.validUntil = value;
+                            validUntilController = value;
                           });
                         },
                       ),
                       const SizedBox(height: 10),
                       TextInput(
+                        textEditingController: doseController,
                         label: 'Dose',
-                        onChanged: (value) {
-                          setState(() {
-                            certificate.dose = value as int; // throws error
-                          });
-                        },
                       ),
                       const SizedBox(height: 10),
                       TextInput(
+                        textEditingController: targetDisController,
                         label: 'Targeted Disease',
-                        onChanged: (value) {
-                          setState(() {
-                            certificate.targetedDisease = value;
-                          });
-                        },
                       ),
                       const SizedBox(height: 10),
                       TextInput(
+                        textEditingController: vaccTypeController,
                         label: 'VaccineType',
-                        onChanged: (value) {
-                          setState(() {
-                            certificate.vaccineType = value;
-                          });
-                        },
                       ),
                       const SizedBox(height: 10),
                       TextInput(
+                        textEditingController: productController,
                         label: 'Product',
-                        onChanged: (value) {
-                          setState(() {
-                            certificate.product = value;
-                          });
-                        },
                       ),
                       const SizedBox(height: 10),
                       TextInput(
+                        textEditingController: manufactController,
                         label: 'Manufacturer',
-                        onChanged: (value) {
-                          setState(() {
-                            certificate.manufacturer = value;
-                          });
-                        },
                       ),
                       const SizedBox(height: 10),
                       TextInput(
+                        textEditingController: countryOfVaccController,
                         label: 'Country Of Vaccination',
-                        onChanged: (value) {
-                          setState(() {
-                            certificate.countryOfVaccination = value;
-                          });
-                        },
                       ),
                       const SizedBox(height: 10),
                       TextInput(
+                        textEditingController: issuerController,
                         label: 'Issuer',
-                        onChanged: (value) {
-                          setState(() {
-                            certificate.issuer = value;
-                          });
-                        },
                       ),
                       const SizedBox(height: 10),
                       TextInput(
+                        textEditingController: uvciController,
                         label: 'UVCI',
-                        onChanged: (value) {
-                          setState(() {
-                            certificate.uvci = value;
-                          });
-                        },
                       ),
                       Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -206,11 +188,27 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                             children: [
                               ElevatedButton(
                                 onPressed: () {
-                                  if (_formKey.currentState!.validate() && _patientKeys != null) {
+                                if (_formKey.currentState!.validate() && _patientKeys != null) {
+                                  Certificate certificate = Certificate()
+                                      ..firstname = fnController.text
+                                      ..lastname = lnController.text
+                                      ..vaccinationDate = vaccDateController
+                                      ..validUntil = validUntilController
+                                      ..dose = int.parse(doseController.text)
+                                      ..targetedDisease = targetDisController.text
+                                      ..vaccineType = vaccTypeController.text
+                                      ..product = productController.text
+                                      ..manufacturer = manufactController.text
+                                      ..countryOfVaccination = countryOfVaccController.text
+                                      ..issuer = issuerController.text
+                                      ..uvci = uvciController.text;
+
+                                    _repository.createCertificate(certificate, _patientKeys!);
+
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(content: Text('Vaccine Entered Successfully')),
                                     );
-                                    _repository.createCertificate(certificate, _patientKeys!);
+                                    //_repository.createCertificate(certificate, _patientKeys!);
                                     Navigator.pop(context);
                                   }
                                 },
@@ -227,86 +225,5 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
   }
 }
 
-class TextInput extends StatelessWidget {
-  final String label;
-  final void Function(String) onChanged;
 
-  const TextInput({Key? key, required this.label, required this.onChanged}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'This field cannot be empty.';
-          }
-          return null;
-        },
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          filled: false,
-          hintText: label,
-          labelText: label,
-        ),
-        onChanged: onChanged);
-  }
-}
-
-class _FormDatePicker extends StatefulWidget {
-  final String title;
-  final DateTime date;
-  final ValueChanged<DateTime> onChanged;
-
-  const _FormDatePicker({
-    required this.title,
-    required this.date,
-    required this.onChanged,
-  });
-
-  @override
-  _FormDatePickerState createState() => _FormDatePickerState();
-}
-
-class _FormDatePickerState extends State<_FormDatePicker> {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              widget.title,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            Text(
-              intl.DateFormat.yMMMMd().format(widget.date),
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-          ],
-        ),
-        TextButton(
-          child: const Text('Change'),
-          onPressed: () async {
-            var newDate = await showDatePicker(
-              context: context,
-              initialDate: widget.date,
-              firstDate: DateTime(1900),
-              lastDate: DateTime(2100),
-            );
-
-            // Don't change the date if the date picker returns null.
-            if (newDate == null) {
-              return;
-            }
-
-            widget.onChanged(newDate);
-          },
-        )
-      ],
-    );
-  }
-}

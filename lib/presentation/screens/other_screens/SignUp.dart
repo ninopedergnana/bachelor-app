@@ -17,7 +17,7 @@ class SignUp extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.blueGrey),
         elevation: 0,
       ),
-      body: SignUpForm(),
+      body: const SignUpForm(),
     );
   }
 }
@@ -34,42 +34,41 @@ class SignUpForm extends StatefulWidget {
 
 class SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
-  final FlutterSecureStorage _localStorage = const FlutterSecureStorage();
-  Person person = Person(firstname: '', lastname: '', email: '', passphrase: '');
-  bool? keysGenerated;
-  Map keyMap = <String, String>{};
+  final FlutterSecureStorage _secureStore = const FlutterSecureStorage();
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+  TextEditingController email = TextEditingController();
 
   Future<bool> generateKeys() async {
     EthPrivateKey credentials = EthPrivateKey.createRandom(Random.secure());
-    var keyOptions = KeyOptions()..rsaBits = 1024;
-    var keyPair1 = await OpenPGP.generate(
+
+    var keyOptions = KeyOptions()..rsaBits = 512;
+    var pgpKeyPair = await OpenPGP.generate(
         options: Options()
-          ..name = person.firstname + person.lastname
-          ..email = person.email
+          ..name = '${firstName.text} ${lastName.text}'
+          ..email = email.text
           ..passphrase = ''
           ..keyOptions = keyOptions);
-    keyMap['pgpPublicKey'] = keyPair1.publicKey;
-    keyMap['pgpPrivateKey'] = keyPair1.privateKey;
-    keyMap['ethPrivateKey'] = '0x' + credentials.privateKeyInt.toRadixString(16);
 
-    bool success = await storeKeys();
+    String ethPrivate = '0x' + credentials.privateKeyInt.toRadixString(16);
 
-    return success;
+    return await storeKeys(pgpKeyPair.privateKey, pgpKeyPair.publicKey, ethPrivate);
   }
 
-  Future<bool> storeKeys() async {
+  Future<bool> storeKeys(pgpPrivate, pgpPublic, ethPrivate) async {
     Future.wait([
-      _localStorage.write(key: 'pgpPublicKey', value: keyMap['pgpPublicKey']),
-      _localStorage.write(key: 'pgpPrivateKey', value: keyMap['pgpPrivateKey']),
-      _localStorage.write(key: 'ethPrivateKey', value: keyMap['ethPrivateKey'])
+      _secureStore.write(key: 'pgpPrivateKey', value: pgpPrivate),
+      _secureStore.write(key: 'pgpPublicKey', value: pgpPublic),
+      _secureStore.write(key: 'ethPrivateKey', value: ethPrivate),
+      _secureStore.write(key: 'firstName', value: firstName.text),
+      _secureStore.write(key: 'lastName', value: lastName.text),
     ]);
-    Map localStorageMap = await _localStorage.readAll();
+    Map localStorageMap = await _secureStore.readAll();
     return localStorageMap.isNotEmpty;
   }
 
   @override
   Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
     return Scaffold(
       body: Form(
         key: _formKey,
@@ -83,10 +82,9 @@ class SignUpFormState extends State<SignUpForm> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   TextFormField(
-                    // The validator receives the text that the user has entered.
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
+                        return 'Please Enter Your First Name';
                       }
                       return null;
                     },
@@ -95,15 +93,10 @@ class SignUpFormState extends State<SignUpForm> {
                       hintText: 'First Name',
                       labelText: 'First Name',
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        person.firstname = value;
-                      });
-                    },
+                    controller: firstName,
                   ),
                   const SizedBox(height: 10.0),
                   TextFormField(
-                    // The validator receives the text that the user has entered.
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please Enter Your First Name';
@@ -115,15 +108,10 @@ class SignUpFormState extends State<SignUpForm> {
                       hintText: 'Last Name',
                       labelText: 'Last Name',
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        person.lastname = value;
-                      });
-                    },
+                    controller: lastName,
                   ),
                   const SizedBox(height: 10.0),
                   TextFormField(
-                    // The validator receives the text that the user has entered.
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please Enter Your Email';
@@ -142,47 +130,23 @@ class SignUpFormState extends State<SignUpForm> {
                       hintText: 'Email',
                       labelText: 'Email',
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        person.email = value;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    // The validator receives the text that the user has entered.
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter Your Password';
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      filled: false,
-                      hintText: 'Password',
-                      labelText: 'Password',
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        person.passphrase = value;
-                      });
-                    },
+                    controller: email,
                   ),
                   const SizedBox(height: 15.0),
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate() && await generateKeys()) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Keys Generated")),
+                          const SnackBar(content: Text("Signup Successful!")),
                         );
-                        Navigator.pushNamed(context, '/certificate-list');
+                        Navigator.pushNamed(context, '/');
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("Key Generation Failed")),
                         );
                       }
                     },
-                    child: const Text('Submit'),
+                    child: const Text('Sign Up'),
                   ),
                 ],
               ),

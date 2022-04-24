@@ -20,27 +20,9 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "doctor",
-        "type": "address"
-      }
-    ],
-    "name": "removeDoctor",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "encryptedCertificate",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "certificateHash",
-        "type": "string"
+        "internalType": "bytes",
+        "name": "ipfsHash",
+        "type": "bytes"
       },
       {
         "internalType": "address",
@@ -64,25 +46,26 @@
     "name": "getCertificates",
     "outputs": [
       {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "encryptedCertificate",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "certificateHash",
-            "type": "string"
-          }
-        ],
-        "internalType": "struct Impfy.Vaccine[]",
+        "internalType": "bytes[]",
         "name": "",
-        "type": "tuple[]"
+        "type": "bytes[]"
       }
     ],
     "stateMutability": "view",
     "type": "function",
     "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "doctor",
+        "type": "address"
+      }
+    ],
+    "name": "invalidateDoctor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   }
 ]

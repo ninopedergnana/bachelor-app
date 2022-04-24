@@ -28,9 +28,10 @@ class SignedCertificate {
   }
 
   Future<bool> verify() async {
+    Repository repository = Repository();
     var unsignedHash = _getHashCode();
     String address = EthSigUtil.ecRecover(
         signature: signedHash, message: Uint8List.fromList(unsignedHash.codeUnits));
-    return Repository().isDoctor(address);
+    return repository.isDoctor(address);
   }
 }

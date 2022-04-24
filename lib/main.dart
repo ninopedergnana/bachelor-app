@@ -41,8 +41,8 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blueGrey,
       ),
       initialRoute: _initialRoute,
-      home: const MyStatefulWidget(),
       routes: {
+        '/': (context) => const MyStatefulWidget(),
         '/certificate-list': (context) => const CertificateList(),
         '/certificate-list/certificate': (context) => const CertificateDetail(),
         '/patients': (context) => const PatientList(),

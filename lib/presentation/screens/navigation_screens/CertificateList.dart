@@ -47,7 +47,7 @@ class _CertificateListState extends State<CertificateList> {
                     itemCount: signedCertList.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        title: Text(signedCertList[index].certificate.product),
+                        title: Text(signedCertList[index].certificate.product!),
                         onTap: () {
                           Navigator.push(
                               context,
