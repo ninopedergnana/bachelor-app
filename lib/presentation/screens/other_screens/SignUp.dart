@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/domain/model/Person.dart';
+import 'package:flutter_app/domain/AuthProvider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:openpgp/openpgp.dart';
+import 'package:provider/provider.dart';
 import 'package:web3dart/credentials.dart';
 
 class SignUp extends StatelessWidget {
@@ -35,36 +35,28 @@ class SignUpForm extends StatefulWidget {
 class SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
   final FlutterSecureStorage _secureStore = const FlutterSecureStorage();
+  late final AuthProvider _authProvider;
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
   TextEditingController email = TextEditingController();
 
-  Future<bool> generateKeys() async {
-    EthPrivateKey credentials = EthPrivateKey.createRandom(Random.secure());
-
-    var keyOptions = KeyOptions()..rsaBits = 512;
-    var pgpKeyPair = await OpenPGP.generate(
-        options: Options()
-          ..name = '${firstName.text} ${lastName.text}'
-          ..email = email.text
-          ..passphrase = ''
-          ..keyOptions = keyOptions);
-
-    String ethPrivate = '0x' + credentials.privateKeyInt.toRadixString(16);
-
-    return await storeKeys(pgpKeyPair.privateKey, pgpKeyPair.publicKey, ethPrivate);
+  @override
+  void initState() {
+    _authProvider = context.read<AuthProvider>();
+    super.initState();
   }
 
-  Future<bool> storeKeys(pgpPrivate, pgpPublic, ethPrivate) async {
-    Future.wait([
-      _secureStore.write(key: 'pgpPrivateKey', value: pgpPrivate),
-      _secureStore.write(key: 'pgpPublicKey', value: pgpPublic),
-      _secureStore.write(key: 'ethPrivateKey', value: ethPrivate),
-      _secureStore.write(key: 'firstName', value: firstName.text),
-      _secureStore.write(key: 'lastName', value: lastName.text),
-    ]);
-    Map localStorageMap = await _secureStore.readAll();
-    return localStorageMap.isNotEmpty;
+  Future _signUp() async {
+    if (_formKey.currentState!.validate()) {
+      await _authProvider.signUp(firstName.text, lastName.text, email.text);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Signup Successful!")),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Key Generation Failed")),
+      );
+    }
   }
 
   @override
@@ -134,18 +126,7 @@ class SignUpFormState extends State<SignUpForm> {
                   ),
                   const SizedBox(height: 15.0),
                   ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate() && await generateKeys()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Signup Successful!")),
-                        );
-                        Navigator.pushNamed(context, '/');
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Key Generation Failed")),
-                        );
-                      }
-                    },
+                    onPressed: _signUp,
                     child: const Text('Sign Up'),
                   ),
                 ],

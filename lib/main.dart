@@ -33,32 +33,40 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    String _initialRoute =
+    String initialRoute =
         context.watch<AuthProvider>().isSignedIn ? '/' : '/auth';
+
+    Map<String, Widget Function(BuildContext)> routes =
+        context.watch<AuthProvider>().isSignedIn
+            ? {
+                '/': (context) => const MyStatefulWidget(),
+                '/certificate-list': (context) => const CertificateList(),
+                '/certificate-list/certificate': (context) =>
+                    const CertificateDetail(),
+                '/patients': (context) => const PatientList(),
+                '/patients/patient': (context) => const PatientDetail(),
+                '/create-certificate': (context) => const CreateCertificate(),
+                '/create-certificate/scan-patient': (context) =>
+                    const ScanPatient(),
+                '/scan-patient': (context) => const ScanPatient(),
+                '/scan-certificate': (context) => const ScanCertificate(),
+                '/keys': (context) => const Keys(),
+                '/certificate-verification': (context) =>
+                    const CertificateVerification()
+              }
+            : {
+                '/auth': (context) => const Start(),
+                '/auth/sign-up': (context) => const SignUp(),
+                '/auth/sign-in': (context) => const SignIn(),
+                '/auth/scan-certificate': (context) => const ScanCertificate(),
+              };
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),
-      initialRoute: _initialRoute,
-      routes: {
-        '/': (context) => const MyStatefulWidget(),
-        '/certificate-list': (context) => const CertificateList(),
-        '/certificate-list/certificate': (context) => const CertificateDetail(),
-        '/patients': (context) => const PatientList(),
-        '/patients/patient': (context) => const PatientDetail(),
-        '/create-certificate': (context) => const CreateCertificate(),
-        '/create-certificate/scan-patient': (context) => const ScanPatient(),
-        '/scan-patient': (context) => const ScanPatient(),
-        '/scan-certificate': (context) => const ScanCertificate(),
-        '/keys': (context) => const Keys(),
-        '/certificate-verification': (context) =>
-            const CertificateVerification(),
-        '/auth': (context) => const Start(),
-        '/auth/sign-up': (context) => const SignUp(),
-        '/auth/sign-in': (context) => const SignIn(),
-        '/auth/scan-certificate': (context) => const ScanCertificate(),
-      },
+      initialRoute: initialRoute,
+      routes: routes,
     );
   }
 }
