@@ -22,9 +22,4 @@ class CertificateDTO {
   String toString() {
     return jsonEncode(toJson());
   }
-
-  SignedCertificate get getCertificate {
-    Certificate certificate = Certificate.fromJson(jsonDecode(encryptedCertificate));
-    return SignedCertificate(certificate: certificate, signedHash: signedHash);
-  }
 }

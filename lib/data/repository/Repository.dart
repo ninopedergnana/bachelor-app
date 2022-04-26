@@ -26,7 +26,7 @@ class Repository {
   }
 
   Repository._internal() {
-    String hexAddress = '0xd74F65f2146351355BBFDD6c3aE6CD452630B9aB';
+    String hexAddress = '0x871e088C3307f726FDD7BAC1370482F57B42eBDC';
     EthereumAddress contractAddress = EthereumAddress.fromHex(hexAddress);
     String rpcUrl = 'https://eth-rinkeby.alchemyapi.io/v2/yCa_KizxtugRrLnI4Hl7wTwYZZHKJkrc';
     var client = Web3Client(rpcUrl, Client());
@@ -52,7 +52,7 @@ class Repository {
   Future<SignedCertificate?> _getCertificateFromIPFS(String ipfsHash) async {
     String ipfsResult = await _ipfs.getCertificate(ipfsHash);
     CertificateDTO certificateDTO = CertificateDTO.fromJson(jsonDecode(ipfsResult));
-    return _decryptCertificate(certificateDTO, _passphrase);
+    return _decryptCertificate(certificateDTO, _passphrase, ipfsHash);
   }
 
   Future<void> createCertificate(Certificate certificate, PatientDTO patient) async {
@@ -71,21 +71,31 @@ class Repository {
   }
 
   Future<SignedCertificate?> _decryptCertificate(
-      CertificateDTO certificateDTO, String passphrase) async {
+      CertificateDTO certificateDTO, String passphrase, String ipfsHash) async {
     String privateKey = (await _secureStore.read(key: 'pgpPrivateKey'))!;
     try {
       String certificateJson =
           await OpenPGP.decrypt(certificateDTO.encryptedCertificate, privateKey, passphrase);
       Certificate certificate = Certificate.fromJson(json.decode(certificateJson));
-      return SignedCertificate(certificate: certificate, signedHash: certificateDTO.signedHash);
+      return SignedCertificate(
+          certificate: certificate, signedHash: certificateDTO.signedHash, ipfsHash: ipfsHash);
     } catch (e) {
       return null;
     }
   }
 
-  Future<bool> isDoctor(String address) async {
-    // TODO: Check if address belongs to doctor, once function is added to contract.
-    // await _client.isDoctor(EthereumAddress.fromHex(address));
-    return address.toLowerCase() == '0x08A6475d8F8668DD93fa3bd3AD87D83312a152d6'.toLowerCase();
+  Future<bool> isDoctor(String doctor) async {
+    EthereumAddress doctorAddress = EthereumAddress.fromHex(doctor);
+    return await _impfy.isDoctor(doctorAddress);
+  }
+
+  Future<bool> isValidCertificate(String doctor, String ipfsHash) async {
+    EthereumAddress doctorAddress = EthereumAddress.fromHex(doctor);
+    Uint8List data = Uint8List.fromList(ipfsHash.codeUnits);
+
+    BigInt blockNumber = await _impfy.getDoctorBlockNumber(doctorAddress);
+    BlockNum block = BlockNum.exact(blockNumber.toInt() - 1);
+
+    return await _impfy.certificateExists(data, atBlock: block);
   }
 }
