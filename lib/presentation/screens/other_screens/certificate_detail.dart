@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/domain/model/SignedCertificate.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import '../../components/DetailViewCustomText.dart';
+import '../../components/detail_view_custom_text.dart';
 
 class CertificateDetail extends StatelessWidget {
   const CertificateDetail({Key? key}) : super(key: key);

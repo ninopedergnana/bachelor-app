@@ -3,8 +3,8 @@ import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter_app/data/api/ipfs.dart';
-import 'package:flutter_app/data/dto/CertificateDTO.dart';
-import 'package:flutter_app/data/dto/PatientDTO.dart';
+import 'package:flutter_app/data/dto/certificate_dto.dart';
+import 'package:flutter_app/data/dto/patient_dto.dart';
 import 'package:flutter_app/domain/model/Certificate.dart';
 import 'package:flutter_app/domain/model/SignedCertificate.dart';
 import 'package:flutter_app/impfy.g.dart';
@@ -28,7 +28,8 @@ class Repository {
   Repository._internal() {
     String hexAddress = '0x871e088C3307f726FDD7BAC1370482F57B42eBDC';
     EthereumAddress contractAddress = EthereumAddress.fromHex(hexAddress);
-    String rpcUrl = 'https://eth-rinkeby.alchemyapi.io/v2/yCa_KizxtugRrLnI4Hl7wTwYZZHKJkrc';
+    String rpcUrl =
+        'https://eth-rinkeby.alchemyapi.io/v2/yCa_KizxtugRrLnI4Hl7wTwYZZHKJkrc';
     var client = Web3Client(rpcUrl, Client());
     _impfy = Impfy(address: contractAddress, client: client);
   }
@@ -46,39 +47,64 @@ class Repository {
         .map((element) => String.fromCharCodes(element))
         .map((element) => _getCertificateFromIPFS(element));
 
-    return (await Future.wait(certificates)).whereType<SignedCertificate>().toList();
+    return (await Future.wait(certificates))
+        .whereType<SignedCertificate>()
+        .toList();
   }
 
   Future<SignedCertificate?> _getCertificateFromIPFS(String ipfsHash) async {
     String ipfsResult = await _ipfs.getCertificate(ipfsHash);
-    CertificateDTO certificateDTO = CertificateDTO.fromJson(jsonDecode(ipfsResult));
+    CertificateDTO certificateDTO =
+        CertificateDTO.fromJson(jsonDecode(ipfsResult));
     return _decryptCertificate(certificateDTO, _passphrase, ipfsHash);
   }
 
-  Future<void> createCertificate(Certificate certificate, PatientDTO patient) async {
+  Future<void> createCertificate(
+    Certificate certificate,
+    PatientDTO patient,
+  ) async {
     String ethPrivateKey = (await _secureStore.read(key: 'ethPrivateKey'))!;
     EthPrivateKey credentials = EthPrivateKey.fromHex(ethPrivateKey);
     String hash = md5.convert(certificate.toString().codeUnits).toString();
     String signedHash = EthSigUtil.signMessage(
-        privateKey: ethPrivateKey, message: Uint8List.fromList(hash.codeUnits));
-    String encryptedCertificate = await certificate.encrypt(patient.pgpPublicKey);
-    CertificateDTO certificateDTO =
-        CertificateDTO(encryptedCertificate: encryptedCertificate, signedHash: signedHash);
+      privateKey: ethPrivateKey,
+      message: Uint8List.fromList(hash.codeUnits),
+    );
+    String encryptedCertificate = await certificate.encrypt(
+      patient.pgpPublicKey,
+    );
+    CertificateDTO certificateDTO = CertificateDTO(
+      encryptedCertificate: encryptedCertificate,
+      signedHash: signedHash,
+    );
     String ipfsHash = await _ipfs.postCertificate(certificateDTO.toString());
     _impfy.addCertificate(
-        Uint8List.fromList(ipfsHash.codeUnits), EthereumAddress.fromHex(patient.ethAddress),
-        credentials: credentials);
+      Uint8List.fromList(ipfsHash.codeUnits),
+      EthereumAddress.fromHex(patient.ethAddress),
+      credentials: credentials,
+    );
   }
 
   Future<SignedCertificate?> _decryptCertificate(
-      CertificateDTO certificateDTO, String passphrase, String ipfsHash) async {
+    CertificateDTO certificateDTO,
+    String passphrase,
+    String ipfsHash,
+  ) async {
     String privateKey = (await _secureStore.read(key: 'pgpPrivateKey'))!;
     try {
-      String certificateJson =
-          await OpenPGP.decrypt(certificateDTO.encryptedCertificate, privateKey, passphrase);
-      Certificate certificate = Certificate.fromJson(json.decode(certificateJson));
+      String certificateJson = await OpenPGP.decrypt(
+        certificateDTO.encryptedCertificate,
+        privateKey,
+        passphrase,
+      );
+      Certificate certificate = Certificate.fromJson(
+        json.decode(certificateJson),
+      );
       return SignedCertificate(
-          certificate: certificate, signedHash: certificateDTO.signedHash, ipfsHash: ipfsHash);
+        certificate: certificate,
+        signedHash: certificateDTO.signedHash,
+        ipfsHash: ipfsHash,
+      );
     } catch (e) {
       return null;
     }

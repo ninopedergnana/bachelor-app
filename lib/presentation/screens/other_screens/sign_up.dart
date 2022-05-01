@@ -1,7 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/domain/AuthProvider.dart';
+import 'package:flutter_app/domain/auth_provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
+
+import '../../navigation/routes.gr.dart';
 
 class SignUp extends StatelessWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -45,6 +48,7 @@ class SignUpFormState extends State<SignUpForm> {
   Future _signUp() async {
     if (_formKey.currentState!.validate()) {
       await _authProvider.signUp(firstName.text, lastName.text, email.text);
+      AutoRouter.of(context).push(const MainRoute());
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Signup Successful!")),
       );

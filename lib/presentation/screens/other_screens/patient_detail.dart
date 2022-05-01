@@ -1,4 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+
+import '../../navigation/routes.gr.dart';
 
 class PatientDetail extends StatelessWidget {
   const PatientDetail({Key? key}) : super(key: key);
@@ -17,7 +20,7 @@ class PatientDetail extends StatelessWidget {
                 children: <Widget>[
                   ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/');
+                        AutoRouter.of(context).push(const MainRoute());
                       },
                       child: const Text('Back'))
         ])));

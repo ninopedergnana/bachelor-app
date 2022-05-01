@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/dto/PatientDTO.dart';
-import 'package:flutter_app/data/repository/Repository.dart';
+import 'package:flutter_app/data/dto/patient_dto.dart';
+import 'package:flutter_app/data/repository/repository.dart';
 import 'package:flutter_app/domain/model/Certificate.dart';
-import 'package:flutter_app/presentation/components/DropDownButtonWidget.dart';
+import 'package:flutter_app/presentation/components/drop_down_button_widget.dart';
 import 'dart:convert';
 import '../../../domain/model/Template.dart';
-import '../../components/FormDatePicker.dart';
-import '../../components/TextInput.dart';
+import '../../components/form_date_picker.dart';
+import '../../components/text_input.dart';
+import '../../components/qr_scan.dart';
 
 class CreateCertificate extends StatelessWidget {
   const CreateCertificate({Key? key}) : super(key: key);
@@ -63,12 +64,8 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
   }
 
   Future<void> scanPatientKey() async {
-    String value = await Navigator.pushNamed(context, '/create-certificate/scan-patient') as String;
+    _patientKeys = await scanPatient();
     setState(() {
-      if (value != '-1') {
-        // Returns -1 when no QR was scanned.
-        _patientKeys = PatientDTO.fromJson(json.decode(value));
-      }
       fnController.text = _patientKeys!.firstName;
       lnController.text = _patientKeys!.lastName;
     });

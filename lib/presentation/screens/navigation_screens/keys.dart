@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/dto/PatientDTO.dart';
-import 'package:flutter_app/presentation/components/CustomDialog.dart';
+import 'package:flutter_app/data/dto/patient_dto.dart';
+import 'package:flutter_app/presentation/components/custom_dialog.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:web3dart/web3dart.dart';
 
-import '../../../data/dto/UserAccountDTO.dart';
+import '../../../data/dto/user_account_dto.dart';
 
 class Keys extends StatefulWidget {
   const Keys({Key? key}) : super(key: key);
