@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/domain/model/Template.dart';
+import 'package:flutter_app/domain/model/template.dart';
 
 class DropDownButtonWidget extends StatefulWidget {
   // used to pass the right template to the create vaccine widget

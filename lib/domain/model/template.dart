@@ -1,6 +1,3 @@
-
-import 'package:flutter/material.dart';
-
 class Template {
   String? templateName; // only used for dropdown
   DateTime? vaccinationDate;
@@ -13,18 +10,17 @@ class Template {
   String? countryOfVaccination;
   String? issuer;
 
-  Template({
-    this.templateName,
-    this.vaccinationDate,
-    this.validUntil,
-    this.dose,
-    this.targetedDisease,
-    this.vaccineType,
-    this.product,
-    this.manufacturer,
-    this.countryOfVaccination,
-    this.issuer
-  });
+  Template(
+      {this.templateName,
+      this.vaccinationDate,
+      this.validUntil,
+      this.dose,
+      this.targetedDisease,
+      this.vaccineType,
+      this.product,
+      this.manufacturer,
+      this.countryOfVaccination,
+      this.issuer});
 
   Template.isNamedConstructor(Template template) {
     vaccinationDate = template.vaccinationDate;

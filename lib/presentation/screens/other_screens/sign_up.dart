@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/domain/auth_provider.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
 import '../../navigation/routes.gr.dart';
@@ -33,7 +32,6 @@ class SignUpForm extends StatefulWidget {
 
 class SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
-  final FlutterSecureStorage _secureStore = const FlutterSecureStorage();
   late final AuthProvider _authProvider;
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();

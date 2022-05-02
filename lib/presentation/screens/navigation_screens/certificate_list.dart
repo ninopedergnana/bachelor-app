@@ -1,8 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/domain/model/SignedCertificate.dart';
+import 'package:flutter_app/domain/model/signed_certificate.dart';
 import 'package:flutter_app/presentation/navigation/routes.gr.dart';
-import 'package:flutter_app/presentation/screens/other_screens/certificate_detail.dart';
 
 import '../../../data/repository/repository.dart';
 
@@ -52,21 +51,17 @@ class _CertificateListState extends State<CertificateList> {
                 return ListTile(
                   title: Text(signedCertList[index].certificate.product!),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CertificateDetail(),
-                        settings: RouteSettings(
-                          arguments: signedCertList[index],
-                        ),
+                    AutoRouter.of(context).push(
+                      CertificateDetailRoute(
+                        signedCertificate: signedCertList[index],
                       ),
                     );
                   },
                 );
-              }, // itemBuilder
+              },
             );
-          } // else case
-        }, // builder
+          }
+        },
       ),
     );
   }

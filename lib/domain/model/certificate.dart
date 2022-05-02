@@ -1,7 +1,8 @@
-import 'package:flutter_app/domain/model/Template.dart';
+import 'dart:convert';
+
+import 'package:flutter_app/domain/model/template.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:openpgp/openpgp.dart';
-import 'dart:convert';
 
 class Certificate extends Template {
   final FlutterSecureStorage _secureStore = const FlutterSecureStorage();
@@ -12,13 +13,11 @@ class Certificate extends Template {
   Certificate();
 
   Certificate.fromTemplate(
-      Template template,
-      {
-      this.firstname,
-      this.lastname,
-      this.uvci
-      }
-  ): super.isNamedConstructor(template);
+    Template template, {
+    this.firstname,
+    this.lastname,
+    this.uvci,
+  }) : super.isNamedConstructor(template);
 
   Certificate.fromJson(Map<String, dynamic> json) {
     firstname = json['fn'];

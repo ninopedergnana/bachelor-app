@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_app/data/dto/user_account_dto.dart';
-import 'package:flutter_app/domain/model/SignedCertificate.dart';
+import 'package:flutter_app/domain/model/signed_certificate.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import '../../data/dto/patient_dto.dart';

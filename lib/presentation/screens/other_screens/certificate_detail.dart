@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/domain/model/SignedCertificate.dart';
+import 'package:flutter_app/domain/model/signed_certificate.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../components/detail_view_custom_text.dart';
 
 class CertificateDetail extends StatelessWidget {
-  const CertificateDetail({Key? key}) : super(key: key);
+  final SignedCertificate signedCertificate;
+
+  const CertificateDetail({Key? key, required this.signedCertificate}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final signedCertificate = ModalRoute.of(context)!.settings.arguments as SignedCertificate;
-    final certificate = signedCertificate.certificate;
-
+    var certificate = signedCertificate.certificate;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white10,

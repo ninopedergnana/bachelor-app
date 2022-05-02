@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/data/dto/patient_dto.dart';
 import 'package:flutter_app/data/repository/repository.dart';
-import 'package:flutter_app/domain/model/Certificate.dart';
+import 'package:flutter_app/domain/model/certificate.dart';
 import 'package:flutter_app/presentation/components/drop_down_button_widget.dart';
-import 'dart:convert';
-import '../../../domain/model/Template.dart';
+
 import '../../components/form_date_picker.dart';
-import '../../components/text_input.dart';
 import '../../components/qr_scan.dart';
+import '../../components/text_input.dart';
 
 class CreateCertificate extends StatelessWidget {
   const CreateCertificate({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    const appTitle = 'Create Certificate';
-
     return const Scaffold(
       body: CreateCertificateForm(),
     );
@@ -51,7 +48,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
   TextEditingController issuerController = TextEditingController();
   TextEditingController uvciController = TextEditingController();
 
-  void fillFormValues(value){
+  void fillFormValues(value) {
     vaccDateController = value.vaccinationDate ?? DateTime.now();
     validUntilController = value.validUntil ?? DateTime.now();
     doseController.text = value.dose.toString();
@@ -87,21 +84,26 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
             child: SingleChildScrollView(
                 padding: const EdgeInsets.all(10),
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 400, minHeight: 100),
+                  constraints:
+                      const BoxConstraints(maxWidth: 400, minHeight: 100),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       TextButton(
-                          onPressed: (_patientKeys == null) ? scanPatientKey : null,
+                          onPressed:
+                              (_patientKeys == null) ? scanPatientKey : null,
                           child: Text(
-                            (_patientKeys == null) ? 'Scan Patient Key' : 'Patient Key Scanned',
+                            (_patientKeys == null)
+                                ? 'Scan Patient Key'
+                                : 'Patient Key Scanned',
                             style: const TextStyle(color: Colors.white),
                           ),
                           style: TextButton.styleFrom(
                               minimumSize: const Size.fromHeight(60),
-                              backgroundColor: (_patientKeys == null) ? Colors.blue : Colors.grey)
-                      ),
+                              backgroundColor: (_patientKeys == null)
+                                  ? Colors.blue
+                                  : Colors.grey)),
                       const SizedBox(height: 10),
                       DropDownButtonWidget(
                         onValueChanged: (value) {
@@ -185,32 +187,39 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                             children: [
                               ElevatedButton(
                                 onPressed: () {
-                                if (_formKey.currentState!.validate() && _patientKeys != null) {
-                                  Certificate certificate = Certificate()
+                                  if (_formKey.currentState!.validate() &&
+                                      _patientKeys != null) {
+                                    Certificate certificate = Certificate()
                                       ..firstname = fnController.text
                                       ..lastname = lnController.text
                                       ..vaccinationDate = vaccDateController
                                       ..validUntil = validUntilController
                                       ..dose = int.parse(doseController.text)
-                                      ..targetedDisease = targetDisController.text
+                                      ..targetedDisease =
+                                          targetDisController.text
                                       ..vaccineType = vaccTypeController.text
                                       ..product = productController.text
                                       ..manufacturer = manufactController.text
-                                      ..countryOfVaccination = countryOfVaccController.text
+                                      ..countryOfVaccination =
+                                          countryOfVaccController.text
                                       ..issuer = issuerController.text
                                       ..uvci = uvciController.text;
 
-                                    _repository.createCertificate(certificate, _patientKeys!);
+                                    _repository.createCertificate(
+                                        certificate, _patientKeys!);
 
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Vaccine Entered Successfully')),
+                                      const SnackBar(
+                                          content: Text(
+                                              'Vaccine Entered Successfully')),
                                     );
                                     //_repository.createCertificate(certificate, _patientKeys!);
                                     Navigator.pop(context);
                                   }
                                 },
                                 child: const Text('Submit'),
-                                style: ElevatedButton.styleFrom(minimumSize: const Size(120, 60)),
+                                style: ElevatedButton.styleFrom(
+                                    minimumSize: const Size(120, 60)),
                               ),
                             ],
                           )),
@@ -221,6 +230,3 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
     );
   }
 }
-
-
-

@@ -40,7 +40,7 @@ class Main extends StatelessWidget {
                 ListTile(
                   title: const Text('Patients'),
                   onTap: () {
-                    Navigator.pushNamed(context, '/patients/patient');
+                    AutoRouter.of(context).push(const PatientDetailRoute());
                   },
                 ),
                 ListTile(
@@ -52,7 +52,8 @@ class Main extends StatelessWidget {
                 ListTile(
                   title: const Text('Sign Out'),
                   onTap: () {
-                    Navigator.pushNamed(context, '/auth');
+                    AutoRouter.of(context)
+                        .popAndPush(const AuthenticationRoute());
                   },
                 ),
               ],

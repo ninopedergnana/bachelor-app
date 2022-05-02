@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app/domain/model/SignedCertificate.dart';
+import 'package:flutter_app/domain/model/signed_certificate.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class ScanCertificate extends StatefulWidget {

@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:eth_sig_util/eth_sig_util.dart';
 import 'package:flutter_app/data/repository/repository.dart';
-import 'package:flutter_app/domain/model/Certificate.dart';
+import 'package:flutter_app/domain/model/certificate.dart';
 
 class SignedCertificate {
   final Certificate certificate;

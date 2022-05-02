@@ -7,10 +7,11 @@ class FormDatePicker extends StatefulWidget {
   final ValueChanged<DateTime> onChanged;
 
   const FormDatePicker({
+    Key? key,
     required this.title,
     required this.date,
     required this.onChanged,
-  });
+  }) : super(key: key);
 
   @override
   FormDatePickerState createState() => FormDatePickerState();

@@ -13,6 +13,7 @@
 import 'package:auto_route/auto_route.dart' as _i11;
 import 'package:flutter/material.dart' as _i12;
 
+import '../../domain/model/signed_certificate.dart' as _i14;
 import '../screens/navigation_screens/authentication.dart' as _i6;
 import '../screens/navigation_screens/certificate_list.dart' as _i9;
 import '../screens/navigation_screens/keys.dart' as _i10;
@@ -40,8 +41,11 @@ class AppRouter extends _i11.RootStackRouter {
           routeData: routeData, child: const _i1.Main());
     },
     CertificateDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<CertificateDetailRouteArgs>();
       return _i11.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i2.CertificateDetail());
+          routeData: routeData,
+          child: _i2.CertificateDetail(
+              key: args.key, signedCertificate: args.signedCertificate));
     },
     CreateCertificateRoute.name: (routeData) {
       return _i11.MaterialPageX<dynamic>(
@@ -114,11 +118,29 @@ class MainRoute extends _i11.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.CertificateDetail]
-class CertificateDetailRoute extends _i11.PageRouteInfo<void> {
-  const CertificateDetailRoute()
-      : super(CertificateDetailRoute.name, path: '/certificate-detail');
+class CertificateDetailRoute
+    extends _i11.PageRouteInfo<CertificateDetailRouteArgs> {
+  CertificateDetailRoute(
+      {_i12.Key? key, required _i14.SignedCertificate signedCertificate})
+      : super(CertificateDetailRoute.name,
+            path: '/certificate-detail',
+            args: CertificateDetailRouteArgs(
+                key: key, signedCertificate: signedCertificate));
 
   static const String name = 'CertificateDetailRoute';
+}
+
+class CertificateDetailRouteArgs {
+  const CertificateDetailRouteArgs({this.key, required this.signedCertificate});
+
+  final _i12.Key? key;
+
+  final _i14.SignedCertificate signedCertificate;
+
+  @override
+  String toString() {
+    return 'CertificateDetailRouteArgs{key: $key, signedCertificate: $signedCertificate}';
+  }
 }
 
 /// generated route for
