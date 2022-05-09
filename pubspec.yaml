@@ -44,6 +44,7 @@ dependencies:
   intl: ^0.17.0
   eth_sig_util: ^0.0.7
   quiver: ^3.0.1+1
+  dcdg: ^4.0.1
 
 
 dev_dependencies:
