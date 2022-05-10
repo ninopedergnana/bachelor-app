@@ -2,6 +2,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter_app/presentation/screens/navigation_screens/authentication.dart';
 import 'package:flutter_app/presentation/screens/navigation_screens/certificate_list.dart';
 import 'package:flutter_app/presentation/screens/navigation_screens/keys.dart';
+import 'package:flutter_app/presentation/screens/navigation_screens/scan_certificate.dart';
 import 'package:flutter_app/presentation/screens/other_screens/certificate_detail.dart';
 import 'package:flutter_app/presentation/screens/other_screens/create_certificate.dart';
 import 'package:flutter_app/presentation/screens/other_screens/patient_detail.dart';
@@ -25,6 +26,7 @@ import 'nav_bar.dart';
       children: [
         AutoRoute(page: CertificateList, guards: [AuthGuard]),
         AutoRoute(page: Keys, guards: [AuthGuard]),
+        AutoRoute(page: ScanCertificate, guards: [AuthGuard]),
       ],
     ),
     AutoRoute(page: CertificateDetail, guards: [AuthGuard]),

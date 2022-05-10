@@ -11,6 +11,7 @@ class Main extends StatelessWidget {
       routes: const [
         CertificateListRoute(),
         KeysRoute(),
+        ScanCertificateRoute(),
       ],
       builder: (context, child, animation) {
         final tabsRouter = AutoTabsRouter.of(context);
@@ -91,11 +92,11 @@ class _NavBarState extends State<NavBar> {
           icon: Icon(Icons.key),
           label: 'Keys',
         ),
-        // NavigationDestination(
-        //   selectedIcon: Icon(Icons.qr_code_outlined),
-        //   icon: Icon(Icons.qr_code),
-        //   label: 'Verify',
-        // ),
+        NavigationDestination(
+          selectedIcon: Icon(Icons.qr_code_outlined),
+          icon: Icon(Icons.qr_code),
+          label: 'Verify',
+        ),
       ],
       selectedIndex: widget.tabsRouter.activeIndex,
       onDestinationSelected: (int index) {
