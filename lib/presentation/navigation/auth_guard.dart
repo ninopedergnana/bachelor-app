@@ -7,10 +7,10 @@ class AuthGuard extends AutoRouteGuard {
 
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) async {
-    bool authenticated = await _secureStorage.containsKey(key: 'pgpPrivateKey');
+    bool authenticated = await _secureStorage.containsKey(key: 'PGP_PRIVATE_KEY');
     // the navigation is paused until resolver.next() is called with either
     // true to resume/continue navigation or false to abort navigation
-    if (!authenticated) {
+    if (authenticated) {
       // if user is authenticated we continue
       resolver.next(true);
     } else {

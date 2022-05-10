@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/domain/model/signed_certificate.dart';
+import 'package:flutter_app/presentation/components/certificate_item.dart';
 import 'package:flutter_app/presentation/navigation/routes.gr.dart';
 
 import '../../../data/repository/repository.dart';
@@ -15,10 +16,10 @@ class CertificateList extends StatefulWidget {
 class _CertificateListState extends State<CertificateList> {
   final Repository repo = Repository();
 
-  List<SignedCertificate> signedCertList = [];
+  List<SignedCertificate> _certificates = [];
 
   Future buildSignedCertList() async {
-    signedCertList = await repo.getCertificates();
+    _certificates = await repo.getCertificates();
     return await repo.getCertificates();
   }
 
@@ -46,18 +47,9 @@ class _CertificateListState extends State<CertificateList> {
             return const Center(child: CircularProgressIndicator());
           } else {
             return ListView.builder(
-              itemCount: signedCertList.length,
+              itemCount: _certificates.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(signedCertList[index].certificate.product!),
-                  onTap: () {
-                    AutoRouter.of(context).push(
-                      CertificateDetailRoute(
-                        signedCertificate: signedCertList[index],
-                      ),
-                    );
-                  },
-                );
+                return CertificateItem(signedCertificate: _certificates[index]);
               },
             );
           }
