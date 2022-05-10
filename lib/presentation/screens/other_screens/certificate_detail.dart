@@ -24,19 +24,9 @@ class CertificateDetail extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            QrImage(
-              data: signedCertificate.toString(),
-              version: QrVersions.auto,
-              size: 320,
-              gapless: true,
-              errorStateBuilder: (cxt, err) {
-                return const Center(
-                  child: Text(
-                    "Uh oh! Something went wrong while scanning the code",
-                    textAlign: TextAlign.center,
-                  ),
-                );
-              },
+            Hero(
+              tag: signedCertificate.signedHash,
+              child: signedCertificate.getQR(),
             ),
             const SizedBox(height: 30),
             DetailViewCustomText(title: "Name", content: certificate.firstname! + " " + certificate.lastname!),

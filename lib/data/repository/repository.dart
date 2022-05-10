@@ -28,14 +28,13 @@ class Repository {
   Repository._internal() {
     String hexAddress = '0x871e088C3307f726FDD7BAC1370482F57B42eBDC';
     EthereumAddress contractAddress = EthereumAddress.fromHex(hexAddress);
-    String rpcUrl =
-        'https://eth-rinkeby.alchemyapi.io/v2/yCa_KizxtugRrLnI4Hl7wTwYZZHKJkrc';
+    String rpcUrl = 'https://eth-rinkeby.alchemyapi.io/v2/yCa_KizxtugRrLnI4Hl7wTwYZZHKJkrc';
     var client = Web3Client(rpcUrl, Client());
     _impfy = Impfy(address: contractAddress, client: client);
   }
 
   Future<EthPrivateKey> _getCredentials() async {
-    String ethPrivateKey = (await _secureStore.read(key: 'ethPrivateKey'))!;
+    String ethPrivateKey = (await _secureStore.read(key: 'ETH_PRIVATE_KEY'))!;
     return EthPrivateKey.fromHex(ethPrivateKey);
   }
 
@@ -47,15 +46,12 @@ class Repository {
         .map((element) => String.fromCharCodes(element))
         .map((element) => _getCertificateFromIPFS(element));
 
-    return (await Future.wait(certificates))
-        .whereType<SignedCertificate>()
-        .toList();
+    return (await Future.wait(certificates)).whereType<SignedCertificate>().toList();
   }
 
   Future<SignedCertificate?> _getCertificateFromIPFS(String ipfsHash) async {
     String ipfsResult = await _ipfs.getCertificate(ipfsHash);
-    CertificateDTO certificateDTO =
-        CertificateDTO.fromJson(jsonDecode(ipfsResult));
+    CertificateDTO certificateDTO = CertificateDTO.fromJson(jsonDecode(ipfsResult));
     return _decryptCertificate(certificateDTO, _passphrase, ipfsHash);
   }
 
@@ -63,7 +59,7 @@ class Repository {
     Certificate certificate,
     PatientDTO patient,
   ) async {
-    String ethPrivateKey = (await _secureStore.read(key: 'ethPrivateKey'))!;
+    String ethPrivateKey = (await _secureStore.read(key: 'ETH_PRIVATE_KEY'))!;
     EthPrivateKey credentials = EthPrivateKey.fromHex(ethPrivateKey);
     String hash = md5.convert(certificate.toString().codeUnits).toString();
     String signedHash = EthSigUtil.signMessage(
@@ -90,7 +86,7 @@ class Repository {
     String passphrase,
     String ipfsHash,
   ) async {
-    String privateKey = (await _secureStore.read(key: 'pgpPrivateKey'))!;
+    String privateKey = (await _secureStore.read(key: 'PGP_PRIVATE_KEY'))!;
     try {
       String certificateJson = await OpenPGP.decrypt(
         certificateDTO.encryptedCertificate,

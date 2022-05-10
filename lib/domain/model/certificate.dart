@@ -55,7 +55,7 @@ class Certificate extends Template {
   }
 
   Future<String> encrypt(String patientKey) async {
-    String? doctorKey = await _secureStore.read(key: 'pgpPublicKey');
+    String? doctorKey = await _secureStore.read(key: 'PGP_PUBLIC_KEY');
     return await OpenPGP.encrypt(toString(), doctorKey! + patientKey);
   }
 }

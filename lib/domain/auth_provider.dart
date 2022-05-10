@@ -22,11 +22,12 @@ class AuthProvider with ChangeNotifier {
     var ethPrivateKey = await generateETHPrivateKey();
 
     UserAccountDTO user = UserAccountDTO(
-        pgpPrivateKey: pgpKeyPair.privateKey,
-        pgpPublicKey: pgpKeyPair.publicKey,
-        ethPrivateKey: ethPrivateKey,
-        firstName: firstName,
-        lastName: lastName);
+      pgpPrivateKey: pgpKeyPair.privateKey,
+      pgpPublicKey: pgpKeyPair.publicKey,
+      ethPrivateKey: ethPrivateKey,
+      firstName: firstName,
+      lastName: lastName,
+    );
 
     await _storeKeys(user);
   }
@@ -43,5 +44,21 @@ class AuthProvider with ChangeNotifier {
       _secureStore.write(key: _firstName, value: user.firstName),
       _secureStore.write(key: _lastName, value: user.lastName),
     ]);
+  }
+
+  Future<UserAccountDTO> getUser() async {
+    var pgpPrivateKey = await _secureStore.read(key: _pgpPrivateKey);
+    var pgpPublicKey = await _secureStore.read(key: _pgpPublicKey);
+    var ethPrivateKey = await _secureStore.read(key: _ethPrivateKey);
+    var firstName = await _secureStore.read(key: _firstName);
+    var lastName = await _secureStore.read(key: _lastName);
+
+    return UserAccountDTO(
+      pgpPrivateKey: pgpPrivateKey!,
+      pgpPublicKey: pgpPublicKey!,
+      ethPrivateKey: ethPrivateKey!,
+      firstName: firstName!,
+      lastName: lastName!,
+    );
   }
 }

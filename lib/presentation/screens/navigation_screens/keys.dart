@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/data/dto/patient_dto.dart';
 import 'package:flutter_app/presentation/components/custom_dialog.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 import 'package:web3dart/web3dart.dart';
 
 import '../../../data/dto/user_account_dto.dart';
+import '../../../domain/auth_provider.dart';
 
 class Keys extends StatefulWidget {
   const Keys({Key? key}) : super(key: key);
@@ -16,7 +18,7 @@ class Keys extends StatefulWidget {
 class KeysState extends State<Keys> {
   final FlutterSecureStorage _secureStore = const FlutterSecureStorage();
   final CustomDialog dialog = CustomDialog();
-
+  late final AuthProvider _authProvider;
   final TextEditingController firstName = TextEditingController();
   final TextEditingController lastName = TextEditingController();
   final TextEditingController pgpPublicKey = TextEditingController();
@@ -26,16 +28,18 @@ class KeysState extends State<Keys> {
 
   @override
   void initState() {
+    _authProvider = context.read<AuthProvider>();
     super.initState();
   }
 
-  loadKeys() async {
-    pgpPublicKey.text = (await _secureStore.read(key: 'pgpPublicKey'))!;
-    pgpPrivateKey.text = (await _secureStore.read(key: 'pgpPrivateKey'))!;
-    ethPrivateKey.text = (await _secureStore.read(key: 'ethPrivateKey'))!;
+  Future loadKeys() async {
+    UserAccountDTO user = await _authProvider.getUser();
+    pgpPrivateKey.text = user.pgpPrivateKey;
+    pgpPublicKey.text = user.pgpPublicKey;
+    ethPrivateKey.text = user.ethPrivateKey;
+    firstName.text = user.firstName;
+    lastName.text = user.lastName;
     ethAddress.text = EthPrivateKey.fromHex(ethPrivateKey.text).address.hex;
-    firstName.text = (await _secureStore.read(key: 'firstName'))!;
-    lastName.text = (await _secureStore.read(key: 'lastName'))!;
   }
 
   Future<void> sharePublicKeys() async {

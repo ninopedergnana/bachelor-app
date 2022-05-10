@@ -3,8 +3,10 @@ import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 import 'package:eth_sig_util/eth_sig_util.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_app/data/repository/repository.dart';
 import 'package:flutter_app/domain/model/certificate.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class SignedCertificate {
   final Certificate certificate;
@@ -39,5 +41,13 @@ class SignedCertificate {
     } else {
       return false;
     }
+  }
+
+  Widget getQR() {
+    return QrImage(
+      data: toString(),
+      version: QrVersions.auto,
+      gapless: true,
+    );
   }
 }
