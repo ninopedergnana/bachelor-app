@@ -1,12 +1,17 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/presentation/navigation/routes.gr.dart';
+import 'package:provider/provider.dart';
+
+import '../../domain/auth_provider.dart';
+
 
 class Main extends StatelessWidget {
   const Main({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider _authProvider = context.read<AuthProvider>();
     return AutoTabsRouter(
       routes: const [
         CertificateListRoute(),
@@ -53,6 +58,7 @@ class Main extends StatelessWidget {
                 ListTile(
                   title: const Text('Sign Out'),
                   onTap: () {
+                    _authProvider.signOut();
                     AutoRouter.of(context)
                         .popAndPush(const AuthenticationRoute());
                   },
