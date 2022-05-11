@@ -116,27 +116,24 @@ class _OnboardingState extends State<Onboarding> {
                                   height: 1.5,
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 10.0),
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          elevation: 0.0,
-                                          primary: const Color(0xff475c6c)
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        elevation: 0.0,
+                                        primary: const Color(0xff475c6c)
+                                    ),
+                                    onPressed: () {
+                                      AutoRouter.of(context)
+                                          .push(const SignInRoute());
+                                    },
+                                    child: const Text(
+                                      "Sign In",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15.0,
                                       ),
-                                      onPressed: () {
-                                        AutoRouter.of(context)
-                                            .push(const SignInRoute());
-                                      },
-                                      child: const Text(
-                                        "Sign in",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15.0,
-                                        ),
-                                      )),
-                                ),
+                                    )),
                               )
                             ],
                           ),

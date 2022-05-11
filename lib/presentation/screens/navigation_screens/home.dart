@@ -59,7 +59,7 @@ class Home extends StatelessWidget {
                   title: const Text('Sign Out'),
                   onTap: () {
                     _authProvider.signOut();
-                    AutoRouter.of(context).push(const AuthenticationRoute());
+                    AutoRouter.of(context).push(const OnboardingRoute());
                   },
                 ),
               ],
