@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/data/dto/patient_dto.dart';
 import 'package:flutter_app/presentation/components/custom_dialog.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:provider/provider.dart';
 import 'package:web3dart/web3dart.dart';
 
 import '../../../data/dto/user_account_dto.dart';
-import '../../../domain/auth_provider.dart';
+import '../../../domain/authentication/auth_provider.dart';
 
 class Keys extends StatefulWidget {
   const Keys({Key? key}) : super(key: key);
@@ -16,7 +14,6 @@ class Keys extends StatefulWidget {
 }
 
 class KeysState extends State<Keys> {
-  final FlutterSecureStorage _secureStore = const FlutterSecureStorage();
   final CustomDialog dialog = CustomDialog();
   late final AuthProvider _authProvider;
   final TextEditingController firstName = TextEditingController();
@@ -28,7 +25,7 @@ class KeysState extends State<Keys> {
 
   @override
   void initState() {
-    _authProvider = context.read<AuthProvider>();
+    _authProvider = AuthProvider();
     super.initState();
   }
 
@@ -72,12 +69,14 @@ class KeysState extends State<Keys> {
               return const Center(child: CircularProgressIndicator());
             } else {
               return SingleChildScrollView(
-                padding: const EdgeInsets.only(left: 5.0, top: 30.0, right: 5.0),
+                padding:
+                    const EdgeInsets.only(left: 5.0, top: 30.0, right: 5.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text("User Data",
-                        style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
+                        style: TextStyle(
+                            fontSize: 25.0, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 15),
                     TextField(
                       controller: firstName,
@@ -85,7 +84,8 @@ class KeysState extends State<Keys> {
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
                           onPressed: () async {
-                            await dialog.showQRDialog(context, firstName.text, 'First Name');
+                            await dialog.showQRDialog(
+                                context, firstName.text, 'First Name');
                           },
                           icon: const Icon(Icons.qr_code),
                         ),
@@ -100,7 +100,8 @@ class KeysState extends State<Keys> {
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
                           onPressed: () async {
-                            await dialog.showQRDialog(context, lastName.text, 'Last Name');
+                            await dialog.showQRDialog(
+                                context, lastName.text, 'Last Name');
                           },
                           icon: const Icon(Icons.qr_code),
                         ),
@@ -110,7 +111,8 @@ class KeysState extends State<Keys> {
                     ),
                     const SizedBox(height: 20),
                     const Text("OpenPGP Keys",
-                        style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
+                        style: TextStyle(
+                            fontSize: 25.0, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 15),
                     TextField(
                       controller: pgpPublicKey,
@@ -118,7 +120,8 @@ class KeysState extends State<Keys> {
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
                           onPressed: () async {
-                            await dialog.showQRDialog(context, pgpPublicKey.text, "PGP Public Key");
+                            await dialog.showQRDialog(
+                                context, pgpPublicKey.text, "PGP Public Key");
                           },
                           icon: const Icon(Icons.qr_code),
                         ),
@@ -144,7 +147,8 @@ class KeysState extends State<Keys> {
                     ),
                     const SizedBox(height: 20),
                     const Text("Ethereum Keys",
-                        style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
+                        style: TextStyle(
+                            fontSize: 25.0, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 15),
                     TextField(
                       controller: ethAddress,
@@ -153,7 +157,8 @@ class KeysState extends State<Keys> {
                         labelText: 'ETH Address',
                         suffixIcon: IconButton(
                           onPressed: () async {
-                            await dialog.showQRDialog(context, ethAddress.text, "ETH Address");
+                            await dialog.showQRDialog(
+                                context, ethAddress.text, "ETH Address");
                           },
                           icon: const Icon(Icons.qr_code),
                         ),

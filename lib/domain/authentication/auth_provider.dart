@@ -1,17 +1,22 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_app/data/dto/user_account_dto.dart';
-import 'package:flutter_app/domain/authentication/sign_up.dart';
+import 'package:flutter_app/domain/authentication/key_generation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 /// Source: https://pub.dev/packages/provider/example
-class AuthProvider with ChangeNotifier {
+class AuthProvider {
+  static final AuthProvider _instance = AuthProvider._internal();
   final FlutterSecureStorage _secureStore = const FlutterSecureStorage();
   final String _pgpPrivateKey = 'PGP_PRIVATE_KEY';
   final String _pgpPublicKey = 'PGP_PUBLIC_KEY';
   final String _ethPrivateKey = 'ETH_PRIVATE_KEY';
   final String _firstName = 'FIRST_NAME';
   final String _lastName = 'LAST_NAME';
+
+  factory AuthProvider() {
+    return _instance;
+  }
+
+  AuthProvider._internal();
 
   Future signIn(UserAccountDTO user) async {
     await _storeKeys(user);

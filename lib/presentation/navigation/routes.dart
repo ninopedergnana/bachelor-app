@@ -1,6 +1,7 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter_app/presentation/screens/navigation_screens/authentication.dart';
 import 'package:flutter_app/presentation/screens/navigation_screens/certificate_list.dart';
+import 'package:flutter_app/presentation/screens/navigation_screens/home.dart';
 import 'package:flutter_app/presentation/screens/navigation_screens/keys.dart';
 import 'package:flutter_app/presentation/screens/navigation_screens/scan_certificate.dart';
 import 'package:flutter_app/presentation/screens/other_screens/certificate_detail.dart';
@@ -20,7 +21,7 @@ import 'nav_bar.dart';
 @MaterialAutoRouter(
   routes: <AutoRoute>[
     AutoRoute(
-      page: Main,
+      page: Home,
       guards: [AuthGuard],
       initial: true,
       children: [

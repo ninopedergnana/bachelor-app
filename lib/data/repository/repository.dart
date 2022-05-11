@@ -7,7 +7,7 @@ import 'package:flutter_app/data/dto/certificate_dto.dart';
 import 'package:flutter_app/data/dto/patient_dto.dart';
 import 'package:flutter_app/domain/model/certificate.dart';
 import 'package:flutter_app/domain/model/signed_certificate.dart';
-import 'package:flutter_app/impfy.g.dart';
+import 'package:flutter_app/data/api/impfy.g.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:openpgp/openpgp.dart';
 import 'package:web3dart/web3dart.dart';

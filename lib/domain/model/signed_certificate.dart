@@ -13,14 +13,21 @@ class SignedCertificate {
   final String signedHash;
   final String ipfsHash;
 
-  SignedCertificate({required this.certificate, required this.signedHash, required this.ipfsHash});
+  SignedCertificate(
+      {required this.certificate,
+      required this.signedHash,
+      required this.ipfsHash});
 
   SignedCertificate.fromJson(Map<String, dynamic> json)
       : certificate = Certificate.fromJson(json['cert']),
         signedHash = json['hash'],
         ipfsHash = json['ipfs'];
 
-  Map<String, dynamic> toJson() => {'cert': certificate, 'hash': signedHash, 'ipfs': ipfsHash};
+  Map<String, dynamic> toJson() => {
+        'cert': certificate,
+        'hash': signedHash,
+        'ipfs': ipfsHash,
+      };
 
   @override
   String toString() {
@@ -35,7 +42,8 @@ class SignedCertificate {
     Repository repository = Repository();
     var unsignedHash = _getHashCode();
     String signer = EthSigUtil.ecRecover(
-        signature: signedHash, message: Uint8List.fromList(unsignedHash.codeUnits));
+        signature: signedHash,
+        message: Uint8List.fromList(unsignedHash.codeUnits));
     if (await repository.isDoctor(signer)) {
       return await repository.isValidCertificate(signer, ipfsHash);
     } else {

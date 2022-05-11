@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/domain/auth_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_app/domain/authentication/auth_provider.dart';
 
 import '../../navigation/routes.gr.dart';
 
@@ -39,14 +38,14 @@ class SignUpFormState extends State<SignUpForm> {
 
   @override
   void initState() {
-    _authProvider = context.read<AuthProvider>();
+    _authProvider = AuthProvider();
     super.initState();
   }
 
   Future _signUp() async {
     if (_formKey.currentState!.validate()) {
       await _authProvider.signUp(firstName.text, lastName.text, email.text);
-      AutoRouter.of(context).push(const MainRoute());
+      AutoRouter.of(context).push(const HomeRoute());
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Signup Successful!")),
       );

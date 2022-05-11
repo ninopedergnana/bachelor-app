@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/data/dto/user_account_dto.dart';
 import 'package:flutter_app/presentation/components/qr_scan.dart';
 import 'package:flutter_app/presentation/navigation/routes.gr.dart';
-import 'package:provider/provider.dart';
 
-import '../../../domain/auth_provider.dart';
+import '../../../domain/authentication/auth_provider.dart';
 import '../../components/large_button.dart';
 
 class SignIn extends StatefulWidget {
@@ -22,7 +21,7 @@ class SignInState extends State<SignIn> {
 
   @override
   void initState() {
-    _authProvider = context.read<AuthProvider>();
+    _authProvider = AuthProvider();
     super.initState();
   }
 
@@ -30,7 +29,7 @@ class SignInState extends State<SignIn> {
     UserAccountDTO? user = await scanUser();
     if (user != null) {
       await _authProvider.signIn(user);
-      await AutoRouter.of(context).push(const MainRoute());
+      await AutoRouter.of(context).push(const HomeRoute());
       print('hello');
     } else {
       //  TODO: Show error

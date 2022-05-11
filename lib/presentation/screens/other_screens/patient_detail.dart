@@ -20,7 +20,7 @@ class PatientDetail extends StatelessWidget {
                 children: <Widget>[
                   ElevatedButton(
                       onPressed: () {
-                        AutoRouter.of(context).push(const MainRoute());
+                        AutoRouter.of(context).push(const HomeRoute());
                       },
                       child: const Text('Back'))
         ])));

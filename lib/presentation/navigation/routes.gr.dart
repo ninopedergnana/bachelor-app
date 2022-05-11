@@ -16,6 +16,7 @@ import 'package:flutter/material.dart' as _i13;
 import '../../domain/model/signed_certificate.dart' as _i15;
 import '../screens/navigation_screens/authentication.dart' as _i6;
 import '../screens/navigation_screens/certificate_list.dart' as _i9;
+import '../screens/navigation_screens/home.dart' as _i1;
 import '../screens/navigation_screens/keys.dart' as _i10;
 import '../screens/navigation_screens/scan_certificate.dart' as _i11;
 import '../screens/other_screens/certificate_detail.dart' as _i2;
@@ -25,7 +26,6 @@ import '../screens/other_screens/patient_list.dart' as _i5;
 import '../screens/other_screens/sign_in.dart' as _i7;
 import '../screens/other_screens/sign_up.dart' as _i8;
 import 'auth_guard.dart' as _i14;
-import 'nav_bar.dart' as _i1;
 
 class AppRouter extends _i12.RootStackRouter {
   AppRouter(
@@ -37,9 +37,9 @@ class AppRouter extends _i12.RootStackRouter {
 
   @override
   final Map<String, _i12.PageFactory> pagesMap = {
-    MainRoute.name: (routeData) {
+    HomeRoute.name: (routeData) {
       return _i12.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i1.Main());
+          routeData: routeData, child: const _i1.Home());
     },
     CertificateDetailRoute.name: (routeData) {
       final args = routeData.argsAs<CertificateDetailRouteArgs>();
@@ -88,18 +88,18 @@ class AppRouter extends _i12.RootStackRouter {
 
   @override
   List<_i12.RouteConfig> get routes => [
-        _i12.RouteConfig(MainRoute.name, path: '/', guards: [
+        _i12.RouteConfig(HomeRoute.name, path: '/', guards: [
           authGuard
         ], children: [
           _i12.RouteConfig(CertificateListRoute.name,
               path: 'certificate-list',
-              parent: MainRoute.name,
+              parent: HomeRoute.name,
               guards: [authGuard]),
           _i12.RouteConfig(KeysRoute.name,
-              path: 'Keys', parent: MainRoute.name, guards: [authGuard]),
+              path: 'Keys', parent: HomeRoute.name, guards: [authGuard]),
           _i12.RouteConfig(ScanCertificateRoute.name,
               path: 'scan-certificate',
-              parent: MainRoute.name,
+              parent: HomeRoute.name,
               guards: [authGuard])
         ]),
         _i12.RouteConfig(CertificateDetailRoute.name,
@@ -117,12 +117,12 @@ class AppRouter extends _i12.RootStackRouter {
 }
 
 /// generated route for
-/// [_i1.Main]
-class MainRoute extends _i12.PageRouteInfo<void> {
-  const MainRoute({List<_i12.PageRouteInfo>? children})
-      : super(MainRoute.name, path: '/', initialChildren: children);
+/// [_i1.Home]
+class HomeRoute extends _i12.PageRouteInfo<void> {
+  const HomeRoute({List<_i12.PageRouteInfo>? children})
+      : super(HomeRoute.name, path: '/', initialChildren: children);
 
-  static const String name = 'MainRoute';
+  static const String name = 'HomeRoute';
 }
 
 /// generated route for
