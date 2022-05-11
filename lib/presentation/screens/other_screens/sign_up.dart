@@ -59,18 +59,20 @@ class SignUpFormState extends State<SignUpForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Form(
         key: _formKey,
         child: Align(
           alignment: Alignment.topCenter,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(10),
+            //padding: const EdgeInsets.all(10),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 400, minHeight: 100),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   TextFormField(
+                    style: const TextStyle(color: Colors.black54),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please Enter Your First Name';
@@ -78,6 +80,10 @@ class SignUpFormState extends State<SignUpForm> {
                       return null;
                     },
                     decoration: const InputDecoration(
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)),
+                      labelStyle: TextStyle(color: Colors.black54),
+                      hintStyle: TextStyle(color: Colors.black54),
                       filled: false,
                       hintText: 'First Name',
                       labelText: 'First Name',
@@ -86,6 +92,7 @@ class SignUpFormState extends State<SignUpForm> {
                   ),
                   const SizedBox(height: 10.0),
                   TextFormField(
+                    style: const TextStyle(color: Colors.black54),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please Enter Your First Name';
@@ -93,14 +100,19 @@ class SignUpFormState extends State<SignUpForm> {
                       return null;
                     },
                     decoration: const InputDecoration(
+                      labelStyle: TextStyle(color: Colors.black54),
+                      hintStyle: TextStyle(color: Colors.black54),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)),
                       filled: false,
-                      hintText: 'Last Name',
+                      hintText: "Last Name",
                       labelText: 'Last Name',
                     ),
                     controller: lastName,
                   ),
                   const SizedBox(height: 10.0),
                   TextFormField(
+                    style: const TextStyle(color: Colors.black54),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please Enter Your Email';
@@ -115,6 +127,10 @@ class SignUpFormState extends State<SignUpForm> {
                       return null;
                     },
                     decoration: const InputDecoration(
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)),
+                      labelStyle: TextStyle(color: Colors.black54),
+                      hintStyle: TextStyle(color: Colors.black54),
                       filled: false,
                       hintText: 'Email',
                       labelText: 'Email',
@@ -123,6 +139,9 @@ class SignUpFormState extends State<SignUpForm> {
                   ),
                   const SizedBox(height: 15.0),
                   ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(0xFF475c6c))),
                     onPressed: _signUp,
                     child: const Text('Sign Up'),
                   ),

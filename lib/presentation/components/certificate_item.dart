@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/domain/model/signed_certificate.dart';
+import 'package:intl/intl.dart';
 
 import '../navigation/routes.gr.dart';
 
@@ -11,6 +12,10 @@ class CertificateItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var date = signedCertificate.certificate.validUntil!;
+    DateFormat formatter = DateFormat('dd.MM.yyyy');
+    final String validDate = formatter.format(date);
+
     return ListTile(
       title: Text(signedCertificate.certificate.product!),
       onTap: () {
@@ -20,7 +25,7 @@ class CertificateItem extends StatelessWidget {
           ),
         );
       },
-      subtitle: Text(signedCertificate.certificate.validUntil!.toString()),
+      subtitle: Text("Valid Until: " + validDate),
       trailing: Hero(
         tag: signedCertificate.signedHash,
         child: signedCertificate.getQR(),

@@ -74,7 +74,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white10,
-        iconTheme: const IconThemeData(color: Colors.blueGrey),
+        iconTheme: const IconThemeData(color: Color(0xff475c6c)),
         elevation: 0,
       ),
       body: Form(
@@ -102,7 +102,7 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                           style: TextButton.styleFrom(
                               minimumSize: const Size.fromHeight(60),
                               backgroundColor: (_patientKeys == null)
-                                  ? Colors.blue
+                                  ? Colors.green.shade400
                                   : Colors.grey)),
                       const SizedBox(height: 10),
                       DropDownButtonWidget(
@@ -208,6 +208,9 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                                     _repository.createCertificate(
                                         certificate, _patientKeys!);
 
+                                    // close keyboard after submission
+                                    FocusManager.instance.primaryFocus?.unfocus();
+
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text(
@@ -219,6 +222,8 @@ class CreateCertificateFormState extends State<CreateCertificateForm> {
                                 },
                                 child: const Text('Submit'),
                                 style: ElevatedButton.styleFrom(
+                                    primary: const Color(0xff475c6c),
+                                    elevation: 0.0,
                                     minimumSize: const Size(120, 60)),
                               ),
                             ],

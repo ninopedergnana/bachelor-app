@@ -24,16 +24,13 @@ class ScanCertificateState extends State<ScanCertificate> {
   Future<void> scanQR() async {
     try {
       String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666',
-          'Cancel',
-          false,
-          ScanMode.QR
-      );
+          '#ff6666', 'Cancel', false, ScanMode.QR);
       setState(() {
         try {
-          _signedCertificate = SignedCertificate.fromJson(jsonDecode(barcodeScanRes));
+          _signedCertificate =
+              SignedCertificate.fromJson(jsonDecode(barcodeScanRes));
           _signedCertificate!.verify().then((b) => _isValid = b);
-        } catch(e) {
+        } catch (e) {
           _isValid = false;
         }
       });
@@ -47,25 +44,29 @@ class ScanCertificateState extends State<ScanCertificate> {
   Widget build(BuildContext context) {
     // if (_signedCertificate == null) scanQR();
     return Scaffold(
-    backgroundColor: (_isValid != null && _isValid!) ? Colors.lightGreen : Colors.red,
-      body: Builder(
-        builder: (BuildContext context) {
+        backgroundColor:
+            (_isValid != null && _isValid!) ? Colors.lightGreen.shade300 : Colors.red.shade300,
+        body: Builder(builder: (BuildContext context) {
           return Container(
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: () => scanQR(),
-                  child: const Text('Scan QR')),
-                Text('Scan result : ${_signedCertificate?.signedHash}\n',
-                  style: const TextStyle(fontSize: 20)),
-                Text('Is valid : $_isValid',
-                  style: const TextStyle(fontSize: 20))
-          ])
-        );
-      })
-    );
+              alignment: Alignment.center,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.blueGrey,
+                        ),
+                        onPressed: () => scanQR(),
+                        child: const Text('Scan Certificate')),
+                    if (_signedCertificate?.signedHash != null) ...[
+                      // conditional rendering of widgets
+                      Text('Signed Certificate Hash : ${_signedCertificate?.signedHash}\n',
+                          style: const TextStyle(fontSize: 20)),
+                      Text('The Hash is correct and the certificate is therefore valid : $_isValid',
+                          style: const TextStyle(fontSize: 20))
+                    ]
+                  ]));
+        }));
   }
 }

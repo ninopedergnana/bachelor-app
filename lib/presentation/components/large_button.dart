@@ -9,7 +9,7 @@ class LargeButton extends StatelessWidget {
     Key? key,
     required this.onPressed,
     required this.text,
-    this.color = Colors.blue,
+    this.color = const Color(0xff475c6c),
   }) : super(key: key);
 
   @override

@@ -34,7 +34,7 @@ class _CertificateListState extends State<CertificateList> {
         focusElevation: 8,
         hoverElevation: 8,
         highlightElevation: 8,
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: const Color(0xff475c6c),
         child: const Icon(
           Icons.add,
           size: 30.0,

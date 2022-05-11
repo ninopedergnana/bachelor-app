@@ -9,6 +9,7 @@ class TextInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+        style: const TextStyle(color: Colors.black),
         controller: textEditingController,
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -17,7 +18,13 @@ class TextInput extends StatelessWidget {
           return null;
         },
         decoration: InputDecoration(
-          border: const OutlineInputBorder(),
+          border: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black)
+          ),
+          focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black)),
+          hintStyle: const TextStyle(color: Colors.black),
+          labelStyle: const TextStyle(color: Colors.black),
           filled: false,
           hintText: label,
           labelText: label,

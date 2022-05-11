@@ -45,7 +45,7 @@ class KeysState extends State<Keys> {
         ethAddress: ethAddress.text,
         firstName: firstName.text,
         lastName: lastName.text);
-    await dialog.showQRDialog(context, patientKeys.toString(), "Public Keys");
+    await dialog.showQRDialog(context, patientKeys.toString(), "User Public Keys");
   }
 
   Future<void> exportAllKeys() async {
@@ -56,7 +56,7 @@ class KeysState extends State<Keys> {
         firstName: firstName.text,
         lastName: lastName.text);
 
-    await dialog.showQRDialog(context, user.toString(), "User Keys");
+    await dialog.showQRDialog(context, user.toString(), "All User Keys");
   }
 
   @override
@@ -182,13 +182,29 @@ class KeysState extends State<Keys> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: sharePublicKeys,
-                      child: const Text('Share Public Keys'),
-                    ),
-                    ElevatedButton(
-                      onPressed: exportAllKeys,
-                      child: const Text('Export Keys'),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0.0,
+                              primary: const Color(0xff475c6c)
+                            ),
+                            onPressed: sharePublicKeys,
+                            child: const Text('Share Public Keys'),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                elevation: 0.0,
+                                primary: const Color(0xff475c6c)
+                            ),
+                            onPressed: exportAllKeys,
+                            child: const Text('Export All Keys'),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
