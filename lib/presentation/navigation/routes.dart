@@ -6,13 +6,13 @@ import 'package:flutter_app/presentation/screens/navigation_screens/keys.dart';
 import 'package:flutter_app/presentation/screens/navigation_screens/scan_certificate.dart';
 import 'package:flutter_app/presentation/screens/other_screens/certificate_detail.dart';
 import 'package:flutter_app/presentation/screens/other_screens/create_certificate.dart';
+import 'package:flutter_app/presentation/screens/other_screens/onboarding.dart';
 import 'package:flutter_app/presentation/screens/other_screens/patient_detail.dart';
 import 'package:flutter_app/presentation/screens/other_screens/patient_list.dart';
 import 'package:flutter_app/presentation/screens/other_screens/sign_in.dart';
 import 'package:flutter_app/presentation/screens/other_screens/sign_up.dart';
 
 import 'auth_guard.dart';
-import 'nav_bar.dart';
 
 /*
  * run `flutter pub run build_runner build`
@@ -37,6 +37,7 @@ import 'nav_bar.dart';
     AutoRoute(page: Authentication),
     AutoRoute(page: SignIn),
     AutoRoute(page: SignUp),
+    AutoRoute(page: Onboarding)
   ],
 )
 class $AppRouter {}
