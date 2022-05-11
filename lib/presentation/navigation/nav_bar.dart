@@ -17,6 +17,7 @@ class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return NavigationBar(
+      backgroundColor: Colors.white10,
       destinations: const <NavigationDestination>[
         NavigationDestination(
           selectedIcon: Icon(Icons.list_outlined),
