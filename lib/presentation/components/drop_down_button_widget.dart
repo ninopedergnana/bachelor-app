@@ -13,56 +13,7 @@ class DropDownButtonWidget extends StatefulWidget {
 
 class DropDownButtonWidgetState extends State<DropDownButtonWidget> {
   Template? chosenTemplate; // will be filled with one from the list
-  List<Template> templates = <Template>[
-    Template(
-      templateName: "Empty Template",
-      vaccinationDate: DateTime.now(),
-      validUntil: DateTime.now(),
-      dose: 0,
-      targetedDisease: "",
-      vaccineType: "",
-      product: "",
-      manufacturer: "",
-      countryOfVaccination: "",
-      issuer: ""
-    ),
-    Template(
-        templateName: "Moderna-Covid",
-        vaccinationDate: DateTime.now(),
-        validUntil: DateTime.now(),
-        dose: 0,
-        targetedDisease: "Covid",
-        vaccineType: "mRNA",
-        product: "Moderna Vaccine",
-        manufacturer: "Moderna",
-        countryOfVaccination: "CH",
-        issuer: "BAG"
-    ),
-    Template(
-        templateName: "Sputnik-Covid",
-        vaccinationDate: DateTime.now(),
-        validUntil: DateTime.now(),
-        dose: 0,
-        targetedDisease: "Covid",
-        vaccineType: "mRNA",
-        product: "Sputnik Vaccine",
-        manufacturer: "Sputnik",
-        countryOfVaccination: "CH",
-        issuer: "BAG"
-    ),
-    Template(
-        templateName: "Pfizer-Covid",
-        vaccinationDate: DateTime.now(),
-        validUntil: DateTime.now(),
-        dose: 0,
-        targetedDisease: "Covid",
-        vaccineType: "mRNA",
-        product: "Pfizer Vaccine",
-        manufacturer: "Pfizer",
-        countryOfVaccination: "CH",
-        issuer: "BAG"
-    )
-  ];
+  List<Template> templates = Template.getDefaultTemplates();
 
   @override
   Widget build(BuildContext context) {
