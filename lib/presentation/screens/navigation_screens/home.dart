@@ -38,10 +38,10 @@ class Home extends StatelessWidget {
               children: [
                 const DrawerHeader(
                   decoration: BoxDecoration(
-                    color: Color(0xff475c6c),
+                    color: Color(0xfff7efd2),
                   ),
                   child: Text(
-                      'Welcome to the Impfy!\n\nLeave while you still can'),
+                      'Welcome to the Impfy!\n\nEnjoy your stay'),
                 ),
                 ListTile(
                   title: const Text('Patients'),

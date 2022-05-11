@@ -103,9 +103,7 @@ class AppRouter extends _i13.RootStackRouter {
           _i13.RouteConfig(KeysRoute.name,
               path: 'Keys', parent: HomeRoute.name, guards: [authGuard]),
           _i13.RouteConfig(ScanCertificateRoute.name,
-              path: 'scan-certificate',
-              parent: HomeRoute.name,
-              guards: [authGuard])
+              path: 'scan-certificate', parent: HomeRoute.name)
         ]),
         _i13.RouteConfig(CertificateDetailRoute.name,
             path: '/certificate-detail', guards: [authGuard]),

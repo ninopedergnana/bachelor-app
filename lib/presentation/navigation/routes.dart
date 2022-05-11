@@ -15,7 +15,7 @@ import 'package:flutter_app/presentation/screens/other_screens/sign_up.dart';
 import 'auth_guard.dart';
 
 /*
- * run `flutter pub run build_runner build`
+ * run `flutter pub run build_runner build --delete-conflicting-outputs`
  * after making changes
  */
 @MaterialAutoRouter(
@@ -27,7 +27,7 @@ import 'auth_guard.dart';
       children: [
         AutoRoute(page: CertificateList, guards: [AuthGuard]),
         AutoRoute(page: Keys, guards: [AuthGuard]),
-        AutoRoute(page: ScanCertificate, guards: [AuthGuard]),
+        AutoRoute(page: ScanCertificate),
       ],
     ),
     AutoRoute(page: CertificateDetail, guards: [AuthGuard]),

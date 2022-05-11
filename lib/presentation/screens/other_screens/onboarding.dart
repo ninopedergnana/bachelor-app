@@ -39,8 +39,8 @@ class _OnboardingState extends State<Onboarding> {
           child: Container(
             decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
                     stops: [
                   0.3,
                   0.7,
@@ -57,9 +57,12 @@ class _OnboardingState extends State<Onboarding> {
                   Container(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () => print("Verify a Vaccine"),
+                      onPressed: () {
+                        AutoRouter.of(context)
+                            .push(const HomeRoute());
+                      },
                       child: const Text(
-                        "Verify a Vaccine",
+                        "Skip",
                         style: TextStyle(color: Colors.black54, fontSize: 20.0),
                       ),
                     ),
@@ -91,8 +94,8 @@ class _OnboardingState extends State<Onboarding> {
                           padding: const EdgeInsets.all(40.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
+                            children: [
+                              const Text(
                                 "Sign Up",
                                 style: TextStyle(
                                   color: Colors.black54,
@@ -101,10 +104,40 @@ class _OnboardingState extends State<Onboarding> {
                                   height: 1.5,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 15.0,
                               ),
-                              SizedBox(height: 400, child: SignUpForm())
+                              const SizedBox(height: 270, child: SignUpForm()),
+                              const Text(
+                                "Already have an account?\nSign in by scanning your User Key QR Code",
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 16.0,
+                                  height: 1.5,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10.0),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          elevation: 0.0,
+                                          primary: const Color(0xff475c6c)
+                                      ),
+                                      onPressed: () {
+                                        AutoRouter.of(context)
+                                            .push(const SignInRoute());
+                                      },
+                                      child: const Text(
+                                        "Sign in",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15.0,
+                                        ),
+                                      )),
+                                ),
+                              )
                             ],
                           ),
                         )
