@@ -1,9 +1,13 @@
 import 'dart:convert';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/domain/model/signed_certificate.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+
+import '../../components/large_button.dart';
+import '../../navigation/routes.gr.dart';
 
 class ScanCertificate extends StatefulWidget {
   const ScanCertificate({Key? key}) : super(key: key);
@@ -13,9 +17,6 @@ class ScanCertificate extends StatefulWidget {
 }
 
 class ScanCertificateState extends State<ScanCertificate> {
-  SignedCertificate? _signedCertificate;
-  bool? _isValid;
-
   @override
   void initState() {
     super.initState();
@@ -24,15 +25,20 @@ class ScanCertificateState extends State<ScanCertificate> {
   Future<void> scanQR() async {
     try {
       String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', false, ScanMode.QR);
+        '#ff6666',
+        'Cancel',
+        false,
+        ScanMode.QR,
+      );
       setState(() {
         try {
-          _signedCertificate =
+          SignedCertificate signedCertificate =
               SignedCertificate.fromJson(jsonDecode(barcodeScanRes));
-          _signedCertificate!.verify().then((b) => _isValid = b);
-        } catch (e) {
-          _isValid = false;
-        }
+          AutoRouter.of(context).push(CertificateDetailRoute(
+            signedCertificate: signedCertificate,
+            isVerification: true,
+          ));
+        } catch (e) {}
       });
     } on PlatformException {
       // barcodeScanRes = 'Failed to get platform version.';
@@ -42,31 +48,38 @@ class ScanCertificateState extends State<ScanCertificate> {
 
   @override
   Widget build(BuildContext context) {
-    // if (_signedCertificate == null) scanQR();
+    return TextButton(
+      style: ElevatedButton.styleFrom(
+        primary: Colors.white,
+        minimumSize: Size.infinite,
+        elevation: 0,
+        shadowColor: Colors.transparent,
+      ),
+      onPressed: scanQR,
+      child: const Text(
+        'Scan Certificate',
+        style: TextStyle(color: Colors.black, fontSize: 16),
+      ),
+    );
     return Scaffold(
-        backgroundColor:
-            (_isValid != null && _isValid!) ? Colors.lightGreen.shade300 : Colors.red.shade300,
-        body: Builder(builder: (BuildContext context) {
-          return Container(
-              alignment: Alignment.center,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.blueGrey,
-                        ),
-                        onPressed: () => scanQR(),
-                        child: const Text('Scan Certificate')),
-                    if (_signedCertificate?.signedHash != null) ...[
-                      // conditional rendering of widgets
-                      Text('Signed Certificate Hash : ${_signedCertificate?.signedHash}\n',
-                          style: const TextStyle(fontSize: 20)),
-                      Text('The Hash is correct and the certificate is therefore valid : $_isValid',
-                          style: const TextStyle(fontSize: 20))
-                    ]
-                  ]));
-        }));
+      body: Builder(builder: (BuildContext context) {
+        return Container(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blueGrey,
+                ),
+                onPressed: () => scanQR(),
+                child: const Text('Scan Certificate'),
+              )
+            ],
+          ),
+        );
+      }),
+    );
   }
 }

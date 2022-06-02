@@ -29,8 +29,7 @@ class SignInState extends State<SignIn> {
     UserAccountDTO? user = await scanUser();
     if (user != null) {
       await _authProvider.signIn(user);
-      await AutoRouter.of(context).push(const HomeRoute());
-      print('hello');
+      await AutoRouter.of(context).replaceAll([const HomeRoute()]);
     } else {
       //  TODO: Show error
     }

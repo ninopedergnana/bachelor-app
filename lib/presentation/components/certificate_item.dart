@@ -7,8 +7,13 @@ import '../navigation/routes.gr.dart';
 
 class CertificateItem extends StatelessWidget {
   final SignedCertificate signedCertificate;
+  final bool isDoctorCertificate;
 
-  const CertificateItem({Key? key, required this.signedCertificate}) : super(key: key);
+  const CertificateItem({
+    Key? key,
+    required this.signedCertificate,
+    required this.isDoctorCertificate,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +27,7 @@ class CertificateItem extends StatelessWidget {
         AutoRouter.of(context).push(
           CertificateDetailRoute(
             signedCertificate: signedCertificate,
+            isVerification: isDoctorCertificate,
           ),
         );
       },

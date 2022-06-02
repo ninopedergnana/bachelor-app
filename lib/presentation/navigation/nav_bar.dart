@@ -25,6 +25,11 @@ class _NavBarState extends State<NavBar> {
           label: 'Certificates',
         ),
         NavigationDestination(
+          selectedIcon: Icon(Icons.system_update_tv_outlined),
+          icon: Icon(Icons.system_update_tv),
+          label: 'Created',
+        ),
+        NavigationDestination(
           selectedIcon: Icon(Icons.key_outlined),
           icon: Icon(Icons.key),
           label: 'Keys',

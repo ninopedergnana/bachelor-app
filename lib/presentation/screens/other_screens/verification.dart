@@ -24,7 +24,10 @@ class VerificationState extends State<Verification> {
   Future<void> scanCertificateQR() async {
     SignedCertificate? certificate = await scanCertificate();
     AutoRouter.of(context).push(
-      CertificateDetailRoute(signedCertificate: certificate!),
+      CertificateDetailRoute(
+        signedCertificate: certificate!,
+        isVerification: true,
+      ),
     );
   }
 

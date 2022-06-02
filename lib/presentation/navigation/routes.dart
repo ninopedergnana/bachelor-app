@@ -30,7 +30,7 @@ import 'auth_guard.dart';
         AutoRoute(page: ScanCertificate),
       ],
     ),
-    AutoRoute(page: CertificateDetail, guards: [AuthGuard]),
+    AutoRoute(page: CertificateDetail),
     AutoRoute(page: CreateCertificate, guards: [AuthGuard]),
     AutoRoute(page: PatientDetail, guards: [AuthGuard]),
     AutoRoute(page: PatientList, guards: [AuthGuard]),

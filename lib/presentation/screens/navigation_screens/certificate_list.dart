@@ -7,7 +7,12 @@ import 'package:flutter_app/presentation/navigation/routes.gr.dart';
 import '../../../data/repository/repository.dart';
 
 class CertificateList extends StatefulWidget {
-  const CertificateList({Key? key}) : super(key: key);
+  final bool isDoctorList;
+
+  const CertificateList({
+    Key? key,
+    required this.isDoctorList,
+  }) : super(key: key);
 
   @override
   _CertificateListState createState() => _CertificateListState();
@@ -19,27 +24,31 @@ class _CertificateListState extends State<CertificateList> {
   List<SignedCertificate> _certificates = [];
 
   Future buildSignedCertList() async {
-    _certificates = await repo.getCertificates();
-    return await repo.getCertificates();
+    _certificates = widget.isDoctorList
+        ? await repo.getDoctorCertificates()
+        : await repo.getPatientCertificates();
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          AutoRouter.of(context).push(const CreateCertificateRoute());
-        },
-        elevation: 4,
-        focusElevation: 8,
-        hoverElevation: 8,
-        highlightElevation: 8,
-        backgroundColor: const Color(0xff475c6c),
-        child: const Icon(
-          Icons.add,
-          size: 30.0,
-        ),
-      ),
+      floatingActionButton: widget.isDoctorList
+          ? FloatingActionButton(
+              onPressed: () {
+                AutoRouter.of(context).push(const CreateCertificateRoute());
+              },
+              elevation: 4,
+              focusElevation: 8,
+              hoverElevation: 8,
+              highlightElevation: 8,
+              backgroundColor: const Color(0xff475c6c),
+              child: const Icon(
+                Icons.add,
+                size: 30.0,
+              ),
+            )
+          : null,
       body: FutureBuilder(
         future: buildSignedCertList(),
         builder: (context, AsyncSnapshot snapshot) {
@@ -49,7 +58,10 @@ class _CertificateListState extends State<CertificateList> {
             return ListView.builder(
               itemCount: _certificates.length,
               itemBuilder: (context, index) {
-                return CertificateItem(signedCertificate: _certificates[index]);
+                return CertificateItem(
+                  signedCertificate: _certificates[index],
+                  isDoctorCertificate: widget.isDoctorList,
+                );
               },
             );
           }

@@ -43,7 +43,27 @@
         "type": "address"
       }
     ],
-    "name": "getCertificates",
+    "name": "getPatientCertificates",
+    "outputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "",
+        "type": "bytes[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "doctor",
+        "type": "address"
+      }
+    ],
+    "name": "getDoctorCertificates",
     "outputs": [
       {
         "internalType": "bytes[]",
@@ -81,11 +101,6 @@
         "internalType": "address",
         "name": "doctor",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "blockNumber",
-        "type": "uint256"
       }
     ],
     "name": "invalidateDoctor",
@@ -101,10 +116,17 @@
         "type": "address"
       }
     ],
-    "name": "invalidateDoctor",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "name": "isValidDoctorExternal",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [

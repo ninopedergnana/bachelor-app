@@ -13,10 +13,11 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     AuthProvider _authProvider = AuthProvider();
     return AutoTabsRouter(
-      routes: const [
-        CertificateListRoute(),
-        KeysRoute(),
-        ScanCertificateRoute(),
+      routes: [
+        CertificateListRoute(isDoctorList: false),
+        CertificateListRoute(isDoctorList: true),
+        const KeysRoute(),
+        const ScanCertificateRoute(),
       ],
       builder: (context, child, animation) {
         final tabsRouter = AutoTabsRouter.of(context);
@@ -40,8 +41,7 @@ class Home extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Color(0xfff7efd2),
                   ),
-                  child: Text(
-                      'Welcome to the Impfy!\n\nEnjoy your stay'),
+                  child: Text('Welcome to the Impfy!\n\nEnjoy your stay'),
                 ),
                 ListTile(
                   title: const Text('Patients'),
@@ -59,7 +59,9 @@ class Home extends StatelessWidget {
                   title: const Text('Sign Out'),
                   onTap: () {
                     _authProvider.signOut();
-                    AutoRouter.of(context).push(const OnboardingRoute());
+                    AutoRouter.of(context).replaceAll(
+                      [const OnboardingRoute()],
+                    );
                   },
                 ),
               ],

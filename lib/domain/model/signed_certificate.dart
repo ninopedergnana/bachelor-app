@@ -44,11 +44,8 @@ class SignedCertificate {
     String signer = EthSigUtil.ecRecover(
         signature: signedHash,
         message: Uint8List.fromList(unsignedHash.codeUnits));
-    if (await repository.isDoctor(signer)) {
-      return true; //await repository.isValidCertificate(signer, ipfsHash);
-    } else {
-      return false;
-    }
+    if (!(await repository.isDoctor(signer))) return false;
+    return await repository.isValidCertificate(ipfsHash, signedHash);
   }
 
   Widget getQR() {

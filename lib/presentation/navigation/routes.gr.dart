@@ -47,7 +47,9 @@ class AppRouter extends _i13.RootStackRouter {
       return _i13.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i2.CertificateDetail(
-              key: args.key, signedCertificate: args.signedCertificate));
+              key: args.key,
+              signedCertificate: args.signedCertificate,
+              isVerification: args.isVerification));
     },
     CreateCertificateRoute.name: (routeData) {
       return _i13.MaterialPageX<dynamic>(
@@ -78,8 +80,11 @@ class AppRouter extends _i13.RootStackRouter {
           routeData: routeData, child: const _i9.Onboarding());
     },
     CertificateListRoute.name: (routeData) {
+      final args = routeData.argsAs<CertificateListRouteArgs>();
       return _i13.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i10.CertificateList());
+          routeData: routeData,
+          child: _i10.CertificateList(
+              key: args.key, isDoctorList: args.isDoctorList));
     },
     KeysRoute.name: (routeData) {
       return _i13.MaterialPageX<dynamic>(
@@ -106,7 +111,7 @@ class AppRouter extends _i13.RootStackRouter {
               path: 'scan-certificate', parent: HomeRoute.name)
         ]),
         _i13.RouteConfig(CertificateDetailRoute.name,
-            path: '/certificate-detail', guards: [authGuard]),
+            path: '/certificate-detail'),
         _i13.RouteConfig(CreateCertificateRoute.name,
             path: '/create-certificate', guards: [authGuard]),
         _i13.RouteConfig(PatientDetailRoute.name,
@@ -134,25 +139,34 @@ class HomeRoute extends _i13.PageRouteInfo<void> {
 class CertificateDetailRoute
     extends _i13.PageRouteInfo<CertificateDetailRouteArgs> {
   CertificateDetailRoute(
-      {_i14.Key? key, required _i16.SignedCertificate signedCertificate})
+      {_i14.Key? key,
+      required _i16.SignedCertificate signedCertificate,
+      required bool isVerification})
       : super(CertificateDetailRoute.name,
             path: '/certificate-detail',
             args: CertificateDetailRouteArgs(
-                key: key, signedCertificate: signedCertificate));
+                key: key,
+                signedCertificate: signedCertificate,
+                isVerification: isVerification));
 
   static const String name = 'CertificateDetailRoute';
 }
 
 class CertificateDetailRouteArgs {
-  const CertificateDetailRouteArgs({this.key, required this.signedCertificate});
+  const CertificateDetailRouteArgs(
+      {this.key,
+      required this.signedCertificate,
+      required this.isVerification});
 
   final _i14.Key? key;
 
   final _i16.SignedCertificate signedCertificate;
 
+  final bool isVerification;
+
   @override
   String toString() {
-    return 'CertificateDetailRouteArgs{key: $key, signedCertificate: $signedCertificate}';
+    return 'CertificateDetailRouteArgs{key: $key, signedCertificate: $signedCertificate, isVerification: $isVerification}';
   }
 }
 
@@ -218,11 +232,28 @@ class OnboardingRoute extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i10.CertificateList]
-class CertificateListRoute extends _i13.PageRouteInfo<void> {
-  const CertificateListRoute()
-      : super(CertificateListRoute.name, path: 'certificate-list');
+class CertificateListRoute
+    extends _i13.PageRouteInfo<CertificateListRouteArgs> {
+  CertificateListRoute({_i14.Key? key, required bool isDoctorList})
+      : super(CertificateListRoute.name,
+            path: 'certificate-list',
+            args:
+                CertificateListRouteArgs(key: key, isDoctorList: isDoctorList));
 
   static const String name = 'CertificateListRoute';
+}
+
+class CertificateListRouteArgs {
+  const CertificateListRouteArgs({this.key, required this.isDoctorList});
+
+  final _i14.Key? key;
+
+  final bool isDoctorList;
+
+  @override
+  String toString() {
+    return 'CertificateListRouteArgs{key: $key, isDoctorList: $isDoctorList}';
+  }
 }
 
 /// generated route for
