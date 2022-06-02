@@ -61,25 +61,5 @@ class ScanCertificateState extends State<ScanCertificate> {
         style: TextStyle(color: Colors.black, fontSize: 16),
       ),
     );
-    return Scaffold(
-      body: Builder(builder: (BuildContext context) {
-        return Container(
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blueGrey,
-                ),
-                onPressed: () => scanQR(),
-                child: const Text('Scan Certificate'),
-              )
-            ],
-          ),
-        );
-      }),
-    );
   }
 }
