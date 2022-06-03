@@ -26,7 +26,7 @@ class Repository {
   }
 
   Repository._internal() {
-    String hexAddress = '0x8240DA0951aDE6E2Ea4EfeDF10eF250DAe677F4e';
+    String hexAddress = '0x64C99DF4eC727941e5C959Aaf0A3dF0381312a14';
     EthereumAddress contractAddress = EthereumAddress.fromHex(hexAddress);
     String rpcUrl =
         'https://eth-rinkeby.alchemyapi.io/v2/yCa_KizxtugRrLnI4Hl7wTwYZZHKJkrc';

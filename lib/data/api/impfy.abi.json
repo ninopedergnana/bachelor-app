@@ -116,7 +116,7 @@
         "type": "address"
       }
     ],
-    "name": "isValidDoctorExternal",
+    "name": "isValidDoctor",
     "outputs": [
       {
         "internalType": "bool",
