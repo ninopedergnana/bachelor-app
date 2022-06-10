@@ -2,40 +2,39 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
+import 'package:eth_sig_util/eth_sig_util.dart';
+import 'package:flutter_app/data/api/impfy.g.dart';
 import 'package:flutter_app/data/api/ipfs.dart';
 import 'package:flutter_app/data/dto/certificate_dto.dart';
 import 'package:flutter_app/data/dto/patient_dto.dart';
+import 'package:flutter_app/domain/authentication/key_storage.dart';
 import 'package:flutter_app/domain/model/certificate.dart';
 import 'package:flutter_app/domain/model/signed_certificate.dart';
-import 'package:flutter_app/data/api/impfy.g.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
 import 'package:openpgp/openpgp.dart';
 import 'package:web3dart/web3dart.dart';
-import 'package:http/http.dart';
-import 'package:eth_sig_util/eth_sig_util.dart';
 
 class Repository {
+  late final Impfy _impfy;
+  final KeyStorage _keyStorage = KeyStorage();
   static final Repository _instance = Repository._internal();
   final IPFS _ipfs = IPFS();
-  final FlutterSecureStorage _secureStore = const FlutterSecureStorage();
+  final String _rpcUrl = 'https://eth-rinkeby.alchemyapi.io/v2/yCa_KizxtugRrLnI4Hl7wTwYZZHKJkrc';
+  final String _contractAddress = '0x64C99DF4eC727941e5C959Aaf0A3dF0381312a14';
   final String _passphrase = '';
-  late final Impfy _impfy;
 
   factory Repository() {
     return _instance;
   }
 
   Repository._internal() {
-    String hexAddress = '0x64C99DF4eC727941e5C959Aaf0A3dF0381312a14';
-    EthereumAddress contractAddress = EthereumAddress.fromHex(hexAddress);
-    String rpcUrl =
-        'https://eth-rinkeby.alchemyapi.io/v2/yCa_KizxtugRrLnI4Hl7wTwYZZHKJkrc';
-    var client = Web3Client(rpcUrl, Client());
+    EthereumAddress contractAddress = EthereumAddress.fromHex(_contractAddress);
+    var client = Web3Client(_rpcUrl, Client());
     _impfy = Impfy(address: contractAddress, client: client);
   }
 
   Future<EthPrivateKey> _getCredentials() async {
-    String ethPrivateKey = (await _secureStore.read(key: 'ETH_PRIVATE_KEY'))!;
+    String ethPrivateKey = (await _keyStorage.getEthPrivateKey())!;
     return EthPrivateKey.fromHex(ethPrivateKey);
   }
 
@@ -44,7 +43,6 @@ class Repository {
 
     var response = await _impfy.getPatientCertificates(credentials.address);
     return _parseCertificates(response);
-
   }
 
   Future<List<SignedCertificate>> getDoctorCertificates() async {
@@ -59,9 +57,7 @@ class Repository {
         .map((element) => String.fromCharCodes(element))
         .map((element) => _getCertificateFromIPFS(element));
 
-    return (await Future.wait(certificates))
-        .whereType<SignedCertificate>()
-        .toList();
+    return (await Future.wait(certificates)).whereType<SignedCertificate>().toList();
   }
 
   Future<SignedCertificate?> _getCertificateFromIPFS(String ipfsHash) async {
@@ -78,7 +74,7 @@ class Repository {
     Certificate certificate,
     PatientDTO patient,
   ) async {
-    String ethPrivateKey = (await _secureStore.read(key: 'ETH_PRIVATE_KEY'))!;
+    String ethPrivateKey = (await _keyStorage.getEthPrivateKey())!;
     EthPrivateKey credentials = EthPrivateKey.fromHex(ethPrivateKey);
     String hash = md5.convert(certificate.toString().codeUnits).toString();
     String signedHash = EthSigUtil.signMessage(
@@ -105,7 +101,7 @@ class Repository {
     String passphrase,
     String ipfsHash,
   ) async {
-    String privateKey = (await _secureStore.read(key: 'PGP_PRIVATE_KEY'))!;
+    String privateKey = (await _keyStorage.getPgpPrivateKey())!;
     try {
       String certificateJson = await OpenPGP.decrypt(
         certificateDTO.encryptedCertificate,

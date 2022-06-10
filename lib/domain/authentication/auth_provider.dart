@@ -1,16 +1,12 @@
 import 'package:flutter_app/data/dto/user_account_dto.dart';
 import 'package:flutter_app/domain/authentication/key_generation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'key_storage.dart';
 
 /// Source: https://pub.dev/packages/provider/example
 class AuthProvider {
   static final AuthProvider _instance = AuthProvider._internal();
-  final FlutterSecureStorage _secureStore = const FlutterSecureStorage();
-  final String _pgpPrivateKey = 'PGP_PRIVATE_KEY';
-  final String _pgpPublicKey = 'PGP_PUBLIC_KEY';
-  final String _ethPrivateKey = 'ETH_PRIVATE_KEY';
-  final String _firstName = 'FIRST_NAME';
-  final String _lastName = 'LAST_NAME';
+  static final KeyStorage _keyStorage = KeyStorage();
 
   factory AuthProvider() {
     return _instance;
@@ -19,7 +15,7 @@ class AuthProvider {
   AuthProvider._internal();
 
   Future signIn(UserAccountDTO user) async {
-    await _storeKeys(user);
+    await _keyStorage.storeKeys(user);
   }
 
   Future signUp(String firstName, String lastName, String email) async {
@@ -34,36 +30,18 @@ class AuthProvider {
       lastName: lastName,
     );
 
-    await _storeKeys(user);
+    await _keyStorage.storeKeys(user);
+  }
+
+  Future<bool> isDoctor() async {
+    return _keyStorage.getIsDoctor();
   }
 
   Future signOut() async {
-    await _secureStore.deleteAll();
-  }
-
-  Future _storeKeys(UserAccountDTO user) async {
-    await Future.wait([
-      _secureStore.write(key: _pgpPrivateKey, value: user.pgpPrivateKey),
-      _secureStore.write(key: _pgpPublicKey, value: user.pgpPublicKey),
-      _secureStore.write(key: _ethPrivateKey, value: user.ethPrivateKey),
-      _secureStore.write(key: _firstName, value: user.firstName),
-      _secureStore.write(key: _lastName, value: user.lastName),
-    ]);
+    await _keyStorage.deleteKeys();
   }
 
   Future<UserAccountDTO> getUser() async {
-    var pgpPrivateKey = await _secureStore.read(key: _pgpPrivateKey);
-    var pgpPublicKey = await _secureStore.read(key: _pgpPublicKey);
-    var ethPrivateKey = await _secureStore.read(key: _ethPrivateKey);
-    var firstName = await _secureStore.read(key: _firstName);
-    var lastName = await _secureStore.read(key: _lastName);
-
-    return UserAccountDTO(
-      pgpPrivateKey: pgpPrivateKey!,
-      pgpPublicKey: pgpPublicKey!,
-      ethPrivateKey: ethPrivateKey!,
-      firstName: firstName!,
-      lastName: lastName!,
-    );
+    return _keyStorage.getKeys();
   }
 }

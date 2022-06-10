@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/data/dto/patient_dto.dart';
 import 'package:flutter_app/presentation/components/custom_dialog.dart';
+import 'package:flutter_app/presentation/components/large_button.dart';
 import 'package:web3dart/web3dart.dart';
 
 import '../../../data/dto/user_account_dto.dart';
@@ -45,7 +46,7 @@ class KeysState extends State<Keys> {
         ethAddress: ethAddress.text,
         firstName: firstName.text,
         lastName: lastName.text);
-    await dialog.showQRDialog(context, patientKeys.toString(), "User Public Keys");
+    await dialog.showQRDialog(context, patientKeys.toString(), "Public Keys & Patient Data");
   }
 
   Future<void> exportAllKeys() async {
@@ -56,7 +57,7 @@ class KeysState extends State<Keys> {
         firstName: firstName.text,
         lastName: lastName.text);
 
-    await dialog.showQRDialog(context, user.toString(), "All User Keys");
+    await dialog.showQRDialog(context, user.toString(), "User Keys");
   }
 
   @override
@@ -69,14 +70,12 @@ class KeysState extends State<Keys> {
               return const Center(child: CircularProgressIndicator());
             } else {
               return SingleChildScrollView(
-                padding:
-                    const EdgeInsets.only(left: 5.0, top: 30.0, right: 5.0),
+                padding: const EdgeInsets.only(left: 10.0, top: 30.0, right: 10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text("User Data",
-                        style: TextStyle(
-                            fontSize: 25.0, fontWeight: FontWeight.bold)),
+                        style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 15),
                     TextField(
                       controller: firstName,
@@ -84,8 +83,7 @@ class KeysState extends State<Keys> {
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
                           onPressed: () async {
-                            await dialog.showQRDialog(
-                                context, firstName.text, 'First Name');
+                            await dialog.showQRDialog(context, firstName.text, 'First Name');
                           },
                           icon: const Icon(Icons.qr_code),
                         ),
@@ -100,8 +98,7 @@ class KeysState extends State<Keys> {
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
                           onPressed: () async {
-                            await dialog.showQRDialog(
-                                context, lastName.text, 'Last Name');
+                            await dialog.showQRDialog(context, lastName.text, 'Last Name');
                           },
                           icon: const Icon(Icons.qr_code),
                         ),
@@ -111,8 +108,7 @@ class KeysState extends State<Keys> {
                     ),
                     const SizedBox(height: 20),
                     const Text("OpenPGP Keys",
-                        style: TextStyle(
-                            fontSize: 25.0, fontWeight: FontWeight.bold)),
+                        style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 15),
                     TextField(
                       controller: pgpPublicKey,
@@ -120,8 +116,7 @@ class KeysState extends State<Keys> {
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
                           onPressed: () async {
-                            await dialog.showQRDialog(
-                                context, pgpPublicKey.text, "PGP Public Key");
+                            await dialog.showQRDialog(context, pgpPublicKey.text, "PGP Public Key");
                           },
                           icon: const Icon(Icons.qr_code),
                         ),
@@ -147,8 +142,7 @@ class KeysState extends State<Keys> {
                     ),
                     const SizedBox(height: 20),
                     const Text("Ethereum Keys",
-                        style: TextStyle(
-                            fontSize: 25.0, fontWeight: FontWeight.bold)),
+                        style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 15),
                     TextField(
                       controller: ethAddress,
@@ -157,8 +151,7 @@ class KeysState extends State<Keys> {
                         labelText: 'ETH Address',
                         suffixIcon: IconButton(
                           onPressed: () async {
-                            await dialog.showQRDialog(
-                                context, ethAddress.text, "ETH Address");
+                            await dialog.showQRDialog(context, ethAddress.text, "ETH Address");
                           },
                           icon: const Icon(Icons.qr_code),
                         ),
@@ -182,30 +175,15 @@ class KeysState extends State<Keys> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              elevation: 0.0,
-                              primary: const Color(0xff475c6c)
-                            ),
-                            onPressed: sharePublicKeys,
-                            child: const Text('Share Public Keys'),
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                elevation: 0.0,
-                                primary: const Color(0xff475c6c)
-                            ),
-                            onPressed: exportAllKeys,
-                            child: const Text('Export All Keys'),
-                          ),
-                        ],
-                      ),
-                    )
+                    LargeButton(
+                      onPressed: sharePublicKeys,
+                      text: 'Share Public Keys & Patient Data',
+                    ),
+                    const SizedBox(height: 10),
+                    LargeButton(
+                      onPressed: exportAllKeys,
+                      text: 'Export User Keys',
+                    ),
                   ],
                 ),
               );

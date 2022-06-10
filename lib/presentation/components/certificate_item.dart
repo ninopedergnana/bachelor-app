@@ -22,7 +22,7 @@ class CertificateItem extends StatelessWidget {
     final String validDate = formatter.format(date);
 
     return ListTile(
-      title: Text(signedCertificate.certificate.product!),
+      title: Text(signedCertificate.certificate.targetedDisease!),
       onTap: () {
         AutoRouter.of(context).push(
           CertificateDetailRoute(

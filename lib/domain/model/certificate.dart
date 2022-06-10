@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_app/domain/authentication/key_storage.dart';
 import 'package:flutter_app/domain/model/template.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:openpgp/openpgp.dart';
 
 class Certificate extends Template {
-  final FlutterSecureStorage _secureStore = const FlutterSecureStorage();
+  final KeyStorage _keyStorage = KeyStorage();
   String? firstname;
   String? lastname;
   String? uvci;
@@ -55,7 +57,7 @@ class Certificate extends Template {
   }
 
   Future<String> encrypt(String patientKey) async {
-    String? doctorKey = await _secureStore.read(key: 'PGP_PUBLIC_KEY');
+    String? doctorKey = await _keyStorage.getPgpPublicKey();
     return await OpenPGP.encrypt(toString(), doctorKey! + patientKey);
   }
 }

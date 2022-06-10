@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/presentation/navigation/routes.gr.dart';
-import 'package:flutter_app/presentation/screens/other_screens/onboarding.dart';
 
 import '../../../domain/authentication/auth_provider.dart';
 import '../../navigation/nav_bar.dart';
@@ -12,6 +11,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthProvider _authProvider = AuthProvider();
+
     return AutoTabsRouter(
       routes: [
         CertificateListRoute(isDoctorList: false),
@@ -44,23 +44,11 @@ class Home extends StatelessWidget {
                   child: Text('Welcome to the Impfy!\n\nEnjoy your stay'),
                 ),
                 ListTile(
-                  title: const Text('Patients'),
-                  onTap: () {
-                    AutoRouter.of(context).push(const PatientDetailRoute());
-                  },
-                ),
-                ListTile(
-                  title: const Text('Settings'),
-                  onTap: () {
-                    AutoRouter.of(context).push(const OnboardingRoute());
-                  },
-                ),
-                ListTile(
                   title: const Text('Sign Out'),
                   onTap: () {
                     _authProvider.signOut();
                     AutoRouter.of(context).replaceAll(
-                      [const OnboardingRoute()],
+                      [const AuthenticationRoute()],
                     );
                   },
                 ),
