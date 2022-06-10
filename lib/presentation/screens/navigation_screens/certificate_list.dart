@@ -41,8 +41,14 @@ class _CertificateListState extends State<CertificateList> {
           return const Center(child: CircularProgressIndicator());
         } else {
           print(snapshot.data);
-          if (snapshot.data == 'false') {
-            return const Center(child: Text('You are not a doctor.'));
+          if (!snapshot.data && widget.isDoctorList) {
+            print('its ${snapshot.data}');
+            return const Center(
+              child: Text(
+                'You are not a doctor.\nTherefore you are not allowed\nto create vaccination certificates.',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+            );
           } else {
             return Scaffold(
               floatingActionButton: widget.isDoctorList
